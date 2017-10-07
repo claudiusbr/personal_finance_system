@@ -2,14 +2,15 @@ Where to find stuff:
 ====================
 [Summary](https://www.dcs.bbk.ac.uk/intranet/index.php/BSc_ISM_Projects_and_BSc_Computing_Projects)
 
-
 - Expenditure Analyser;
-- a budgeting tool, which could for example start a budget based on what data has been entered by the user;
-- a 'budget checker', where it compares current expenditure against the planned budget;
+- a budgeting tool, which could for example start a budget based on what data
+  has been entered by the user;
+- a 'budget checker', where it compares current expenditure against the planned
+  budget;
 - (possibly) a web interface, so that this could be accessed from a browser;
 - the already discussed expenditure analyser;
 
-- DBPedia
+- DBPedia;
 
 
 
