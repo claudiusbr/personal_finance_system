@@ -99,3 +99,48 @@ Log
   - then, check if the backend model still fits, and make necessary adjustments;
 
   - finally, start coding.
+
+
+
+16/Dec/2017
+-----------
+### 11:00am
+
+At this point I am thinking of how to model the database schema. There are two
+use cases which will generate 'write' operations to the DB: `Upload Statement`
+and `Create manual entry`. Both will be essentially performing `Insert`
+operations on the database by inserting categorised entries into it. Therefore,
+it makes sense to consider this the double entry aspect of the system -- one
+entry goes to cash book, the other goes to the category as a credit -- and to
+model the schema as having at least one table to represent the cash book.
+
+As I write this, there is an `include` transaction between `Create manual
+entry` and `Categorise Entries`. If I do want to create a double entry system
+which allows manual entries, it would not make much sense to have the system
+look for categories for manual transactions -- the user should basically choose
+which category to use. So, I will remove the `include` between `Create manual
+entry` and `Categorise entries` from the Use Case Diagram.
+
+## 12:00pm
+If the system is to be extended to allow for a more intelligent category
+suggestion system, then it may be easier to develop it both in a modular and
+layered fashion -- need to read up on ways to do this. Design patterns are
+probably the answer here, and/or something which will allow the functionality
+of the system to be grouped into self contained modules which can be replaced.
+
+## 5:00pm
+- lots of references to Bennett et al. for modelling the system. Refined
+  strategy for this based on the topics on page 132. 
+
+## 7:20pm
+- decided to structure the project report loosely as most of Dawson's (2009, p.
+  189) students:
+  - Abstract; Contents; Introduction; Development Method; Requirements; Design;
+    Implementation and test; Evaluation; Conclusions; References; Appendices.
+
+## 8:57pm
+- after skimming through Bennet et al. (2010) I found a reference to Fowler (,
+  M., 1997. Analysis patterns: reusable object models. Addison-Wesley
+  Professional.) where apparently there are accounting object model patterns,
+  so I need to find a library which has this book so that I can have a look and
+  see if it will fit my needs.

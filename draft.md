@@ -13,17 +13,43 @@ Requirements
 
 Strategy
 --------
-- model the backend
-  - to build a system trully layered, the database must be able to change. So
-    there should be a system which will rebuild a database from a turnkey and
-    rebuild it in mysql on a local desktop, upload it to a server and then do
-    this.
 
-- then, model the front end -- design a user interface;
+### Project Report
+- loosely following the layout by Dawson (2009, p. 189), and structure the
+  project as:
+  - Abstract
+  - Contents
+  - Introduction
+  - Development Method
+  - Requirements
+  - Design
+  - Implementation and test
+  - Evaluation
+  - Conclusions
+  - References
+  - Appendices
+
+### Development
+- model the backend - Bennett et al. p.132, 'requirements analysis'
+  - analyse the requirements whih will bring this into reality. To do this,
+    check out 
+  - to build a system trully layered, the database must be able to change
+    (schema stays the same, but physical level changes). So there should be a
+    system which will rebuild a database from a turnkey and rebuild it in mysql
+    on a local desktop, upload it to a server and then do this.
+
+- then, model the front end -- design a user interface - Bennett et al. p.132,
+  'requirements analysis';
 
 - then, check if the backend model still fits, and make necessary adjustments;
 
 - finally, start coding.
+
+- to help with the web search for categories, see if the manning books below
+  will help (ordered by apparent relevance):
+  - Taming Text
+  - Practical Probabilistic Programming
+  - Natural Language Processing
 
 
 Questions to answer
@@ -79,6 +105,14 @@ Questions to answer
     entered
 
 
+### Why did I choose Scala?
+- it's multiparadigm, which would allow for improved efficiency, especially
+  when using functional programming for multi-threading. For example, a sort of
+  map-reduce implementation could be used to implement the category searching
+  aspect of the program using a read-write dependency -- that is, having data
+  which is read by multiple threads, but which is written separately and then
+  concatenated by a reduce algorithm.
+
 
 
 Brain Dump
@@ -108,21 +142,17 @@ Brain Dump
     deﬁnition of role, purpose and nature – but in general terms, three
     categories can be identiﬁed.
 
-
 - most of the academic resources seem to be directed at creating an accounting
   system for businesses. Have not yet found any info for a system for
   individual accounting.
-
 
 - Build the database in a way where the bulk of the data is kept in one
   table,but you have a journal, accounts, etc, all in their own table which
   then will have one-to-many relationship with the bulk data table.
 
-
 - the application will be simplified as it only keeps track of income and
   expenditure related to your bank account, or credit card statements for
   example.
-
 
 - create an application layer which is modular.
 - might be good to split the application layer as:
@@ -130,11 +160,9 @@ Brain Dump
   - Business logic
   - database interaction
 
-
 - competitor software:
   - Xero;
   - Quickbooks;
-
 
 - test scenarios for trial balance:
   - sum of all values equal zero;
@@ -142,7 +170,3 @@ Brain Dump
     - data corruption?
     - would this even be allowed to happen, since all interactions will happen
       at application layer level?
-
-
-
-
