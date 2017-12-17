@@ -133,7 +133,7 @@ Brain Dump
     systems possess two common interrelated purposes: 1 to provide users with
     information – or a decision-facilitating function: that is, a function
     concerned with assisting decision making/decision makers by providing
-    ‘useful’ infor- mation; and 2 to support decision making and facilitate
+    ‘useful’ information; and 2 to support decision making and facilitate
     control – or a decision-mediating function: that is, a function concerned
     with controlling and inducing alternative forms of behaviour in transacting
     parties where conflict exists and/or mediation is required. to provide

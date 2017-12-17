@@ -5,14 +5,23 @@
 \newdateformat{monthyeardate}{\monthname[\THEMONTH], \THEYEAR}
 
 \usepackage{setspace}   % to change line spacing within a paragraph
-\usepackage{indentfirst}	% to indent first paragraph
+%\usepackage{indentfirst}	% to indent first paragraph
 \usepackage{graphbox}   % to give includegraph the align option
 \usepackage[lmargin=2.00cm,tmargin=3.00cm,rmargin=3.00cm,bmargin=2.00cm,]{geometry}	% for margins
-\usepackage[english]{babel}	% language
+\usepackage[british,english]{babel}	% language
 \usepackage{color}	% to specify colours
 
+% for tikz macros
+\usepackage{tikz}
+
+% for trademark symbol
+\usepackage{textcomp}
 
 \definecolor{sepia}{RGB}{103, 24, 0}
+
+% add float barriers to keep figures from being moved
+% http://anorien.csc.warwick.ac.uk/mirrors/CTAN/macros/latex/contrib/placeins/placeins-doc.pdf
+\usepackage{placeins}		
 
 % for hyperlinks; colorlinks=true means change the text
 % colour rather than adding a colourful border
@@ -31,11 +40,14 @@
 
 % for the author year referencing style, using biber as backend, in citations keep the 
 % number of authors to one, then append 'et al.', in bibliography show all authors...
-\usepackage[citestyle=ieee,style=authoryear,backend=biber,maxcitenames=1,maxbibnames=20]{biblatex}
+\usepackage[citestyle=ieee,style=authoryear,backend=biber,maxcitenames=1,maxbibnames=20,urldate=short]{biblatex}
 \DeclareNameAlias{author}{last-first} % ... with all authors in the `surname, name' format
 \addbibresource{bibliography.bib}
 \renewcommand*{\nameyeardelim}{\addcomma\space}
-
+\DeclareFieldFormat{urldate}{%
+  (visited on: \thefield{urlday}\addspace%
+  \mkbibmonth{\thefield{urlmonth}}\addspace%
+  \thefield{urlyear}\isdot)}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -45,25 +57,23 @@
 \input{./contents/title_page.tex}
 
 \newpage
-
 \pagenumbering{roman}
-
 \input{./contents/abstract.tex}
 
-%\newpage
-
+\newpage
 \tableofcontents
 
-%\newpage
-
+\newpage
 \pagenumbering{arabic}
-
 \input{./contents/introduction.tex}
 
-%\newpage
+\newpage
+\input{./contents/development_method.tex}
 
-\input{./contents/body.tex}
+\newpage
+\input{./contents/requirements.tex}
 
+\newpage
 \printbibliography[heading=bibintoc]
 
 \end{document}
