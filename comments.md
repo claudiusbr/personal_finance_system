@@ -144,3 +144,23 @@ of the system to be grouped into self contained modules which can be replaced.
   Professional.) where apparently there are accounting object model patterns,
   so I need to find a library which has this book so that I can have a look and
   see if it will fit my needs.
+
+18/12/2018
+----------
+## 10:00am
+- decided today that maybe I can actually already start to iterate -- as I
+  write the report I can add what I am working on to the introduction or
+  methodology.
+
+
+## 4:30pm
+- decided to include a 'reflections' page, especially after finding a paper
+  which talks about expert systems. If I don't have the time to create the 'tax
+  estimator' system, should I call this an expert system?
+
+- if I have time, I would like to create a more sophisticated budgeting tool
+  which looks at current and non-current liabilities, and adds them to the
+  budget. For example, a tool where you can enter a liability, the time you
+  have to pay it off, an 'interest calculator' based on the country in which
+  you live, then another field to add other recurring or non-recurring costs.
+  Then this tool would add this to your budget calculation.

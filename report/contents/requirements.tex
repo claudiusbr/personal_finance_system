@@ -1,7 +1,7 @@
 \section{Requirements} \label{sec:Requirements}
 
-Benett et al. (2010,p. 140-142) \nocite{bennett2010object} categorises
-requirements as of three types:
+Bennett et al. (\citeyear[][pp.~140-142]{bennett2010object}) categorises
+requirements as being of three types:
 
 \begin{description} \item[Functional Requirements]
     The system's functionality -- what it is expected to do.
@@ -24,14 +24,45 @@ non-functional requirements such as performance and security.
 
 \subsection{Functional Requirements} \label{sec:Requirements.FunctionalRequirements}
 
+Any personal accounting system should be able to provide accurate and relevant
+summaries of an individual's financial status. In order to do this, the user
+needs to be able to supply the system with the relevant data so that it can be
+analysed and properly converted into the relevant knowledge.
+
+It seems fair to infer that nowadays most of a user's financial transactions
+currently happen in ways that can be listed electronically -- a study by
+Payments UK (\citeyear{paymentsUK2017summary}), for example, indicates that
+there has been a rise in debit card payments over the past few years, and that
+the volumes of this type of transaction is likely to be higher than that of
+cash payments by the year 2021. Therefore, an assumption has been made that the
+users will require means of uploading a list of their financial transactions
+into the system, and this has been identified as a functional requirement.
+
+The system created for this project intends to do just this. Its main feature,
+however, will be a system for the user to categorise expenditure based on
+patterns in these entries. However, in order not to restrict the system to the
+uploading of transactions only, it must also be possible for a user to create
+entries manually.
+
+
+\subsubsection{Requirements Model} \label{sec:Requirements.RequirementsModel}
 
 Use case diagrams are an UML construct which were developed by Jacobson et al.
 (1992, cited \cite[][p.~154]{bennett2010object}). The use case diagram below is
-used to illustrate the functional requirements listed above:
+used to illustrate the functional requirements listed in
+\ref{sec:Requirements.FunctionalRequirements}:
 
 \begin{figure}[ht!]
   \begin{center}
     \includegraphics[width=14cm]{./contents/img/Use_Case_Diagram.png}
+  \end{center}
+\end{figure}
+\FloatBarrier
+
+The wireframe below was created to better illustrate the \emph{Manual Entry} requirement:
+\begin{figure}[ht!]
+  \begin{center}
+    \includegraphics[width=14cm]{./contents/img/Wireframe_-_Manual_Entry.png}
   \end{center}
 \end{figure}
 \FloatBarrier

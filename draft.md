@@ -26,6 +26,7 @@ Strategy
   - Implementation and test
   - Evaluation
   - Conclusions
+  - Review/Reflections
   - References
   - Appendices
 
@@ -51,9 +52,33 @@ Strategy
   - Practical Probabilistic Programming
   - Natural Language Processing
 
+- if I have time, include also a more sophisticated budgeting tool which looks
+  at current and non-current liabilities, and adds them to the budget. For
+  example, a tool where you can enter a liability, the time you have to pay it
+  off, an 'interest calculator' based on the country in which you live, then
+  another field to add other recurring or non-recurring costs. Then this tool
+  would add this to your budget calculation.
 
 Questions to answer
 -------------------
+
+### Is this system an expert system?
+- a paper from 1990 called 'Expert Systems for Personal Financial Planning'
+  does make a case to perhaps indicate that this could become an expert system
+  if the facility to calculate taxes is included within it. Would a system
+  which does budgeting by simply adding up all categories for the year and then
+  averaging them be considered an expert system?
+  - bibtex reference to paper:
+    ```
+    @article{brown1990expert,
+      title={EXPERT SYSTEMS FOR PERSONAL FINANCIAL PLANNING.},
+      author={Brown, Carol E and Nielson, Norma I and Phillips, Mary Ellen},
+      journal={Journal of Financial Planning},
+      volume={3},
+      number={3},
+      year={1990}
+    }
+    ```
 
 ### Why develop a personal accounting system?
 - because doing personal finance manually would involve too many repetitive
