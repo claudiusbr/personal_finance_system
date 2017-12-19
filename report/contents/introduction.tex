@@ -12,7 +12,19 @@ efficient and less tedious ways to organise one's personal financial
 information than doing it manually (\cite{quicken2017about}). This project has
 been developed based on these ideas.
 
-This report documents the work for the project. Each chapter delineates a
+The system has been developed using the principle of \emph{double entry
+bookkeeping}, which states that every transaction should affect two accounts,
+one being credited (Out) and one debited (In). An account, for the scope of
+this project, either refers to a category created by the user, or to the user's
+\emph{cash book} -- the contents of their bank account plus any manual entry
+which they make.  In bookkeeping, each account can be classified as an
+\emph{asset, liability, income} or \emph{expenditure}. Whether the account
+increases or decreases will depend on which of these categories it falls under:
+\emph{debits} will increase \emph{assets} and \emph{expense} accounts, and
+\emph{credits} will increase \emph{liability, capital} or \emph{income}
+acccounts (\cite[][pp.~18-19]{wood2004book}).
+
+This report documents the work of the project. Each chapter delineates a
 specific aspect of the development lifecycle, which is in line with the
 development process listed in \ref{sec:DevelopmentMethod}. Chapter
 \ref{sec:Requirements} identifies the identified requirements which were used

@@ -1,6 +1,9 @@
 \section{Requirements} \label{sec:Requirements}
-Bennett et al. (\citeyear[][pp.~140-142]{bennett2010object}) categorises
-requirements as being of three types:
+This project is building a system to find a solution for a problem. One of the
+first steps in order to do this is to try to understand what the problem is --
+that is, try to map the requirements of the software. Bennett et al.
+(\citeyear[][pp.~140-142]{bennett2010object}) categorises requirements as being
+of three types:
 
 \begin{description} \item[Functional Requirements]
     The system's functionality -- what it is expected to do.
@@ -16,10 +19,10 @@ requirements as being of three types:
     part in meeting these requirements.
 \end{description}
 
-The initial iterations will be focused more on the functional and usability
-requirements, paying some attention as well to specific non-functional
-requirements such as performance and security.
-
+These definitions will be employed when trying to classify the requirements and
+model the problem domain. The initial iterations will be focused more on the
+functional and usability requirements, paying some attention as well to
+specific non-functional requirements such as performance and security.
 
 \subsection{Functional Requirements} \label{sec:Requirements.FunctionalRequirements}
 Any personal accounting system should be able to provide accurate and relevant
@@ -85,3 +88,12 @@ Use cases and use case diagrams are an appropriate tool to document functional
 requirements, but not non-functional ones (Jacobson et al., 1999,
 \cite[cited][p.~153]{bennett2010object}). Therefore, a separate list has been
 kept in order to document the non-functional requirements, where they exist.
+
+\subsection{Package Diagram} \label{sec:Requirements.PackageDiagram}
+The diagram below provides a general idea of what the system should look like at a high level:
+\begin{figure}[ht!]
+  \begin{center}
+    \includegraphics[width=14cm]{./contents/img/Package_Diagram.png}
+  \end{center}
+\end{figure}
+\FloatBarrier
