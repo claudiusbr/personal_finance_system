@@ -12,14 +12,17 @@ efficient and less tedious ways to organise one's personal financial
 information than doing it manually (\cite{quicken2017about}). This project has
 been developed based on these ideas.
 
-The system has been developed using the principle of \emph{double entry
-bookkeeping}, which states that every transaction should affect two accounts,
+The system has been modelled after the principle of \emph{double entry
+bookkeeping}, from the accounting domain, which states that ``money is never
+created or destroyed -- it merely moves from one account to another''
+(\cite[][Section 6.2]{fowler1997analysis}). More specifically, double entry is
+the principle which ensures that every transaction always affects two accounts,
 one being credited (Out) and one debited (In). An account, for the scope of
-this project, either refers to a category created by the user, or to the user's
+this project, refers either to a category created by the user, or to the user's
 \emph{cash book} -- the contents of their bank account plus any manual entry
-which they make.  In bookkeeping, each account can be classified as an
-\emph{asset, liability, income} or \emph{expenditure}. Whether the account
-increases or decreases will depend on which of these categories it falls under:
+which they make. In bookkeeping, each account can be classified as \emph{asset,
+liability, income} or \emph{expenditure}. Whether the account increases or
+decreases will depend on which of these categories it falls under:
 \emph{debits} will increase \emph{assets} and \emph{expense} accounts, and
 \emph{credits} will increase \emph{liability, capital} or \emph{income}
 acccounts (\cite[][pp.~18-19]{wood2004book}).

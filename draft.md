@@ -31,18 +31,32 @@ Strategy
   - Appendices
 
 ### Development
-- model the backend - Bennett et al. p.132, 'requirements analysis'
-  - analyse the requirements whih will bring this into reality. To do this,
-    check out 
-  - to build a system trully layered, the database must be able to change
-    (schema stays the same, but physical level changes). So there should be a
-    system which will rebuild a database from a turnkey and rebuild it in mysql
-    on a local desktop, upload it to a server and then do this.
-
-- then, model the front end -- design a user interface - Bennett et al. p.132,
-  'requirements analysis';
+- *answer from Peter*: To answer your questions below: yes, you should
+  include a textual description along with your UML diagrams.  For the
+  chapters, you might want to include a background chapter too, where
+  you describe your investigations of similar systems etc.  I’m not
+  sure the development method requires a whole chapter of its own.
+  Similarly, you might combine evaluation with testing.  Adding chapter
+  numbers is sometimes helpful if you need to refer to particular
+  chapters in the report.
 
 - then, check if the backend model still fits, and make necessary adjustments;
+
+
+- the transaction analysis pattern could also be optimised by
+  functional programming and parallelism. For example, if there's a
+  large enough set of categories already acquired, the statement
+  uploaded by the user can be split, then have separate mappers assign
+  the entries to the correct categories, then have a reducer perform
+  the double entry on the final accounts. Somehow. This is just an idea
+  at this point.
+
+- another thing which might be good to implement is the capacity to
+  perform multi legged transaction -- as in, whenever a balance appears
+  with a single pattern, perform a multilegged transaction to it. E.g.,
+  for my mortgage payment, I want to always deduct the amount of
+  interest, and charge that to the interest category, and the rest to
+  my asset account.
 
 - finally, start coding.
 
