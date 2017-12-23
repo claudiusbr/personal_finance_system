@@ -1,7 +1,9 @@
 \section{Requirements} \label{sec:Requirements}
 This project is building a system to find a solution for a problem. One of the
 first steps in order to do this is to try to understand what the problem is --
-that is, try to map the requirements of the software. Bennett et al.
+that is, try to map the requirements of the software. 
+% maybe move to appendix
+Bennett et al.
 (\citeyear[][pp.~140-142]{bennett2010object}) categorises requirements as being
 of three types:
 
@@ -24,61 +26,94 @@ model the problem domain. The initial iterations will be focused more on the
 functional and usability requirements, paying some attention as well to
 specific non-functional requirements such as performance and security.
 
-\subsection{Functional Requirements} \label{sec:Requirements.FunctionalRequirements}
 Any personal accounting system should be able to provide accurate and relevant
 summaries of an individual's financial status. In order to do this, the user
 needs to be able to supply the system with the necessary data so that it can be
 analysed and properly converted into knowledge.
 
 It seems fair to infer that nowadays most of a user's financial transactions
-currently happen in ways that can be listed electronically (usually via their
-bank or credit card statements) -- a study by Payments UK
+happen in ways that can be listed electronically (usually via their bank or
+credit card statements) -- a study by Payments UK
 (\citeyear{paymentsUK2017summary}), for example, indicates that there has been
 a rise in debit card payments over the past few years, and that the volumes of
 this type of transaction is likely to be higher than that of cash payments by
 the year 2021. Therefore, an assumption has been made that the users will
 require means of uploading a list of their financial transactions into the
-system, and this has been identified as a functional requirement.
+system.
 
 The system created for this project intends to do just this. Its main feature,
-however, will be a feature to allow the user to categorise expenditure based on
-patterns in the entries' description. However, in order not to restrict the
-system to the uploading of transactions via bank or credit card statements
-only, it must also be possible for a user to create entries manually.
+however, will be to allow the user to categorise expenditure based on patterns
+in the entries' descriptions. However, 
 
 There must also be a feature to allow the user to view summaries of the income
 and expenditure over a period of time, as well as one to forecast budgets for
-future periods of time based on the analysed ``financial behaviour''.
+future periods based on the ``financial behaviour'' analysed.
 
-\subsubsection{Requirements Model} \label{sec:Requirements.RequirementsModel}
+\subsection{Functional Requirements} \label{sec:Requirements.FunctionalRequirements}
 
 Use case diagrams are UML constructs which were developed by Jacobson et al.
-(1992, cited \cite[][p.~154]{bennett2010object}). The use case diagram below is
-used to illustrate the functional requirements listed in
-\ref{sec:Requirements.FunctionalRequirements}:
-
+(1992, cited \cite[][p.~154]{bennett2010object}). The use case diagram on
+Figure \ref{fig:UseCaseDiagram} is used to illustrate the functional
+requirements identified for this project:
 \begin{figure}[ht!]
   \begin{center}
     \includegraphics[width=14cm]{./contents/img/Use_Case_Diagram.png}
   \end{center}
+  \caption{Use Case Diagram}
+  \label{fig:UseCaseDiagram}
 \end{figure}
 \FloatBarrier
 
-The wireframe below was created to better illustrate the \emph{Manual Entry} requirement:
+Table \ref{tab:UseCaseDescriptions} lists the descriptions for the use cases
+listed above. The first iteration had them all in a single table, but at
+subsequent ones more details were identified
+\begin{table}[!htb]
+  \centering
+  \begin{tabular}{|p{4cm}|p{12cm}|}
+    \hline
+    \textbf{Use Case}&\textbf{Description}\\
+    \hline
+    Upload Statement&The user must be able to upload a list of their
+                     financial transactions, most likely their bank
+                     or credit card statements, in a suitable format,
+                     and all entries should be categorised based on 
+                     specific patterns\\
+    \hline
+    Create Manual Entry&The user should be able to create a manual entry\\
+    \hline
+    Visualise Categorised Summary&The use must be able to visualise
+                                  a summary of their income and expenditure
+                                  over a period of time\\
+    \hline
+    Visualise Budget&The user must be able to visualise a budget for future
+                     periods based on their income and expenditure data 
+                     already entered\\
+    \hline
+  \end{tabular}
+  \caption{Use Case Diagram} \label{tab:UseCaseDescriptions}
+\end{table}
+
+The wireframe below (Figure \ref{fig:Wireframe.CreateManualEntry}) was created
+to better illustrate the \emph{Manual Entry} requirement from the point of view
+of the user:
 \begin{figure}[ht!]
   \begin{center}
     \includegraphics[width=14cm]{./contents/img/Wireframe_-_Manual_Entry.png}
   \end{center}
+  \caption{User interface wireframe for \emph{Create Manual Entry} use case}
+  \label{fig:Wireframe.CreateManualEntry}
 \end{figure}
 \FloatBarrier
 
-Also, in order to better understand the relationship between \emph{Upload
-Statement} and \emph{Categorise Entries}, the activity diagram below was
+And in order to better understand the relationship between \emph{Upload
+Statement} and \emph{Categorise Entries}, the activity diagram below (Figure \ref{fig:AD.CategoriseEntries}) was
 developed:
 \begin{figure}[ht!]
   \begin{center}
     \includegraphics[width=11cm]{./contents/img/Activity_Diagram_-_Categorise_Entries.png}
   \end{center}
+  \caption{}
+  \label{fig:AD.CategoriseEntries}
 \end{figure}
 \FloatBarrier
 
