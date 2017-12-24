@@ -1,3 +1,6 @@
+./contents/img/Comm_Diagram_-_Manual_Entry.png:
+	dia --export=./contents/img/Comm_Diagram_-_Manual_Entry.png --filter=png ../requirements/dia/Comm_Diagram_-_Manual_Entry.dia
+
 ./contents/img/Class_Diagram_-_Transaction.png:
 	dia --export=./contents/img/Class_Diagram_-_Transaction.png --filter=png ../requirements/dia/Class_Diagram_-_Transaction.dia
 
@@ -17,5 +20,5 @@
 ./contents/img/Use_Case_Diagram.png: ../requirements/dia/Use_Case_Diagram.dia 
 	dia --export=./contents/img/Use_Case_Diagram.png --filter=png ../requirements/dia/Use_Case_Diagram.dia 
 
-pdf:	report.tex ./contents/img/Activity_Diagram_-_Categorise_Entries.png ./contents/img/Activity_Diagram_-_Manual_Entry.png ./contents/img/Use_Case_Diagram.png ./contents/img/Class_Diagram_-_Categories_and_Amount.png ./contents/img/Package_Diagram.png ./contents/img/Class_Diagram_-_Transaction.png
+pdf:	report.tex ./contents/img/*.png
 	pdflatex report && biber report && pdflatex report && pdflatex report

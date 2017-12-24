@@ -1,9 +1,9 @@
 \section{Analysis and Design} \label{sec:Design}
 
 Seeing that this is a system dealing with finance, it would make sense to treat
-the categories as if they were the accounts. And, in order to make sure to
-imbue this system with knowledge acquired by more experienced programmers, it
-makes sense to make use of patterns.
+the categories as if they were accounts. And, in order to make sure to imbue
+this system with knowledge acquired by more experienced programmers, it makes
+sense to make use of patterns.
 
 % maybe move to appendix
 It is also useful at this point to make a distinction between the types of
@@ -24,6 +24,8 @@ pattern, used to create the \emph{Category} entity class, and the
   \begin{center}
     \includegraphics[width=11cm]{./contents/img/Class_Diagram_-_Categories_and_Amount.png}
   \end{center}
+  \caption{}
+  \label{fig:ClassDiagram.CategoriesAndAmount}
 \end{figure}
 \FloatBarrier
 
@@ -34,6 +36,13 @@ only way to change the total of a category is by adding positive or negative
 entries to it -- for example, to indicate a credit to a category, a negative
 entry can be added to it.
 
+Another design choice which can be observed in Figure
+\ref{fig:ClassDiagram.CategoriesAndAmount} is that the \emph{Amount} class also
+possesses an attribute for currency. This has been designed so as to allow for
+the possibility of extending the design to keep track of transactions in
+multiple currencies, although it was not a specific requirement. Initially,
+there will only be a single default currency which shall be set at runtime.
+
 The next step is to provide a way for these entries to be added to categories.
 For this to happen, there needs to be a constraint in to ensure that double
 entry happens every time a change needs to be made to a category. One of the
@@ -41,8 +50,34 @@ ways to achieve this is to apply the \emph{Transaction} pattern
 (\cite[][Section~6.2]{fowler1997analysis}):
 \begin{figure}[ht!]
   \begin{center}
-    \includegraphics[width=14cm]{./contents/img/Class_Diagram_-_Transaction.png}121200
+    \includegraphics[width=14cm]{./contents/img/Class_Diagram_-_Transaction.png}
   \end{center}
 \end{figure}
 \FloatBarrier
+
+After having determined the analysis patterns which shall be employed, it makes
+sense to dive into a deeper analysis of the use cases described in Chapter
+\ref{sec:Requirements}. At this point the objective will be to start modelling
+classes based on concepts or things found in the problem domain. This will be
+done in the following subsections.
+
+\subsection{Create Manual Entry} \label{sec:AnalysisAndDesign.ManualEntry}
+
+The \emph{Create Manual Entry} use case, which allows a
+user to input financial transactions individually using a specific interface,
+can be modelled as follows (Figure \ref{fig:CommDiagram.CreateManualEntry}):
+\begin{figure}[ht!]
+  \begin{center}
+    \includegraphics[width=16cm]{./contents/img/Comm_Diagram_-_Manual_Entry.png}
+  \end{center}
+  \caption{Communication Diagram for \emph{Create Manual Entry} use case}
+  \label{fig:CommDiagram.CreateManualEntry}
+\end{figure}
+\FloatBarrier
+
+As the diagram above indicates, the \emph{Transaction} class is responsible for
+the creation of new instances of \emph{Entry} and \emph{Amount}, which then get
+assigned to the \emph{Category} instances involved in the transaction. This
+process assumes that all categories already exist, and a separate diagram will
+be created for the creation of a new category.
 
