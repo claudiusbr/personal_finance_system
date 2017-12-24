@@ -71,7 +71,7 @@ can be modelled as follows (Figure \ref{fig:CommDiagram.CreateManualEntry}):
   \begin{center}
     \includegraphics[width=16cm]{./contents/img/Comm_Diagram_-_Manual_Entry.png}
   \end{center}
-  \caption{Communication Diagram for \emph{Create Manual Entry} use case}
+  \caption{Communication Diagram for the \emph{Create Manual Entry} use case}
   \label{fig:CommDiagram.CreateManualEntry}
 \end{figure}
 \FloatBarrier
@@ -84,3 +84,31 @@ decided that it would be beneficial to save the transaction information, so it
 was made into an \emph{entity class} instead. This process assumes that all
 categories already exist, and a separate diagram will be created for the
 creation of a new category.
+
+
+\subsection{Upload Statement} \label{sec:AnalysisAndDesign.UploadStatement}
+
+The user should be able to upload their bank statements, provided that they are
+in a suitable format. The specifics of the format will be described in the
+implementation phase, together with more information on how to encapsulate as
+much as possible the complexities related to formatting of this information.
+For the analysis and design phases, the emphasis will be on modelling the
+objects and their interactions. The diagram (Figure
+\ref{fig:CommDiagram.CreateManualEntry}) below illustrates this process:
+\begin{figure}[ht!]
+  \begin{center}
+    \includegraphics[width=16cm]{./contents/img/Comm_Diagram_-_Upload_Statement.png}
+  \end{center}
+  \caption{Communication Diagram for the \emph{Upload Statement} use case}
+  \label{fig:CommDiagram.CreateManualEntry}
+\end{figure}
+\FloatBarrier
+
+As can be seen in the diagram above, the process is spread among many classes.
+After the user uploads the statement, the loaded raw input will be sent to a
+\emph{Parser} which will separate it according to the columns into the
+appropriate fields and line items. Then, what is now a collection of statement
+line items will be passed on to an \emph{InputValidator} to make sure the user
+input is valid at this point. Lastly, the resulting validated entries will be
+sent down to a \emph{Classifier}, which will initiate the transaction to
+allocate the entries to categories.
