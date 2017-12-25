@@ -78,13 +78,31 @@ can be modelled as follows (Figure \ref{fig:CommDiagram.CreateManualEntry}):
 
 As the diagram above indicates, the \emph{Transaction} class is responsible for
 the creation of new instances of \emph{Entry} and \emph{Amount}, which then get
-assigned to the \emph{Category} instances involved in the transaction. Although
-\emph{Transaction} was originally thought of as \emph{control class}, it was
-decided that it would be beneficial to save the transaction information, so it
-was made into an \emph{entity class} instead. This process assumes that all
-categories already exist, and a separate diagram will be created for the
-creation of a new category.
+assigned to the \emph{Category} instances chosen, or created, by the user.
+Once the user starts typing, the \emph{CategorySuggester} is triggered to
+suggest categories. The actual implementation of how this suggestions happen
+may vary, but initially it should at least be based on what the user types in
+the search box. If the user chooses to create a new category instead, then they
+will be taken to the appropriate interface to allow them to do so. Once the
+user is satisfied and chooses to submit, the system will start to input the
+transactions in the appropriate category or categories.
 
+Although \emph{Transaction} was originally thought of as a \emph{control
+class}, it was later decided that it would be beneficial to save the
+transaction information, so it was made into an \emph{entity class} instead.
+It is also worth noting that, although implicit in the diagram and the
+wireframe on Figure \ref{fig:Wireframe.CreateManualEntry}, it is estimated that
+the user will start the interface, enter the transaction's details, and then
+start the process to find a category. Seeing that there will be a search
+suggestion at this point, it felt it was appropriate to have the diagram on
+Figure \ref{fig:CommDiagram.CreateManualEntry} have its first message sent at
+this stage.
+
+It is also important to emphasise the fact that \emph{CategorySuggester} is
+only an interface at this point, and that the suggester in the diagram will be
+any object which implements this interface. This is to allow more flexibility
+in the implementation of the classes responsible for suggesting categories to
+the user.
 
 \subsection{Upload Statement} \label{sec:AnalysisAndDesign.UploadStatement}
 
@@ -109,6 +127,36 @@ After the user uploads the statement, the loaded raw input will be sent to a
 \emph{Parser} which will separate it according to the columns into the
 appropriate fields and line items. Then, what is now a collection of statement
 line items will be passed on to an \emph{InputValidator} to make sure the user
-input is valid at this point. Lastly, the resulting validated entries will be
-sent down to a \emph{Classifier}, which will initiate the transaction to
-allocate the entries to categories.
+input is valid. Lastly, the resulting validated entries will be sent down to a
+\emph{Classifier}, which will signal the relevant \emph{Transaction}
+instance(s) to add the entries to their relevant \emph{Categories} -- this last
+part has already been illustrated in Figure
+\ref{fig:CommDiagram.CreateManualEntry}. 
+
+When the \emph{Classifier} cannot match a line item against any of the existing
+categories, it will pass the line in question to the \emph{ManualEntryUI},
+which, apart from having all transaction details already populated, will rely
+on the process described at subsection \ref{sec:AnalysisAndDesign.ManualEntry}
+to properly categorise the item and then forward it to \emph{Transaction} to
+create the categories.
+
+\subsection{View Categorised Summary} \label{sec:AnalysisAndDesign.ViewSummary}
+This feature will allow the user to view a summary of their spend by category.
+The user will enter the period which they want to examine, and the system will
+retrieve the categories which have entries with those dates. The system should
+then sort the categories by income or expenditure and by total, and then
+display it to the user.
+
+%TODO: add a sequence diagram for this.
+
+\subsection{Calculate Budget} \label{sec:AnalysisAndDesign.CalculateBudget}
+This feature will allow the user to request the system to calculate a budget
+for them over a period of time. What the system will do then is retrieve all
+categories over the last 12 months, then calculate their means and take them as
+ratio of the income over the same last period. Then, it will take the first few
+which make up more than 80\% of the total, and add all the others which make up
+the remainder and add them up as `other' or something similar. It will then
+show these totals to the user, in a similar way as it shows the categorised
+summary.
+
+%TODO: do a sequence diagram for this.

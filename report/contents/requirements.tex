@@ -2,6 +2,7 @@
 This project is building a system to find a solution for a problem. One of the
 first steps in order to do this is to try to understand what the problem is --
 that is, try to map the requirements of the software. 
+
 % maybe move to appendix
 Bennett et al.
 (\citeyear[][pp.~140-142]{bennett2010object}) categorises requirements as being
@@ -20,6 +21,7 @@ of three types:
     achieve their goals in the existing system. User interfaces can play a big
     part in meeting these requirements.
 \end{description}
+%
 
 These definitions will be employed when trying to classify the requirements and
 model the problem domain. The initial iterations will be focused more on the
@@ -67,7 +69,7 @@ requirements identified for this project:
 Table \ref{tab:UseCaseDescriptions} lists the descriptions for the use cases
 listed above. The first iteration had them all in a single table, but at
 subsequent ones more details were identified
-\begin{table}[!htb]
+\begin{table}[ht!]
   \centering
   \begin{tabular}{|p{4cm}|p{12cm}|}
     \hline
@@ -76,13 +78,14 @@ subsequent ones more details were identified
     Upload Statement&The user must be able to upload a list of their
                      financial transactions, most likely their bank
                      or credit card statements, in a valid format, and all
-                     entries should be categorised based on specific patterns
-                     \\
+                     entries should be categorised based on specific patterns\\
+                    &\emph{Includes}: Categorise Entries\\
     \hline
     Create Manual Entry&The user should be able to create a manual entry for
                         income or expenditure, include a date, amount and
                         description, and either choose an existing category for
                         it or create a new one in the process\\
+                       &\emph{Extends}: Create Category\\
     \hline
     Visualise Categorised Summary&The use must be able to visualise
                                   a summary of their income and expenditure
@@ -92,9 +95,16 @@ subsequent ones more details were identified
                      periods based on their income and expenditure data 
                      already entered\\
     \hline
+    Categorise Items&Analyse the current entry and assign it to a category\\
+                    &\emph{Extends}: Create Category\\
+    \hline
+    Create Category&Creates a new category with the name suggested by the
+                        user\\
+    \hline
   \end{tabular}
-  \caption{Use Case Diagram} \label{tab:UseCaseDescriptions}
+  \caption{Use Case Descriptions} \label{tab:UseCaseDescriptions}
 \end{table}
+\FloatBarrier
 
 The wireframe below (Figure \ref{fig:Wireframe.CreateManualEntry}) was created
 to better illustrate the \emph{Manual Entry} requirement from the point of view
@@ -132,12 +142,3 @@ Use cases and use case diagrams are an appropriate tool to document functional
 requirements, but not non-functional ones (Jacobson et al., 1999,
 \cite[cited][p.~153]{bennett2010object}). Therefore, a separate list has been
 kept in order to document the non-functional requirements, where they exist.
-
-\subsection{Package Diagram} \label{sec:Requirements.PackageDiagram}
-The diagram below provides a general idea of what the system should look like at a high level:
-\begin{figure}[ht!]
-  \begin{center}
-    \includegraphics[width=14cm]{./contents/img/Package_Diagram.png}
-  \end{center}
-\end{figure}
-\FloatBarrier
