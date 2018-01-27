@@ -21,4 +21,4 @@
 	dia --export=./contents/img/Use_Case_Diagram.png --filter=png ../requirements/dia/Use_Case_Diagram.dia 
 
 pdf:	report.tex ./contents/img/Activity_Diagram_-_Categorise_Entries.png ./contents/img/Activity_Diagram_-_Manual_Entry.png ./contents/img/Use_Case_Diagram.png ./contents/img/Class_Diagram_-_Categories_and_Amount.png ./contents/img/Class_Diagram_-_Transaction.png ./contents/img/Comm_Diagram_-_Manual_Entry.png ./contents/img/Comm_Diagram_-_Upload_Statement.png
-	pdflatex report && biber report && pdflatex report && pdflatex report
+	pdflatex report && biber report && pdflatex report && pdflatex report && mv report.pdf ../
