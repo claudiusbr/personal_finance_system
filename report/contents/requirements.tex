@@ -1,9 +1,9 @@
 \section{Requirements} \label{sec:Requirements}
-This project is building a system to find a solution for a problem. One of the
-first steps in order to do this is to try to understand what the problem is --
-that is, try to map the requirements of the software. 
+A system could be summarised roughly as a solution to one or more problems. One
+of the first steps in order to build this kind of solution is to try to
+understand the problem -- that is, try to map the requirements of the software. 
 
-% maybe move to appendix
+% TODO: maybe move to appendix
 Bennett et al.
 (\citeyear[][pp.~140-142]{bennett2010object}) categorises requirements as being
 of three types:
@@ -30,8 +30,8 @@ specific non-functional requirements such as performance and security.
 
 Any personal accounting system should be able to provide accurate and relevant
 summaries of an individual's financial status. In order to do this, the user
-needs to be able to supply the system with the necessary data so that it can be
-analysed and properly converted into knowledge.
+needs to be able to supply the system with the necessary data, so that it can
+be analysed and properly converted into knowledge.
 
 It seems fair to infer that nowadays most of a user's financial transactions
 happen in ways that can be listed electronically (usually via their bank or
@@ -45,11 +45,10 @@ system.
 
 The system created for this project intends to do just this. Its main feature,
 however, will be to allow the user to categorise expenditure based on patterns
-in the entries' descriptions. However, 
-
-There must also be a feature to allow the user to view summaries of the income
-and expenditure over a period of time, as well as one to forecast budgets for
-future periods based on the ``financial behaviour'' analysed.
+in the entries' descriptions. There must also be a feature to allow the user to
+view summaries of the income and expenditure over a period of time, as well as
+one to forecast budgets for future periods based on the ``financial behaviour''
+analysed.
 
 \subsection{Functional Requirements} \label{sec:Requirements.FunctionalRequirements}
 
@@ -125,8 +124,8 @@ exist they will be asked if they want to create a new one:
 \FloatBarrier
 
 And in order to better understand the relationship between \emph{Upload
-Statement} and \emph{Categorise Entries}, the activity diagram below (Figure \ref{fig:AD.CategoriseEntries}) was
-developed:
+Statement} and \emph{Categorise Entries}, the activity diagram below (Figure
+\ref{fig:AD.CategoriseEntries}) was developed:
 \begin{figure}[ht!]
   \begin{center}
     \includegraphics[width=11cm]{./contents/img/Activity_Diagram_-_Categorise_Entries.png}
@@ -142,3 +141,5 @@ Use cases and use case diagrams are an appropriate tool to document functional
 requirements, but not non-functional ones (Jacobson et al., 1999,
 \cite[cited][p.~153]{bennett2010object}). Therefore, a separate list has been
 kept in order to document the non-functional requirements, where they exist.
+% TODO: make sure I've actually got a list once I understand what these
+% requirements are
