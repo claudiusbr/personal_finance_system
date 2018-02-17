@@ -33,6 +33,8 @@ analysed.
 
 \subsection{Functional Requirements} \label{sec:Requirements.FunctionalRequirements}
 
+
+\subsubsection{Use Case Diagram} \label{sec:Requirements.FunctionalRequirements.UseCaseDiagram}
 Use case diagrams are UML constructs which were developed by Jacobson et al.
 (1992, cited \cite[][p.~154]{bennett2010object}). The use case diagram on
 Figure \ref{fig:UseCaseDiagram} is used to illustrate the functional
@@ -46,9 +48,11 @@ requirements identified for this project:
 \end{figure}
 \FloatBarrier
 
+
+
+\subsubsection{Use Case List} \label{sec:Requirements.FunctionalRequirements.UseCaseList}
 Table \ref{tab:UseCaseDescriptions} lists the descriptions for the use cases
-listed above. The first iteration had them all in a single table, but at
-subsequent ones more details were identified
+listed above:
 \begin{table}[ht!]
   \centering
   \begin{tabular}{|p{4cm}|p{12cm}|}
@@ -71,7 +75,7 @@ subsequent ones more details were identified
                                   a summary of their income and expenditure
                                   over a period of time\\
     \hline
-    Visualise Budget&The user must be able to visualise a budget for future
+    Calculate Budget&The user must be able to visualise a budget for future
                      periods based on their income and expenditure data 
                      already entered\\
     \hline
@@ -80,6 +84,9 @@ subsequent ones more details were identified
     \hline
     Create Category&Creates a new category with the name suggested by the
                         user\\
+    \hline
+    Estimate Tax&Based on the information entered and the current tax year,
+                 calculate how much tax is due\\
     \hline
   \end{tabular}
   \caption{Use Case Descriptions} \label{tab:UseCaseDescriptions}
@@ -115,6 +122,24 @@ Statement} and \emph{Categorise Entries}, the activity diagram below (Figure
   \label{fig:AD.CategoriseEntries}
 \end{figure}
 \FloatBarrier
+
+Below (Figure \ref{fig:Wireframe.VisualiseCategorisedSummary}) is also a
+wireframe illustrating the GUI for \emph{Visualise Categorised Summary}. The
+user should have an option to select the dates and, if they only want to see
+one category, the category itself:
+\begin{figure}[ht!]
+  \begin{center}
+    \includegraphics[width=8cm]{./contents/img/Wireframe_-_Visualise_Summary.png}
+  \end{center}
+  \caption{}
+  \label{fig:Wireframe.VisualiseCategorisedSummary}
+\end{figure}
+\FloatBarrier
+
+The dates field should allow them both to type a date or choose it from a drop
+down calendar. If no values are entered, the system will return a summary of
+all categories on the system.
+
 
 
 \subsection{Non-Functional Requirements} \label{sec:Requirements.NonFunctionalRequirements}

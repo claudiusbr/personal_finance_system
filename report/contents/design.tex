@@ -3,7 +3,7 @@
 Seeing that this is a system dealing with finance, it would make sense to treat
 the categories as if they were accounts. And, in order to make sure to imbue
 this system with knowledge acquired by more experienced programmers, it makes
-sense to make use of patterns.
+sense to make use of analysis and design patterns.
 
 %TODO: maybe move to appendix
 It is also useful at this point to make a distinction between the types of
@@ -16,9 +16,9 @@ model transactions, coordination, control and sequencing of other objects --
 which are known as \emph{control classes} (Jacobson et al., 1999,
 \cite[cited][pp.~198-201]{bennett2010object}).
 
-The first analysis patterns which seem appropriate are the \emph{Account}
-pattern, used to create the \emph{Category} entity class, and the
-\emph{Quantity} pattern for the \emph{Amount} entity class
+The first analysis patterns which seem appropriate are a modified version of
+the \emph{Account} pattern, used to create the \texttt{Category} entity class,
+and the \emph{Quantity} pattern for the \texttt{Amount} entity class
 (\cite[][Sections~6.1~\&~3.1]{fowler1997analysis}):
 \begin{figure}[ht!]
   \begin{center}
@@ -29,24 +29,28 @@ pattern, used to create the \emph{Category} entity class, and the
 \end{figure}
 \FloatBarrier
 
-As implied by the diagram above, the \emph{Category} class will be associated
-with instances of the \emph{Entry} class, and will keep track of the balance
-made up of the sum of \emph{Amount}'s of each entry. This is done so that the
-only way to change the total of a category is by adding positive or negative
-entries to it -- for example, to indicate a credit to a category, a negative
-entry can be added to it.
+As implied by the diagram above, the \texttt{Category} class will be associated
+with instances of the \texttt{Entry} class. This is done so that the only way to
+change the total of a category is by adding positive or negative entries to it
+-- for example, to indicate a credit to a category, a negative entry can be
+added to it. The modification to the original Account pattern consists of the
+fact that, whereas in the original pattern an instance of \texttt{Account}
+would keep track of the balance, there is no need to keep track of the current
+balance in each \texttt{Category} -- the purpose of the system is to allow the
+user to view a summary of income/expenditure by period, so this will have to be
+calculated each time.
 
 Another design choice which can be observed in Figure
-\ref{fig:ClassDiagram.CategoriesAndAmount} is that the \emph{Amount} class also
-possesses an attribute for currency. This has been designed so as to allow for
-the possibility of extending the design to keep track of transactions in
-multiple currencies, although it was not a specific requirement. Initially,
+\ref{fig:ClassDiagram.CategoriesAndAmount} is that the \texttt{Amount} class
+also possesses an attribute for currency. This has been designed so as to allow
+for the possibility of extending the system to keep track of transactions in
+multiple currencies, although this was not a specific requirements. Initially,
 there will only be a single default currency which shall be set at runtime.
 
 The next step is to provide a way for these entries to be added to categories.
-For this to happen, there needs to be a constraint in to ensure that double
-entry happens every time a change needs to be made to a category. One of the
-ways to achieve this is to apply the \emph{Transaction} pattern
+For this to happen, there needs to be a constraint to ensure that double entry
+happens every time a change needs to be made to a category. One of the ways to
+achieve this is to apply the \emph{Transaction} pattern
 (\cite[][Section~6.2]{fowler1997analysis}):
 \begin{figure}[ht!]
   \begin{center}
@@ -76,10 +80,10 @@ can be modelled as follows (Figure \ref{fig:CommDiagram.CreateManualEntry}):
 \end{figure}
 \FloatBarrier
 
-As the diagram above indicates, the \emph{Transaction} class is responsible for
-the creation of new instances of \emph{Entry} and \emph{Amount}, which then get
-assigned to the \emph{Category} instances chosen, or created, by the user.
-Once the user starts typing, the \emph{CategorySuggester} is triggered to
+As the diagram above indicates, the \texttt{Transaction} class is responsible for
+the creation of new instances of \texttt{Entry} and \texttt{Amount}, which then get
+assigned to the \texttt{Category} instances chosen, or created, by the user.
+Once the user starts typing, the \texttt{CategorySuggester} is triggered to
 suggest categories. The actual implementation of how this suggestions happen
 may vary, but initially it should at least be based on what the user types in
 the search box. If the user chooses to create a new category instead, then they
@@ -87,7 +91,7 @@ will be taken to the appropriate interface to allow them to do so. Once the
 user is satisfied and chooses to submit, the system will start to input the
 transactions in the appropriate category or categories.
 
-Although \emph{Transaction} was originally thought of as a \emph{control
+Although \texttt{Transaction} was originally thought of as a \emph{control
 class}, it was later decided that it would be beneficial to save the
 transaction information, so it was made into an \emph{entity class} instead.
 It is also worth noting that, although implicit in the diagram and the
@@ -98,7 +102,7 @@ suggestion at this point, it felt it was appropriate to have the diagram on
 Figure \ref{fig:CommDiagram.CreateManualEntry} have its first message sent at
 this stage.
 
-It is also important to emphasise the fact that \emph{CategorySuggester} is
+It is also important to emphasise the fact that \texttt{CategorySuggester} is
 only an interface at this point, and that the suggester in the diagram will be
 any object which implements this interface. This is to allow more flexibility
 in the implementation of the classes responsible for suggesting categories to
@@ -109,9 +113,9 @@ the user.
 The user should be able to upload their bank statements, provided that they are
 in a suitable format. The specifics of the format will be described in the
 implementation phase, together with more information on how to encapsulate as
-much as possible the complexities related to formatting of this information.
-For the analysis and design phases, the emphasis will be on modelling the
-objects and their interactions. The diagram (Figure
+much as possible the complexities related to the formatting of this
+information.  For the analysis and design phases, the emphasis will be on
+modelling the objects and their interactions. The diagram (Figure
 \ref{fig:CommDiagram.CreateManualEntry}) below illustrates this process:
 \begin{figure}[ht!]
   \begin{center}
@@ -124,30 +128,40 @@ objects and their interactions. The diagram (Figure
 
 As can be seen in the diagram above, the process is spread among many classes.
 After the user uploads the statement, the loaded raw input will be sent to a
-\emph{Parser} which will separate it according to the columns into the
+\texttt{Parser} which will separate it according to the columns into the
 appropriate fields and line items. Then, what is now a collection of statement
-line items will be passed on to an \emph{InputValidator} to make sure the user
+line items will be passed on to an \texttt{InputValidator} to make sure the user
 input is valid. Lastly, the resulting validated entries will be sent down to a
-\emph{Classifier}, which will signal the relevant \emph{Transaction}
-instance(s) to add the entries to their relevant \emph{Categories} -- this last
-part has already been illustrated in Figure
+\texttt{Classifier}, which will signal the relevant \texttt{Transaction}
+instance(s) to add the entries to their relevant \texttt{Category} instances --
+this last part has already been illustrated in Figure
 \ref{fig:CommDiagram.CreateManualEntry}. 
 
-When the \emph{Classifier} cannot match a line item against any of the existing
-categories, it will pass the line in question to the \emph{ManualEntryUI},
+When the \texttt{Classifier} cannot match a line item against any of the existing
+categories, it will pass the line in question to the \texttt{ManualEntryUI},
 which, apart from having all transaction details already populated, will rely
 on the process described at subsection \ref{sec:AnalysisAndDesign.ManualEntry}
-to properly categorise the item and then forward it to \emph{Transaction} to
+to properly categorise the item and then forward it to \texttt{Transaction} to
 create the categories.
 
-\subsection{View Categorised Summary} \label{sec:AnalysisAndDesign.ViewSummary}
-This feature will allow the user to view a summary of their spend by category.
-The user will enter the period which they want to examine, and the system will
-retrieve the categories which have entries with those dates. The system should
-then sort the categories by income or expenditure and by total, and then
-display it to the user.
+\subsection{Visualise Categorised Summary} \label{sec:AnalysisAndDesign.ViewSummary}
+As mentioned before, this feature will allow the user to view a summary of
+their income and expenditure by category.  The user will enter the period which
+they want to examine, and the system will retrieve the categories which have
+entries with those dates.  The system should then sort the categories by income
+or expenditure and by total, and then display it to the user. Optionally, the
+user can filter the output further by choosing a single category.
 
-%TODO: add a sequence diagram for this.
+Below (Figure \ref{fig:CommDiagram.VisualiseCategorisedSummary}) is a
+communication diagram to illustrate this interaction: \begin{figure}[ht!]
+  \begin{center}
+    \includegraphics[width=16cm]{./contents/img/Comm_Diagram_-_Visualise_Categorised_Summary.png}
+  \end{center}
+  \caption{communication diagram for \emph{Visualise Categorised Summary} use case}
+  \label{fig:CommDiagram.VisualiseCategorisedSummary}
+\end{figure}
+
+
 
 \subsection{Calculate Budget} \label{sec:AnalysisAndDesign.CalculateBudget}
 This feature will allow the user to request the system to calculate a budget
@@ -158,5 +172,14 @@ which make up more than 80\% of the total, and add all the others which make up
 the remainder and add them up as `other' or something similar. It will then
 show these totals to the user, in a similar way as it shows the categorised
 summary.
+
+%TODO: do a sequence diagram for this.
+
+\subsection{Estimate Tax} \label{sec:AnalysisAndDesign.EstimateTax}
+This feature will allow the user to, based on their income and expenditure,
+calculate the amount of tax due for a financial year. For this to happen, the
+user will have to provide the date when the financial year begins, and the tax
+tiers in their country. This is loosely based on UK Generally Accepted
+Accounting Practices, where taxation is centralised and happens in tiers.
 
 %TODO: do a sequence diagram for this.
