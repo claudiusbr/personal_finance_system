@@ -40,6 +40,10 @@ balance in each \texttt{Category} -- the purpose of the system is to allow the
 user to view a summary of income/expenditure by period, so this will have to be
 calculated each time.
 
+%TODO: see if we can use \cite[][location~2057]{fowler1997analysis} summary
+%accounts to separate entries or accounts into income and expenditure. E.g.:
+%positive entry to wages is income, but to bills is expenditure...?
+
 Another design choice which can be observed in Figure
 \ref{fig:ClassDiagram.CategoriesAndAmount} is that the \texttt{Amount} class
 also possesses an attribute for currency. This has been designed so as to allow
@@ -176,10 +180,15 @@ summary.
 %TODO: do a sequence diagram for this.
 
 \subsection{Estimate Tax} \label{sec:AnalysisAndDesign.EstimateTax}
+
+%TODO: refer to
+%\cite[][location~2071-rest~of~chapter~6~and~maybe~chapter~7]{fowler1997analysis}
+%as these patterns seem like they would be useful here.
 This feature will allow the user to, based on their income and expenditure,
 calculate the amount of tax due for a financial year. For this to happen, the
 user will have to provide the date when the financial year begins, and the tax
 tiers in their country. This is loosely based on UK Generally Accepted
-Accounting Practices, where taxation is centralised and happens in tiers.
+Accounting Practices (UK GAAP), where taxation is centralised and happens in
+tiers.
 
 %TODO: do a sequence diagram for this.
