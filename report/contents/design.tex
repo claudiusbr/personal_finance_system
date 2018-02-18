@@ -62,9 +62,6 @@ achieve this is to apply the \emph{Transaction} pattern
 \FloatBarrier
 
 
-%TODO: see if we can use \cite[][location~2057]{fowler1997analysis} summary
-%accounts to separate entries or accounts into income and expenditure. E.g.:
-%positive entry to wages is income, but to bills is expenditure...? 
 Furthermore, especially due to the requirements for tax estimates, the
 \emph{Summary Accounts} pattern (\cite[][Section~6.3]{fowler1997analysis}) will
 be adapted to help classify categories between income and expenditure. A
@@ -86,6 +83,13 @@ illustrate it better:
   \label{fig:ClassDiagram.SummaryCategory}
 \end{figure}
 \FloatBarrier
+
+
+Lastly, also as a preparation for the estimate tax functionality, it would be
+useful to design them based on the \emph{Memo Account} and \emph{Posting Rules}
+patterns (\cite[][Section~6.4~\&~6.5]{fowler1997analysis}).
+
+\textbf{TODO: implement the Memo Account and Posting Rules, and employ textual descriptions}
 
 
 After having determined the analysis patterns which shall be employed, it makes
