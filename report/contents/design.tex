@@ -22,7 +22,7 @@ and the \emph{Quantity} pattern for the \texttt{Amount} entity class
 (\cite[][Sections~6.1~\&~3.1]{fowler1997analysis}):
 \begin{figure}[ht!]
   \begin{center}
-    \includegraphics[width=11cm]{./contents/img/Class_Diagram_-_Categories_and_Amount.png}
+    \includegraphics[width=9cm]{./contents/img/Class_Diagram_-_Categories_and_Amount.png}
   \end{center}
   \caption{}
   \label{fig:ClassDiagram.CategoriesAndAmount}
@@ -40,10 +40,6 @@ balance in each \texttt{Category} -- the purpose of the system is to allow the
 user to view a summary of income/expenditure by period, so this will have to be
 calculated each time.
 
-%TODO: see if we can use \cite[][location~2057]{fowler1997analysis} summary
-%accounts to separate entries or accounts into income and expenditure. E.g.:
-%positive entry to wages is income, but to bills is expenditure...?
-
 Another design choice which can be observed in Figure
 \ref{fig:ClassDiagram.CategoriesAndAmount} is that the \texttt{Amount} class
 also possesses an attribute for currency. This has been designed so as to allow
@@ -58,10 +54,39 @@ achieve this is to apply the \emph{Transaction} pattern
 (\cite[][Section~6.2]{fowler1997analysis}):
 \begin{figure}[ht!]
   \begin{center}
-    \includegraphics[width=14cm]{./contents/img/Class_Diagram_-_Transaction.png}
+    \includegraphics[width=9cm]{./contents/img/Class_Diagram_-_Transaction.png}
   \end{center}
+  \caption{}
+  \label{fig:ClassDiagram.Transaction}
 \end{figure}
 \FloatBarrier
+
+
+%TODO: see if we can use \cite[][location~2057]{fowler1997analysis} summary
+%accounts to separate entries or accounts into income and expenditure. E.g.:
+%positive entry to wages is income, but to bills is expenditure...? 
+Furthermore, especially due to the requirements for tax estimates, the
+\emph{Summary Accounts} pattern (\cite[][Section~6.3]{fowler1997analysis}) will
+be adapted to help classify categories between income and expenditure. A
+\texttt{SummaryCategory} implements the \texttt{Category} interface, and would
+implement its \texttt{getEntries} method so that its entries are those of its
+components. It's components are other instances of \texttt{Category}, so they
+can be both both \texttt{DetailCategory} and its own type -- the implementation
+will have to take this into account somehow, such as by using recursion. The
+class diagram below (Figure \ref{fig:ClassDiagram.SummaryCategory}) can
+illustrate it better:
+
+\textbf{TODO}
+
+\begin{figure}[ht!]
+  \begin{center}
+    \includegraphics[width=11cm]{./contents/img/Class_Diagram_-_Summary_Category.png}
+  \end{center}
+  \caption{}
+  \label{fig:ClassDiagram.SummaryCategory}
+\end{figure}
+\FloatBarrier
+
 
 After having determined the analysis patterns which shall be employed, it makes
 sense to dive into a deeper analysis of the use cases described in Chapter
@@ -77,7 +102,7 @@ user to input financial transactions individually using a specific interface,
 can be modelled as follows (Figure \ref{fig:CommDiagram.CreateManualEntry}):
 \begin{figure}[ht!]
   \begin{center}
-    \includegraphics[width=16cm]{./contents/img/Comm_Diagram_-_Manual_Entry.png}
+    \includegraphics[width=12cm]{./contents/img/Comm_Diagram_-_Manual_Entry.png}
   \end{center}
   \caption{Communication Diagram for the \emph{Create Manual Entry} use case}
   \label{fig:CommDiagram.CreateManualEntry}
@@ -160,7 +185,7 @@ Below (Figure \ref{fig:CommDiagram.VisualiseCategorisedSummary}) is a
 communication diagram to illustrate this interaction: 
 \begin{figure}[ht!]
   \begin{center}
-    \includegraphics[width=14cm]{./contents/img/Comm_Diagram_-_Visualise_Categorised_Summary.png}
+    \includegraphics[width=12cm]{./contents/img/Comm_Diagram_-_Visualise_Categorised_Summary.png}
   \end{center}
   \caption{communication diagram for \emph{Visualise Categorised Summary} use case}
   \label{fig:CommDiagram.VisualiseCategorisedSummary}
@@ -196,11 +221,22 @@ application layer.
 %TODO: refer to
 %\cite[][location~2071-rest~of~chapter~6~and~maybe~chapter~7]{fowler1997analysis}
 %as these patterns seem like they would be useful here.
-This feature will allow the user to, based on their income and expenditure,
-calculate the amount of tax due for a financial year. For this to happen, the
-user will have to provide the date when the financial year begins, and the tax
-tiers in their country. This is loosely based on UK Generally Accepted
-Accounting Practices (UK GAAP), where taxation is centralised and happens in
-tiers.
+This feature will allow the user to calculate an estimate of the amount of tax
+due for a financial year, based on their income and expenditure. For this to
+happen, the user will have to provide the date when the financial year begins,
+and the tax tiers in their country. This is loosely based on UK Generally
+Accepted Accounting Practices (UK GAAP), where taxation is centralised and
+happens in tiers. The communication diagram of figure
+\ref{fig:CommDiagram.EstimateTax} exemplifies the application module which will
+model this functionality:
 
-%TODO: do a sequence diagram for this.
+\textbf{TODO}
+
+\begin{figure}[ht!]
+  \begin{center}
+    \includegraphics[width=5cm]{./contents/img/Comm_Diagram_-_Estimate_Tax.png}
+  \end{center}
+  \caption{}
+  \label{fig:CommDiagram.EstimateTax}
+\end{figure}
+\FloatBarrier
