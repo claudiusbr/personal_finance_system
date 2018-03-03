@@ -1,13 +1,4 @@
 \section{Requirements} \label{sec:Requirements}
-A system could be summarised roughly as a solution to one or more problems. One
-of the first steps in order to build this kind of solution is to try to
-understand the problem -- that is, try to map the requirements of the software. 
-
-The definitions of functional and non-functional requirements from Appendix 1
-(\ref{appendix1}) will be employed when trying to classify the requirements and
-model the problem domain. The initial iterations will be focused more on the
-functional and usability requirements, paying some attention as well to
-specific non-functional requirements such as performance and security.
 
 Any personal accounting system should be able to provide accurate and relevant
 summaries of an individual's financial status. In order to do this, the user
@@ -141,6 +132,33 @@ down calendar. If no values are entered, the system will return a summary of
 all categories on the system.
 
 
+
+Below is a wireframe to illustrate how the initial window for the
+\emph{Estimate Tax} requirement:
+
+\textbf{TODO}
+
+\begin{figure}[ht!]
+  \begin{center}
+    \includegraphics[width=14cm]{./contents/img/Wireframe_-_Estimate_Tax.png}
+  \end{center}
+  \caption{Estimate Tax interface. Date and allowances shown as specified by HM
+    Revenue \& Customs (\cite[][]{hmrc2018taxrates})}
+  \label{fig:Wireframe.EstimateTax}
+\end{figure}
+\FloatBarrier
+
+Normally, in the UK there is a difference between what is ``tax exempt'' and
+what is ``taxed at 0\%''. As indicated by Figure
+\ref{fig:Wireframe.EstimateTax}, for the purposes of the estimation provided by
+the requirements in this project, it was decided that this distinction would be
+ignored, and that the user can simply have a choice to use one of the dynamic
+boxes on \emph{Normal Taxation Rates} to indicate a tax free allowance.
+
+A choice has been made to include help texts next to the fields which are
+likely to need them, and these are indicated in Figure
+\ref{fig:Wireframe.EstimateTax} by the bubbles with the question marks next to
+the relevant fields.
 
 \subsection{Non-Functional Requirements} \label{sec:Requirements.NonFunctionalRequirements}
 Use cases and use case diagrams are an appropriate tool to document functional

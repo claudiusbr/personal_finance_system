@@ -1,5 +1,8 @@
 \section{Introduction} \label{sec:Introduction}
 
+A system could be summarised roughly as a solution to one or more problems. One
+of the first steps in order to build this kind of solution is to try to
+understand the problem -- that is, try to map the requirements of the software.
 Vaasen et al. (2009 \cite[cited][p.~8]{Boczko:2012:IAI:2331376}) suggests that
 an accounting information system's main purpose is to provide information to
 internal and external stakeholders. Although this refers to accounting systems
@@ -12,26 +15,26 @@ efficient and less tedious ways to organise one's personal financial
 information than doing it manually (\cite{quicken2017about}). This project has
 been developed based on these ideas.
 
-The system has been modelled after the principle of \emph{double entry
-bookkeeping}, from the accounting domain, which states that ``money is never
-created or destroyed -- it merely moves from one account to another''
-(\cite[][Section 6.2]{fowler1997analysis}). More specifically, double entry is
-the principle which ensures that every transaction always affects two accounts,
-one being credited (Out) and one debited (In). An account, for the scope of
-this project, refers either to a category created by the user, or to the user's
-\emph{cash book} -- the contents of their bank account plus any manual entry
-which they make. In bookkeeping, each account can be classified as \emph{asset,
-liability, income} or \emph{expenditure}. Whether the account increases or
-decreases will depend on which of these categories it falls under:
-\emph{debits} will increase \emph{assets} and \emph{expense} accounts, and
-\emph{credits} will increase \emph{liability, capital} or \emph{income}
-acccounts (\cite[][pp.~18-19]{wood2004book}).
-
 This report documents the work of the project. Each chapter delineates a
 specific aspect of the development lifecycle, which is in line with the
 development process listed in \ref{sec:DevelopmentMethod}. Chapter
 \ref{sec:Requirements} identifies the identified requirements which were used
 as motivation for the system to be developed.
+
+The system developed for this project has been modelled after the principle of
+\emph{double entry bookkeeping}, from the accounting domain, which states that
+``money is never created or destroyed -- it merely moves from one account to
+another'' (\cite[][Section 6.2]{fowler1997analysis}). More specifically, double
+entry is the principle which ensures that every transaction always affects two
+accounts, one being credited (Out) and one debited (In). An account, for the
+scope of this project, refers either to a category created by the user, or to
+the user's \emph{cash book} -- the contents of their bank account plus any
+manual entry which they make. In bookkeeping, each account can be classified as
+\emph{asset, liability, income} or \emph{expenditure}. Whether the account
+increases or decreases will depend on which of these categories it falls under:
+\emph{debits} will increase \emph{assets} and \emph{expense} accounts, and
+\emph{credits} will increase \emph{liability, capital} or \emph{income}
+acccounts (\cite[][pp.~18-19]{wood2004book}).
 
 Analysis of requirements has been incorporated in the design section (Chapter
 \ref{sec:Design}). This is also where the first mention of patterns can be
