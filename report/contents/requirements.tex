@@ -149,11 +149,14 @@ Below is a wireframe to illustrate how the initial window for the
 \FloatBarrier
 
 Normally, in the UK there is a difference between what is ``tax exempt'' and
-what is ``taxed at 0\%''. As indicated by Figure
-\ref{fig:Wireframe.EstimateTax}, for the purposes of the estimation provided by
-the requirements in this project, it was decided that this distinction would be
-ignored, and that the user can simply have a choice to use one of the dynamic
-boxes on \emph{Normal Taxation Rates} to indicate a tax free allowance.
+what is ``taxed at 0\%''.  For the purposes of the estimation provided by
+the requirements in this project, it was initially decided that this
+distinction would be ignored, and that the user could simply have a choice to
+use one of the dynamic boxes on \emph{Normal Taxation Rates} to indicate a tax
+free allowance. However, due to the order in which the taxes are to be
+deducted, it was decided that a non-taxable allowance field should still be
+made available, but allow its value to be set to zero. This should allow for
+more flexibility.
 
 A choice has been made to include help texts next to the fields which are
 likely to need them, and these are indicated in Figure
