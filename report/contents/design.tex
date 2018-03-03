@@ -33,12 +33,12 @@ As implied by the diagram above, the \texttt{Category} class will be associated
 with instances of the \texttt{Entry} class. This is done so that the only way to
 change the total of a category is by adding positive or negative entries to it
 -- for example, to indicate a credit to a category, a negative entry can be
-added to it. The modification to the original Account pattern consists of the
-fact that, whereas in the original pattern an instance of \texttt{Account}
-would keep track of the balance, there is no need to keep track of the current
-balance in each \texttt{Category} -- the purpose of the system is to allow the
-user to view a summary of income/expenditure by period, so this will have to be
-calculated each time.
+added to it. One of the modifications to the original Account pattern consists
+of the fact that, whereas in the original pattern an instance of
+\texttt{Account} would keep track of the balance, there is no need to keep
+track of the current balance in each \texttt{Category} -- the purpose of the
+system is to allow the user to view a summary of income/expenditure by period,
+so this will have to be calculated each time.
 
 Another design choice which can be observed in Figure
 \ref{fig:ClassDiagram.CategoriesAndAmount} is that the \texttt{Amount} class
@@ -94,7 +94,7 @@ Account} is a subtype of \emph{Account}, but it's not subject to double entry
 -- that is, whenever a double entry is made there can be also a third entry in
 the memo account. In this system, the categories will be subject to double
 entry, and when a percentage is registered in the memo category it will not be
-entered anywhere else. \textbf{TODO: revise this. is it really a good idea?
+entered anywhere else. \textbf{TODO: revise this. Is it really a good idea?
 Memo accounts are subsidiary ledgers, so maybe it would be good to keep them as
 such...?}
 
@@ -247,9 +247,20 @@ due for a financial year, based on their income and expenditure. For this to
 happen, the user will have to provide the date when the financial year begins,
 and the tax tiers in their country. The tax estimation will be based as best as
 possible on how personal tax is calculated in the UK
-(\cite[][]{hmrc2018personaltax}). The communication diagram
-of figure \ref{fig:CommDiagram.EstimateTax} exemplifies the application module
-which will model this functionality:
+(\cite[][]{hmrc2018personaltax}). 
+
+This time it was felt that Fowler's (\citeyear[][Ch.~6.4]{fowler1997analysis})
+\emph{Memo Account} pattern would be useful for this case. Designing this
+requirement with this pattern would ensure that, whenever the user created a
+category which was deemed taxable, a portion of the income would be posted to
+the tax account. It is also necessary to remember whether income has already
+been deducted or if it relates to the gross amount, so this will have to be
+taken into consideration.
+
+\textbf{TODO: find the proper design pattern for this: a enum which keeps track of the tax situation of each category -- are they income deducted at source, or tax deductible expenditure?}
+
+The communication diagram of figure \ref{fig:CommDiagram.EstimateTax}
+exemplifies the application module which will model this functionality:
 
 \textbf{TODO}
 
@@ -262,7 +273,3 @@ which will model this functionality:
 \end{figure}
 \FloatBarrier
 
-There should be an option to allow a user to determine whether income is
-taxable and if tax has already been deducted at source. Maybe it would be
-useful to have a mechanism to search whether such categories are widely
-taxable.
