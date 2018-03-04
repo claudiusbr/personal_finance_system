@@ -6,22 +6,30 @@ summaries of an individual's financial status. In order to do this, the user
 needs to be able to supply the system with the necessary data, so that it can
 be analysed and properly converted into knowledge.
 
-It seems fair to infer that nowadays most of a user's financial transactions
-happen in ways that can be listed electronically (usually via their bank or
-credit card statements) -- a study by Payments UK
-(\citeyear{paymentsUK2017summary}), for example, indicates that there has been
-a rise in debit card payments over the past few years, and that the volumes of
-this type of transaction is likely to be higher than that of cash payments by
-the year 2021. Therefore, an assumption has been made that the users will
-require means of uploading a list of their financial transactions into the
-system.
+The scope of the personal finance system developed for this project must
+include a feature to allow a user to upload their bank and credit card
+statements into it. Each transaction should be categorised based on categories
+which the user will create. The user should then be able to visualise a summary
+of their income and expenditure by category and period. This should allow them
+to have a concise and clear visibility of how much they have earned and spent
+over any period of time.
 
-The system created for this project intends to do just this. Its main feature,
-however, will be to allow the user to categorise expenditure based on patterns
-in the entries' descriptions. There must also be a feature to allow the user to
-view summaries of the income and expenditure over a period of time, as well as
-one to forecast budgets for future periods based on the ``financial behaviour''
-analysed.
+Since there may be other sources of income which the user may want to
+categorise (such as breakdowns of cash transactions from pocket money), a
+feature to allow for manual entries should also be made available. The user can
+declare a lump sum, and then break it down among categories. The option should
+allow them to choose whether the transaction is a credit or a debit from a
+specific category, and then provide the corresponding debit or credit to a
+category of their choice. For example, if the user withdraws \pounds50, and
+spends half of it on weekly shopping and the other half on a cinema ticket,
+they should be able to `debit' \pounds50 to the \emph{Bank} category, and then
+`credit' \pounds25 to both \emph{Weekly Shopping} and \emph{Entertainment}
+categories.
+
+Once the system has enough data, it should be able to calculate a simple budget
+and display it for the user. The budget can be a simple average of income and
+expenditure over a long enough period of time, projected over the future
+month/year -- it would only be used as a guideline for the user, anyway.
 
 A feature to estimate tax would also be useful. Initially, this can be based on
 the system used to calculate personal tax in the UK, where all of an
