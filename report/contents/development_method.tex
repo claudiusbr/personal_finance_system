@@ -92,3 +92,12 @@ Analysis patterns will be used ``when trying to understand the problem'' domain
 consists of a structure of classes and associations which occurs often in many
 modelling situations related to specific domains
 (\cite[][p.~254]{bennett2010object}).
+
+
+\subsection{Persistence Layer Design}
+Hibernate was used to design the persistence layer. One of the intentions of
+creating this system was to make it portable, but the complexities inherent in
+trying to achieve this using individual language dialects implemented by each
+database management system (\cite[][p.~4]{bauer2016hibernate}) would make it
+impractical, so it was decided to use Object Relational Mapping with Hibernate
+to achieve portability.
