@@ -22,7 +22,7 @@ and the \emph{Quantity} pattern for the \texttt{Amount} entity class
 (\cite[][Sections~6.1~\&~3.1]{fowler1997analysis}):
 \begin{figure}[ht!]
   \begin{center}
-    \includegraphics[width=9cm]{./contents/img/Class_Diagram_-_Categories_and_Amount.png}
+    \includegraphics[width=12cm]{./contents/img/Class_Diagram_-_Categories_and_Amount.png}
   \end{center}
   \caption{}
   \label{fig:ClassDiagram.CategoriesAndAmount}
@@ -60,28 +60,6 @@ achieve this is to apply the \emph{Transaction} pattern
   \label{fig:ClassDiagram.Transaction}
 \end{figure}
 \FloatBarrier
-
-
-Furthermore, especially due to the requirements for tax estimates, the
-\emph{Summary Accounts} pattern (\cite[][Section~6.3]{fowler1997analysis}) will
-be adapted to help classify categories between income and expenditure. A
-\texttt{SummaryCategory} implements the \texttt{Category} interface, and would
-implement its \texttt{getEntries} method so that its entries are those of its
-components. It's components are other instances of \texttt{Category}, so they
-can be both both \texttt{DetailCategory} and its own type -- the implementation
-will have to take this into account somehow, such as by using recursion. The
-class diagram below (Figure \ref{fig:ClassDiagram.SummaryCategory}) can
-illustrate it better:
-
-\begin{figure}[ht!]
-  \begin{center}
-    \includegraphics[width=11cm]{./contents/img/Class_Diagram_-_Summary_Category.png}
-  \end{center}
-  \caption{}
-  \label{fig:ClassDiagram.SummaryCategory}
-\end{figure}
-\FloatBarrier
-
 
 After having determined some of the analysis patterns which shall be employed,
 it makes sense to dive into a more specific analysis of the use cases described
@@ -237,19 +215,56 @@ case. Designing this requirement as such would ensure that, whenever the user
 created a category which was deemed taxable, a portion of the income would be
 posted to the tax account. It is also necessary to remember whether income has
 already been deducted or if it relates to the gross amount, so this will have
-to be taken into consideration.
+to be taken into consideration. 
+
 
 The \emph{Memo Account} pattern here will be implemented as tax-related
-instances of the already discussed \emph{DetailCategory}. Due to the
-double-entry principle of bookkeeping, each tax instance will need to have a
-\emph{contra} category -- that is, a second category which will act as the
-counterpart to the transaction -- so that the principle is still observed. 
+instances of \emph{Category}. Due to the double-entry principle of bookkeeping,
+each tax instance will need to have a \emph{contra} category -- that is, a
+second category which will act as the counterpart to the transaction -- so that
+the principle is still observed.  In order for the user not to have to create
+the transactions manually, however, an \emph{event listener} needs to be added
+in order for entries to be made in the appropriate tax categories when
+necessary. This is where the \emph{Posting Rules} pattern will be appropriate.
+Below (Figure \ref{fig:ClassDiagram.Memo_Categories_and_Posting_Rule}) is an
+analysis class diagram exemplifying the implementation:
+\begin{figure}[ht!]
+  \begin{center}
+    \includegraphics[width=9cm]{./contents/img/Class_Diagram_-_Memo_Categories_and_Posting_Rule.png}
+  \end{center}
+  \caption{}
+  \label{fig:ClassDiagram.Memo_Categories_and_Posting_Rule}
+\end{figure}
+\FloatBarrier
 
-Also, in order for the user not to have to create the transactions manually,
-however, an \emph{event listener} needs to be added in order for entries to be
-made in the appropriate tax categories when necessary. This is where the
-\emph{Posting Rules} pattern will be appropriate.
+So the principle being illustrated here is that, whenever an entry is posted to
+a category which the user has marked as subscriber to tax, then the
+\texttt{PostingRule}, which subscribes to that event, would determine whether a
+transaction needs to happen between the tax category and its contra. Then, when
+estimates need to be generated, they can simply come directly from the tax
+categories.
 
+
+\textbf{TODO: Regarding designing the tax model} Categories should not be aware
+of tax -- in order for the system to truly be developed iteratively, the
+categories should only keep track of their dates, patterns, etc, and leave the
+taxation and subscription up to other mechanisms to decide them. The reason for
+this is that taxes change, but income from previous years may still fall within
+the previous year's rule. Normally taxes change after tax years have ended, but
+they may also change within a tax year in some countries, so maybe they should
+be tied in to the month. Which means that it may be worth thinking more deeply
+about the class boundaries here -- should the tax categories be made aware of
+dates? Should dates be modelled and from them smaller instances of each system
+exist -- that is, time would be the biggest driver of the domain, so all
+``rules'' would exist within month domains, for example. Then these could be
+aggregated to form tax years. And still they need to maintain the flexibility
+to be able to have all entries be queried by whichever period of time the user
+wants, so ideally the categories should only keep track of their dates, and
+other mechanisms would have to exist to calculate what subscribes to what. That
+is, subscription to certain tax rules should exist by period, so ideally the
+categories should not know about them, but there needs to be something which
+still can keep track of which category is subscribed to which tax rule at which
+time.
 
 The communication diagram of figure \ref{fig:CommDiagram.EstimateTax}
 exemplifies the application module which will model this functionality:
