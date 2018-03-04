@@ -73,8 +73,6 @@ will have to take this into account somehow, such as by using recursion. The
 class diagram below (Figure \ref{fig:ClassDiagram.SummaryCategory}) can
 illustrate it better:
 
-\textbf{TODO}
-
 \begin{figure}[ht!]
   \begin{center}
     \includegraphics[width=11cm]{./contents/img/Class_Diagram_-_Summary_Category.png}
@@ -85,27 +83,11 @@ illustrate it better:
 \FloatBarrier
 
 
-Lastly, also as a preparation for the estimate tax functionality, it would be
-useful to design them based on the \emph{Memo Account} and \emph{Posting Rules}
-patterns (\cite[][Section~6.4~\&~6.5]{fowler1997analysis}). These patterns,
-however, will have to be slightly modified in order to better suit the design
-of this system. For example, in Fowler's original implementation, a \emph{Memo
-Account} is a subtype of \emph{Account}, but it's not subject to double entry
--- that is, whenever a double entry is made there can be also a third entry in
-the memo account. In this system, the categories will be subject to double
-entry, and when a percentage is registered in the memo category it will not be
-entered anywhere else. \textbf{TODO: revise this. Is it really a good idea?
-Memo accounts are subsidiary ledgers, so maybe it would be good to keep them as
-such...?}
-
-\textbf{TODO: implement the Memo Account and Posting Rules, and employ textual descriptions}
-
-
-After having determined the analysis patterns which shall be employed, it makes
-sense to dive into a deeper analysis of the use cases described in Chapter
-\ref{sec:Requirements}. At this point the objective will be to start modelling
-classes based on concepts or things found in the problem domain. This will be
-done in the following subsections.
+After having determined some of the analysis patterns which shall be employed,
+it makes sense to dive into a more specific analysis of the use cases described
+in Chapter \ref{sec:Requirements}. At this point the objective will be to start
+modelling classes and interactions based on concepts or things found in the
+problem domain. This will be done in the following subsections.
 
 \subsection{Create Manual Entry} \label{sec:AnalysisAndDesign.ManualEntry}
 
@@ -249,15 +231,25 @@ and the tax tiers in their country. The tax estimation will be based as best as
 possible on how personal tax is calculated in the UK
 (\cite[][]{hmrc2018personaltax}). 
 
-This time it was felt that Fowler's (\citeyear[][Ch.~6.4]{fowler1997analysis})
-\emph{Memo Account} pattern would be useful for this case. Designing this
-requirement with this pattern would ensure that, whenever the user created a
-category which was deemed taxable, a portion of the income would be posted to
-the tax account. It is also necessary to remember whether income has already
-been deducted or if it relates to the gross amount, so this will have to be
-taken into consideration.
+It was felt that Fowler's (\citeyear[][Session.~6.4-6.5]{fowler1997analysis})
+\emph{Memo Account} and \emph{Posting Rules} patterns would be useful for this
+case. Designing this requirement as such would ensure that, whenever the user
+created a category which was deemed taxable, a portion of the income would be
+posted to the tax account. It is also necessary to remember whether income has
+already been deducted or if it relates to the gross amount, so this will have
+to be taken into consideration.
 
-\textbf{TODO: find the proper design pattern for this: a enum which keeps track of the tax situation of each category -- are they income deducted at source, or tax deductible expenditure?}
+The \emph{Memo Account} pattern here will be implemented as tax-related
+instances of the already discussed \emph{DetailCategory}. Due to the
+double-entry principle of bookkeeping, each tax instance will need to have a
+\emph{contra} category -- that is, a second category which will act as the
+counterpart to the transaction -- so that the principle is still observed. 
+
+Also, in order for the user not to have to create the transactions manually,
+however, an \emph{event listener} needs to be added in order for entries to be
+made in the appropriate tax categories when necessary. This is where the
+\emph{Posting Rules} pattern will be appropriate.
+
 
 The communication diagram of figure \ref{fig:CommDiagram.EstimateTax}
 exemplifies the application module which will model this functionality:
