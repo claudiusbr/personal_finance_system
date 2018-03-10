@@ -30,6 +30,8 @@
 ./contents/img/Class_Diagram_-_Memo_Categories_and_Posting_Rule.png: ../requirements/dia/Class_Diagram_-_Memo_Categories_and_Posting_Rule.dia
 	dia --export=./contents/img/Class_Diagram_-_Memo_Categories_and_Posting_Rule.png --filter=png ../requirements/dia/Class_Diagram_-_Memo_Categories_and_Posting_Rule.dia
 
+./contents/img/Class_Diagram_-_All_Classes.png: ../requirements/dia/Class_Diagram_-_All_Classes.dia
+	dia --export=./contents/img/Class_Diagram_-_All_Classes.png --filter=png ../requirements/dia/Class_Diagram_-_All_Classes.dia
 
 
 
@@ -42,5 +44,5 @@
 
 
 
-pdf:	report.tex ./contents/img/Activity_Diagram_-_Categorise_Entries.png ./contents/img/Activity_Diagram_-_Manual_Entry.png ./contents/img/Use_Case_Diagram.png ./contents/img/Class_Diagram_-_Categories_and_Amount.png ./contents/img/Class_Diagram_-_Transaction.png ./contents/img/Class_Diagram_-_Memo_Categories_and_Posting_Rule.png ./contents/img/Class_Diagram_-_Summary_Category.png ./contents/img/Comm_Diagram_-_Manual_Entry.png ./contents/img/Comm_Diagram_-_Upload_Statement.png ./contents/img/Comm_Diagram_-_Visualise_Categorised_Summary.png ./contents/img/Comm_Diagram_-_Calculate_Budget.png ./contents/img/Comm_Diagram_-_Estimate_Tax.png
+pdf:	report.tex ./contents/img/Activity_Diagram_-_Categorise_Entries.png ./contents/img/Activity_Diagram_-_Manual_Entry.png ./contents/img/Use_Case_Diagram.png ./contents/img/Class_Diagram_-_Categories_and_Amount.png ./contents/img/Class_Diagram_-_Transaction.png ./contents/img/Class_Diagram_-_Memo_Categories_and_Posting_Rule.png ./contents/img/Class_Diagram_-_All_Classes.png ./contents/img/Class_Diagram_-_Summary_Category.png ./contents/img/Comm_Diagram_-_Manual_Entry.png ./contents/img/Comm_Diagram_-_Upload_Statement.png ./contents/img/Comm_Diagram_-_Visualise_Categorised_Summary.png ./contents/img/Comm_Diagram_-_Calculate_Budget.png ./contents/img/Comm_Diagram_-_Estimate_Tax.png
 	pdflatex report && biber report && pdflatex report && pdflatex report && mv report.pdf ../

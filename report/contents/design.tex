@@ -283,3 +283,28 @@ exemplifies the application module which will model this functionality:
 \end{figure}
 \FloatBarrier
 
+
+\subsection{Final Class Diagram}
+The class diagram on Figure \ref{fig:ClassDiagram.AllClasses} is the result of
+joining the more relevant entities listed so far:
+\begin{figure}[ht!]
+  \begin{center}
+    \includegraphics[width=14cm]{./contents/img/Class_Diagram_-_All_Classes.png}
+  \end{center}
+  \caption{}
+  \label{fig:ClassDiagram.AllClasses}
+\end{figure}
+
+Note that the classes for estimating tax were not included in this iteration,
+but time permitting they should be included in subsequent ones.
+
+Manual entries and uploaded statements will inevitably always go against a Bank
+category. For this requirement alone, there does not seem to be any harm in
+hardcoding the \texttt{Bank} category. In this case, since most transactions
+are going to affect the this category, it was decided that no patterns should
+be assigned to it. Due to this, and also in order to the \emph{Memo Account}
+pattern with a \emph{contra} which should be applied to the \emph{Estimate Tax}
+feature, it was decided to allow multiplicity of \texttt{0..*} to the
+association between \texttt{Pattern} and \texttt{Category}. This relationship
+has also been made into a composition, since patterns should not exist without
+categories on the system, but a category can exist without a pattern.
