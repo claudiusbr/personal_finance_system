@@ -108,3 +108,26 @@ be developed for this one. Also, ``such homegrown frameworks are unmanageable,
 inflexible, unscalable, and sometimes out of date''
 (\cite[][p.~7]{konda2014just}). So the choice to use the Hibernate Framework
 was made taking these points into consideration.
+
+
+\subsubsection{Database Management Systems}
+In an earlier prototype of the project which inspired this one, the application
+connected directly with a MySql database. Although this met the prototype's
+needs at the time, it was decided that using MySql only would affect
+application portability, as it is much less likely that it would be possible to
+implement a version of the application which could be run from a portable
+device, such as a USB stick. Therefore, the following database engines were
+chosen for different versions of the application:
+
+\begin{description}
+  \item[HyperSQL DataBase (HSQLDB)] 
+    Chosen due to its size and portability. This version will be used for the
+    portable version of the application.
+\end{description}
+
+The decision to use HSQLDB for the portable version came after analysing
+different options, such as H2 (\cite[][]{mueller2017h2}), Apache Derby
+(\cite[][]{apache2017derby}), and SQLite (\cite[][]{hipp2018sqlite}). As there
+there was a time constraint, it was not possible to test all alternatives, so
+HSQLDB was chosen mainly after some research into which option would support
+hibernate best.
