@@ -129,5 +129,7 @@ The decision to use HSQLDB for the portable version came after analysing
 different options, such as H2 (\cite[][]{mueller2017h2}), Apache Derby
 (\cite[][]{apache2017derby}), and SQLite (\cite[][]{hipp2018sqlite}). As there
 there was a time constraint, it was not possible to test all alternatives, so
-HSQLDB was chosen mainly after some research into which option would support
-hibernate best.
+HSQLDB was chosen as a test with the condition that, if any major problems were
+found, others would be considered. As no major problems were encountered, the
+portable choice remained, but not enough research was made into the other
+DBMS's to determine if this was the best one.
