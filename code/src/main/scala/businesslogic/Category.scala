@@ -1,3 +1,3 @@
 package businesslogic
 
-class Category(val name: String)
+case class Category(name: String)
