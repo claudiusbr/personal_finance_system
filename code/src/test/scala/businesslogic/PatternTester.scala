@@ -14,4 +14,10 @@ class PatternTester extends  BehaviourTester with Mocker {
   it should "have a collection of categories as a member" in {
     pat.categories.head should be (mockCategory)
   }
+
+  it should "throw an exception if it was created with an empty category list" in {
+    intercept[IllegalArgumentException] {
+      Pattern(reg, List[Category]())
+    }
+  }
 }
