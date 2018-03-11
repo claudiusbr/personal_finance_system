@@ -12,7 +12,10 @@ statements into it. Each transaction should be categorised based on categories
 which the user will create. The user should then be able to visualise a summary
 of their income and expenditure by category and period. This should allow them
 to have a concise and clear visibility of how much they have earned and spent
-over any period of time.
+over any period of time. The category must be handled with care -- there should
+not be a case where a user deletes a category and then all the entries in a
+period are lost with it, but if a user wants to change the name of a category
+they should be free to do so.
 
 Since there may be other sources of income which the user may want to
 categorise (such as breakdowns of cash transactions from pocket money), a
