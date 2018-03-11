@@ -6,7 +6,7 @@ package businesslogic
 class AmountTester extends BehaviourTester {
   val amtUK: Amount = Amount(20.00)
 
-  "an Amount instance" should "should default to GBP if no currency is passed" in {
+  "an Amount instance" should "should default to GBP if no currency is provided" in {
     amtUK.currency should be (GBP)
   }
 }
