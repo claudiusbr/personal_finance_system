@@ -1,4 +1,6 @@
-package businesslogic
+package businesslogic.transaction
+
+import businesslogic.{BehaviourTester, Mocker}
 
 import scala.util.matching.Regex
 

@@ -1,4 +1,5 @@
 package businesslogic
+package transaction
 
 /**
   * Integration test between amount and Currency
