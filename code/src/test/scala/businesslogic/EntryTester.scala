@@ -1,6 +1,6 @@
 package businesslogic
 
-class EntryTest extends BehaviourTester {
+class EntryTester extends BehaviourTester {
   "an Entry" should "have an amount" in {
     val e: Entry = Entry(amount = 20.00)
     e.amount should be (20.00)

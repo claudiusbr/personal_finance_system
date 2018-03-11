@@ -1,9 +1,18 @@
 \section{Analysis and Design} \label{sec:Design}
 
+The system will be designed in a layered architecture, and will consist of
+three layers: Presentation, Business Logic and Persistence. The presentation
+layer will take care of all the interactions between the user and the system
+and will depend only on the Business Logic layer below it. The business logic
+will contain the model of the concepts which will deliver a solution for the
+requirements, and will depend only on the persistence layer below it. Lastly,
+the persistence layer will ensure that the data is not lost when the
+application is stopped (\cite[][p.~32-33]{bauer2016hibernate}).
+
 Seeing that this is a system dealing with finance, it would make sense to treat
-the categories as if they were accounts. And, in order to make sure to imbue
-this system with knowledge acquired by more experienced programmers, it makes
-sense to make use of analysis and design patterns.
+the categories as if they were \emph{accounts}. And, in order to make sure to
+imbue this system with knowledge acquired by more experienced programmers, it
+makes sense to make use of analysis and design patterns.
 
 %TODO: maybe move to appendix
 It is also useful at this point to make a distinction between the types of
@@ -15,6 +24,7 @@ will be called \emph{entity classes}; and lastly, there are those classes which
 model transactions, coordination, control and sequencing of other objects --
 which are known as \emph{control classes} (Jacobson et al., 1999,
 \cite[cited][pp.~198-201]{bennett2010object}).
+%
 
 The first analysis patterns which seem appropriate are a modified version of
 the \emph{Account} pattern, used to create the \texttt{Category} entity class,
@@ -289,9 +299,9 @@ The class diagram on Figure \ref{fig:ClassDiagram.AllClasses} is the result of
 joining the more relevant entities listed so far:
 \begin{figure}[ht!]
   \begin{center}
-    \includegraphics[width=14cm]{./contents/img/Class_Diagram_-_All_Classes.png}
+    \includegraphics[width=15cm]{./contents/img/Class_Diagram_-_All_Classes.png}
   \end{center}
-  \caption{}
+  \caption{Class diagram of the most relevant classes of the Business Logic Layer}
   \label{fig:ClassDiagram.AllClasses}
 \end{figure}
 
