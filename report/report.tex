@@ -4,6 +4,27 @@
 \usepackage{datetime}
 \newdateformat{monthyeardate}{\monthname[\THEMONTH], \THEYEAR}
 
+\usepackage{listings}
+
+% from https://tex.stackexchange.com/questions/47175/scala-support-in-listings-package#47209
+% "define" Scala
+\lstdefinelanguage{Scala}{
+  morekeywords={abstract,case,catch,class,def,%
+    do,else,extends,false,final,finally,%
+    for,if,implicit,import,match,mixin,%
+    new,null,object,override,package,%
+    private,protected,requires,return,sealed,%
+    super,this,throw,trait,true,try,%
+    type,val,var,while,with,yield},
+  otherkeywords={=>,<-,<\%,<:,>:,\#,@},
+  sensitive=true,
+  morecomment=[l]{//},
+  morecomment=[n]{/*}{*/},
+  morestring=[b]",
+  morestring=[b]',
+  morestring=[b]"""
+}
+
 \usepackage{setspace}   % to change line spacing within a paragraph
 %\usepackage{indentfirst}	% to indent first paragraph
 \usepackage{graphbox}   % to give includegraph the align option
@@ -79,6 +100,8 @@
 \newpage
 \input{./contents/design.tex}
 
+\newpage
+\input{./contents/implementation.tex}
 
 \clearpage
 \input{./contents/development_method.tex}

@@ -13,11 +13,13 @@ class Transaction {
   //def execute(operands: List[Tuple2[Category,List[Entry]]]): List[Category] = { }
 
   /**
-    * this method takes a list of entries and adds them up to make sure they
-    * equal zero, thus preserving double entry
+    * this method takes a list of entries and adds them up to make
+    * sure they equal zero, thus preserving double entry
     * @param entries a list of entries
-    * @return true if the sum of the amounts of all entries equals zero
+    * @return true if the sum of the amounts of all entries equals
+    *         zero
     */
   def sumEqualsZero(entries: List[Entry]): Boolean =
-    entries.foldLeft(0.0d)((s: Double, e: Entry) => s + e.amount.total) == 0.0d
+    entries.foldLeft(0.0d)(
+      (s: Double, e: Entry) => s + e.amount.total) == 0.0d
 }
