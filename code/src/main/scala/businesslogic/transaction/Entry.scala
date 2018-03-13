@@ -10,11 +10,14 @@ object Entry {
     apply(Amount(amount,currency),dates, description)
 }
 
-case class Entry(amount: Amount, dates: DateRegistry, description: String) {
+case class Entry(amount: Amount, private val dates: DateRegistry, description: String) {
 
   def this(amount: Double, dates: DateRegistry, description: String) =
     this(Amount(amount),dates, description)
 
   def this(amount: Double, currency: Currency, dates: DateRegistry, description: String) =
     this(Amount(amount,currency),dates, description)
+
+  val dateCreated: DateTime = dates.dateCreated
+  val dateRecorded: DateTime = dates.dateRecorded
 }
