@@ -1,4 +1,5 @@
-package businesslogic.transaction
+package businesslogic
+package transaction
 
 sealed trait Currency
 case object GBP extends Currency

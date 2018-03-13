@@ -1,4 +1,5 @@
-package businesslogic.transaction
+package businesslogic
+package transaction
 
 import org.joda.time.DateTime
 
