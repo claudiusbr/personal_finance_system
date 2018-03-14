@@ -2,6 +2,7 @@
 
 \textbf{TODO: Read the lightbend guide https://www.lightbend.com/lagom-framework to Scala and Microservices}
 
+\textbf{TODO: see if the below still makes sense}
 The constraints from \texttt{Transaction} and \texttt{Pattern} were implemented
 in the business logic code as follows:
 {
@@ -26,5 +27,38 @@ in the business logic code as follows:
     caption={
       snippet of \texttt{Pattern} showing requirement for it to have at least one Category
     }
-  ]{../code/src/main/scala/businesslogic/transaction/Pattern.scala}
+  ]{../code/src/main/scala/businesslogic/transaction/Patterns.scala}
 }
+
+As Fowler (\citeyear[][]{fowler1997analysis}), one of the classes should be
+responsible for keeping track of the relationship. As seen above, it was
+decided that each \texttt{Category} will keep track of its patterns, and this
+will at the same time enforce the constraint at the application layer level.
+
+
+\subsection{Scala Case Classes} \label{sec:Reflections.ScalaCaseClasses}
+One of the benefits of Scala are its case classes. They are very useful for
+pattern matching, but also come with a few perks such as the \texttt{copy()}
+method. This method allows for the class to be copied with some or all its
+members modified. It could be said that it is a language-native implementation
+of the \emph{Prototype Design Pattern}
+(\cite[][location~2461]{nikolov2016scala}), and throughout the implementation
+and testing stage it proved to be a useful feature.
+
+Its utilisation can be seen in the \texttt{Transaction} class, as one of the
+tools used to add entries to a \texttt{Category} without having to change the
+state of a specific instance -- more similar to what is done in the
+\emph{Functional Programming} paradigm:
+{
+  \small
+  \lstinputlisting[
+    language=Scala,
+    firstline=32,
+    lastline=38,
+    caption={
+      extract of the \texttt{Transaction} class showing the \texttt{copy()}
+      method in action
+    }
+  ]{../code/src/main/scala/businesslogic/transaction/Transaction.scala}
+}
+
