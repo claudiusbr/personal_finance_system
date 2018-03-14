@@ -6,6 +6,6 @@ package transaction
   * @param name the class name
   * @param entries a list of Entry types
   */
-class Category private[transaction] (val name: String, val entries: List[Entry]) {
+case class Category private[transaction] (name: String, entries: List[Entry]) {
   def this(name: String) = this(name,List[Entry]())
 }

@@ -1,8 +1,6 @@
 package businesslogic
 package transaction
 
-import java.lang.ClassCastException
-
 import validation._
 
 final class TransactionEntriesValidator extends Validator {

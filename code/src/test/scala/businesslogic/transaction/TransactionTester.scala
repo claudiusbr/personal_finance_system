@@ -25,18 +25,14 @@ class TransactionTester extends BehaviourTester with Mocker {
 
   protected val tuMatch: TransactionUnit = TransactionUnit(laptop,List(mockEntry,mockOtherEntry))
 
-  it should "add entries to categories, as necessary" in {
-    laptop.entries should be (List[Entry]())
-    bank.entries should be (List[Entry]())
+  it should "execute the transaction on a single TransactionUnit" in {
+    val result = trans.execute(List(tuMatch))
 
-    /*
-    trans.execute(
-      List(
-        (laptop,List(mockEntry)),
-        (bank,List(mockOtherEntry))
-      )
-      */
+    result.head.name should be ("Laptop")
+    result.head.entries should be (List(mockEntry,mockOtherEntry))
   }
+
+  it should "execute the transaction on multiple transaction units"
 }
 
 class TransactionEntriesValidatorTester extends TransactionTester with BehaviourTester with Mocker {
@@ -46,8 +42,8 @@ class TransactionEntriesValidatorTester extends TransactionTester with Behaviour
   private val tuFail: TransactionUnit = TransactionUnit(laptop,List(mockEntry,mockEntry))
 
   "a TransactionEntriesValidator" should "return Fail if no list of TransactionUnits is given" in {
-    val stuff = List(mockEntry, mockEntry)
-    tev.validate(stuff) should be(Fail("A list of TransactionUnits is required", stuff))
+    val lse = List(mockEntry, mockEntry)
+    tev.validate(lse) should be(Fail("A list of TransactionUnits is required", lse))
   }
 
   it should "validate entries to ensure they equal zero" in {
