@@ -45,3 +45,23 @@ into the final design, but which were later changed even before the
 implementation started -- that is, even before any coding was done. This caused
 a reflection on whether the development method was truly iterative, and whether
 or not it was more similar to the Waterfall model.
+
+\subsection{Dependency Injection} \label{sec:Reflections.DependencyInjection}
+Very often during the implementation it was felt that better dependency
+injection could be achieved. In classes such as those found in the
+\texttt{TransactionsValidators.scala} file there was constant hard-coded
+dependency to the \texttt{validation} package. In this instance, a framework
+such as \emph{Spring} or \emph{Guice} would have been useful, but unfortunately
+time constraints made it unlikely for the author to implement these into the
+project. As a result, there is more tight coupling than there could be, but
+wherever possible an effort has been made to pass the dependencies as
+constructor or method parameters, so as to facilitate testing, among other
+things.
+
+\subsection{Validation} \label{sec:Reflections.Validation} 
+\textbf{TODO: see if this is still the case at the end of the project}
+A lot of thought has been put into where validation should happen. For example,
+the constraints of \texttt{Transaction}, \texttt{Category} and \texttt{Entry}
+which were used to enforce \emph{double-entry} could have been implemented at
+database or application levels, or both. Initially they were implemented in the
+business logic.
