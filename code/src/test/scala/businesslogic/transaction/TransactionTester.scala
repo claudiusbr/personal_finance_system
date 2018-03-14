@@ -23,16 +23,26 @@ class TransactionTester extends BehaviourTester with Mocker {
   protected val laptop: Category = new Category("Laptop")
   protected val bank: Category = new Category("Bank")
 
-  protected val tuMatch: TransactionUnit = TransactionUnit(laptop,List(mockEntry,mockOtherEntry))
+  protected val tuMatch: TransactionUnit = TransactionUnit(laptop, List(mockEntry, mockOtherEntry))
+  protected val tuAlsoMatch: TransactionUnit = TransactionUnit(bank, List(mockOtherEntry, mockEntry))
 
   it should "execute the transaction on a single TransactionUnit" in {
     val result = trans.execute(List(tuMatch))
 
-    result.head.name should be ("Laptop")
-    result.head.entries should be (List(mockEntry,mockOtherEntry))
+    result.head.name should be("Laptop")
+    result.head.entries should be(List(mockEntry, mockOtherEntry))
   }
 
-  it should "execute the transaction on multiple transaction units"
+  it should "execute the transaction on multiple transaction units" in {
+    val result = trans.execute(List(tuMatch,tuAlsoMatch))
+
+    result.head.name should be("Laptop")
+    result.head.entries should be(List(mockEntry, mockOtherEntry))
+
+    result.tail.head.name should be ("Bank")
+    result.tail.head.entries should be (List(mockOtherEntry,mockEntry))
+  }
+
 }
 
 class TransactionEntriesValidatorTester extends TransactionTester with BehaviourTester with Mocker {

@@ -13,4 +13,8 @@ class CategoryTester extends BehaviourTester with Mocker {
   it should "have an empty list of Entries" in {
     ctg.entries should be (List[Entry]())
   }
+
+  it should "be allowed to have no patterns" in {
+    ctg.patterns.list shouldBe empty
+  }
 }
