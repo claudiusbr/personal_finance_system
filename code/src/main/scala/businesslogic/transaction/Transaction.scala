@@ -1,25 +1,31 @@
 package businesslogic
 package transaction
 
+import validation._
+
 /**
   * This is the control class which restricts access to the creation of entries
   * on categories.
+  * Here the dependencies to the validators with default parameters were passed
+  * to the constructor in case the validation and transaction aspect of the
+  * code can be executed in multiple threads
   */
-class Transaction {
+class Transaction(entriesValidator: Validator = new TransactionEntriesValidator,
+                  categoriesValidator: Validator = new TransactionUnitValidator) {
 
   /**
     * This method validates and executes a transaction executed by a user
+    * Decided to use dependency injection on method here, so that one Transaction
+    * object can still be reused with multiple Category/Entries pairs
     */
-  //def execute(operands: List[Tuple2[Category,List[Entry]]]): List[Category] = { }
+  /*
+  def execute(transactionUnits: List[TransactionUnit]): List[Category] = {
+    if (!(categoriesValidator validate transactionUnits))
 
-  /**
-    * this method takes a list of entries and adds them up to make
-    * sure they equal zero, thus preserving double entry
-    * @param entries a list of entries
-    * @return true if the sum of the amounts of all entries equals
-    *         zero
-    */
-  def sumEqualsZero(entries: List[Entry]): Boolean =
-    entries.foldLeft(0.0d)(
-      (s: Double, e: Entry) => s + e.amount.total) == 0.0d
+    if (!(entriesValidator validate transactionUnits))
+      throw new IllegalArgumentException(
+        "\n"
+      )
+      */
+
 }
