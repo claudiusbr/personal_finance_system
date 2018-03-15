@@ -1,5 +1,43 @@
 \section{Implementation} \label{sec:Implementation}
 
+\subsection{Scala Case Classes} \label{sec:Reflections.ScalaCaseClasses}
+One of the benefits of Scala are its case classes. They are very useful for
+pattern matching, but also come with a few perks such as the \texttt{copy()}
+method. This method allows for the class to be copied with some or all its
+members modified. It could be said that it is a language-native implementation
+of the \emph{Prototype Design Pattern}
+(\cite[][Ch.~6,~Location~2461]{nikolov2016scala}), and throughout the
+implementation and testing stage it proved to be a useful feature.
+
+Its utilisation can be seen in the \texttt{Transaction} class, as one of the
+tools used to add entries to a \texttt{Category} without having to change the
+state of a specific instance -- more similar to what is done in the
+\emph{Functional Programming} paradigm:
+{
+  \small
+  \lstinputlisting[
+    language=Scala,
+    firstline=32,
+    lastline=38,
+    caption={
+      extract of the \texttt{Transaction} class showing the \texttt{copy()}
+      method in action
+    }
+  ]{../code/src/main/scala/businesslogic/transaction/Transaction.scala}
+}
+
+
+\subsection{Presentation Layer} \label{sec:Implementation.Presentation}
+In the presentation layer, for the first iteration, the \emph{Scala Swing}
+package was used for building most aspects of the
+presentation layer. One of the reasons why it was chosen was that, as with many
+other GUI packages, it already comes with an implementation of the
+\emph{Observer Design Pattern} (\cite[][]{gamma1995design}) in its capacity to
+react to events (\cite[][p.~5]{maier2009scala};
+\cite[][Ch.~9,~Location~3731]{nikolov2016scala}).
+
+
+\subsection{Business Logic} \label{sec:Implementation.BusinessLogic}
 \textbf{TODO: Read the lightbend guide https://www.lightbend.com/lagom-framework to Scala and Microservices}
 
 \textbf{TODO: see if the below still makes sense}
@@ -35,30 +73,4 @@ responsible for keeping track of the relationship. As seen above, it was
 decided that each \texttt{Category} will keep track of its patterns, and this
 will at the same time enforce the constraint at the application layer level.
 
-
-\subsection{Scala Case Classes} \label{sec:Reflections.ScalaCaseClasses}
-One of the benefits of Scala are its case classes. They are very useful for
-pattern matching, but also come with a few perks such as the \texttt{copy()}
-method. This method allows for the class to be copied with some or all its
-members modified. It could be said that it is a language-native implementation
-of the \emph{Prototype Design Pattern}
-(\cite[][location~2461]{nikolov2016scala}), and throughout the implementation
-and testing stage it proved to be a useful feature.
-
-Its utilisation can be seen in the \texttt{Transaction} class, as one of the
-tools used to add entries to a \texttt{Category} without having to change the
-state of a specific instance -- more similar to what is done in the
-\emph{Functional Programming} paradigm:
-{
-  \small
-  \lstinputlisting[
-    language=Scala,
-    firstline=32,
-    lastline=38,
-    caption={
-      extract of the \texttt{Transaction} class showing the \texttt{copy()}
-      method in action
-    }
-  ]{../code/src/main/scala/businesslogic/transaction/Transaction.scala}
-}
 
