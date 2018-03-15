@@ -9,6 +9,7 @@ lazy val root = (project in file(".")).
     )),
     name := "PersonalFinanceSystem",
     libraryDependencies += scalaTest % Test,
+    libraryDependencies += "org.scala-lang.modules" % "scala-swing_2.12" % "2.0.2",
     libraryDependencies += "org.mockito" % "mockito-all" % "1.9.5" % "test",
     libraryDependencies += "joda-time" % "joda-time" % "2.9.9"
   )
