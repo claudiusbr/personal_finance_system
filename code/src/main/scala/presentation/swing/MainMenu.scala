@@ -2,50 +2,56 @@ package presentation
 package swing
 
 import java.awt.Font
-import javax.swing.ImageIcon
 
-import scala.swing.{BoxPanel, Button, Dimension, GridPanel, Label, MainFrame, Orientation, SimpleSwingApplication, Swing}
+import scala.swing.event.ButtonClicked
+import scala.swing.{BoxPanel, Button, GridPanel, Label, MainFrame, Orientation, Swing, SwingApplication}
 
-// TODO: implement logging capabilities
+private [swing] class MainMenu(fontSpecs: Font) extends MainFrame {
 
-object MainMenu extends SimpleSwingApplication {
-  def top: MainFrame = new MainFrame {
-    private val verdana: Font = new Font("Verdana", Font.BOLD, 20)
-    title = "Personal Finance System"
-    contents =
-      new BoxPanel(Orientation.Vertical) {
-        contents += new GridPanel(2,2) {
+  private val manualEntry: FrameKit =  FrameKitFactory(fontSpecs, ManualEntry)
 
-          contents += new Button {
-            text = "Upload Statement"
-            font = verdana
-          }
+  private val uploadStatement: Button = new Button {
+    text = "Upload Statement"
+    font = fontSpecs
+  }
 
-          contents += new Button {
-            text = "Manual Entry"
-            font = verdana
-          }
+  private val viewSummary: Button = new Button {
+    text = "View Summary"
+    font = fontSpecs
+  }
 
-          contents += new Button {
-            text = "View Summary"
-            font = verdana
-          }
+  private val calcBudget: Button = new Button {
+    text = "Calculate Budget"
+    font = fontSpecs
+  }
 
-          contents += new Button {
-            text = "Calculate Budget"
-            font = verdana
-          }
+  title = "Personal Finance System"
+  contents = new BoxPanel(Orientation.Vertical) {
+    contents += new GridPanel(2,2) {
 
-          border = Swing.EmptyBorder(30, 30, 30, 30)
-        }
+      contents += uploadStatement
+      contents += manualEntry.button
+      contents += viewSummary
+      contents += calcBudget
 
-        contents += new BoxPanel(Orientation.Horizontal) {
-          contents += new Label {
-            text = "£ $ €"
-            font = new Font("verdana",Font.BOLD,100)
-          }
-          border = Swing.EmptyBorder(30, 30, 30, 30)
-        }
+      border = Swing.EmptyBorder(30, 30, 30, 30)
+    }
+
+    contents += new BoxPanel(Orientation.Horizontal) {
+      contents += new Label {
+        text = "£ $ €"
+        font = new Font(fontSpecs.getFontName(),Font.BOLD,100)
       }
+      border = Swing.EmptyBorder(30, 30, 30, 30)
+    }
+  }
+
+  listenTo(uploadStatement,manualEntry.button,viewSummary,calcBudget)
+
+  reactions += {
+    case ButtonClicked(`manualEntry`) => {
+      MainWindow.whatIsShowing.visible = false
+
+    }
   }
 }
