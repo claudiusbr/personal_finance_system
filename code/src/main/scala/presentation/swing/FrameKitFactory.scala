@@ -18,10 +18,10 @@ class FrameKit(val frame: Frame, val button: Button)
   * this object is responsible for returning the right menu to the main menu
   */
 object FrameKitFactory {
-  def apply(fontSpecs: Font, kitName: KitName): FrameKit = kitName match {
+  def apply(fontSpecs: Font, kitName: KitName, main: MainMenu): FrameKit = kitName match {
 
     case ManualEntry => new FrameKit(
-      new ManualEntry(fontSpecs),
+      new ManualEntry(fontSpecs, main),
       new Button {
         text = "Manual Entry"
         font = fontSpecs
@@ -29,7 +29,7 @@ object FrameKitFactory {
     )
 
     case UploadStatement => new FrameKit(
-      new UploadStatement(fontSpecs),
+      new UploadStatement(fontSpecs, main),
       new Button {
         text = "Upload Statement"
         font = fontSpecs
@@ -37,7 +37,7 @@ object FrameKitFactory {
     )
 
     case ViewSummary => new FrameKit(
-      new ViewSummary(fontSpecs),
+      new ViewSummary(fontSpecs, main),
       new Button {
         text = "View Summary"
         font = fontSpecs
@@ -45,7 +45,7 @@ object FrameKitFactory {
     )
 
     case CalculateBudget => new FrameKit(
-      new CalculateBudget(fontSpecs),
+      new CalculateBudget(fontSpecs, main),
       new Button {
         text = "Calculate Budget"
         font = fontSpecs
