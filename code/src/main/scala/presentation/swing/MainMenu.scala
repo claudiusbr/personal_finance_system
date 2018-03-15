@@ -4,35 +4,25 @@ package swing
 import java.awt.Font
 
 import scala.swing.event.ButtonClicked
-import scala.swing.{BoxPanel, Button, GridPanel, Label, MainFrame, Orientation, Swing, SwingApplication}
+import scala.swing.{BoxPanel, GridPanel, Label, MainFrame, Orientation, Swing}
 
 private [swing] class MainMenu(fontSpecs: Font) extends MainFrame {
 
-  private val manualEntry: FrameKit =  FrameKitFactory(fontSpecs, ManualEntry)
-
-  private val uploadStatement: Button = new Button {
-    text = "Upload Statement"
-    font = fontSpecs
-  }
-
-  private val viewSummary: Button = new Button {
-    text = "View Summary"
-    font = fontSpecs
-  }
-
-  private val calcBudget: Button = new Button {
-    text = "Calculate Budget"
-    font = fontSpecs
-  }
+  private val (manualEntry,uploadStatement,viewSummary,calcBudget) = (
+    FrameKitFactory(fontSpecs, ManualEntry),
+    FrameKitFactory(fontSpecs, UploadStatement),
+    FrameKitFactory(fontSpecs, ViewSummary),
+    FrameKitFactory(fontSpecs, CalculateBudget)
+  )
 
   title = "Personal Finance System"
   contents = new BoxPanel(Orientation.Vertical) {
     contents += new GridPanel(2,2) {
 
-      contents += uploadStatement
+      contents += uploadStatement.button
       contents += manualEntry.button
-      contents += viewSummary
-      contents += calcBudget
+      contents += viewSummary.button
+      contents += calcBudget.button
 
       border = Swing.EmptyBorder(30, 30, 30, 30)
     }
@@ -46,7 +36,7 @@ private [swing] class MainMenu(fontSpecs: Font) extends MainFrame {
     }
   }
 
-  listenTo(uploadStatement,manualEntry.button,viewSummary,calcBudget)
+  listenTo(uploadStatement.button,manualEntry.button,viewSummary.button,calcBudget.button)
 
   reactions += {
     case ButtonClicked(`manualEntry`) => {
