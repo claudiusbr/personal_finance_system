@@ -30,11 +30,27 @@ state of a specific instance -- more similar to what is done in the
 \subsection{Presentation Layer} \label{sec:Implementation.Presentation}
 In the presentation layer, for the first iteration, the \emph{Scala Swing}
 package was used for building most aspects of the
-presentation layer. One of the reasons why it was chosen was that, as with many
-other GUI packages, it already comes with an implementation of the
-\emph{Observer Design Pattern} (\cite[][]{gamma1995design}) in its capacity to
-react to events (\cite[][p.~5]{maier2009scala};
+presentation layer. The package consists of Scala wrappers for the Java Swing
+package, and one of the reasons why it was chosen was that, as with many other
+GUI packages, it already comes with an implementation of the \emph{Observer
+Design Pattern} (\cite[][]{gamma1995design}) in its capacity to react to events
+(\cite[][p.~5]{maier2009scala};
 \cite[][Ch.~9,~Location~3731]{nikolov2016scala}).
+
+\begin{sloppypar}
+  The application starts by implementing the \texttt{MainMenu} class, which
+  extends the \texttt{SimpleSwingApplication} abstract class from the
+  \texttt{scala.swing} package. The class has an implementation of a \emph{main
+  method}, therefore it acts as an entry point for the application to run. It
+  also contains a \texttt{MainFrame}, which is a Swing \texttt{Frame} -- ``a
+  window containing arbitrary data''
+  (\cite[][Ch.~34,~Section~34.1]{odersky2016scala})-- which switches off the
+  application when closed. It also has implementations of other methods to
+  allow the application to close gracefully
+  (\cite[][p.~2~\&~3]{maier2009scala}), so with these aspects implemented, it
+  allows development to be focused on functionality more relevant to the
+  application's logic itself.
+\end{sloppypar}
 
 
 \subsection{Business Logic} \label{sec:Implementation.BusinessLogic}
