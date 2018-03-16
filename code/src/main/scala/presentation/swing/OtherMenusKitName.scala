@@ -31,37 +31,21 @@ abstract class OtherMenu(main: MainMenu) extends MainFrame {
   }
 }
 
-trait KitName
+private[swing] trait KitName
 
-private[swing] case object ManualEntry extends KitName {
-  val title = "Manual Entry"
-}
-private[swing] class ManualEntry(fontSpecs: Font, main: MainMenu) extends OtherMenu(main) {
-  title = ManualEntry.title
-  contents = navigationBox
-}
-
-private[swing] case object UploadStatement extends KitName {
-  val title = "Upload Statement"
-}
+private[swing] case object UploadStatement extends KitName { val title = "Upload Statement" }
 private[swing] class UploadStatement(fontSpecs: Font, main: MainMenu) extends OtherMenu(main) {
   title = UploadStatement.title
   contents = navigationBox
 }
 
-
-private[swing] case object ViewSummary extends KitName {
-  val title = "View Summary"
-}
+private[swing] case object ViewSummary extends KitName { val title = "View Summary" }
 private[swing] class ViewSummary(fontSpecs: Font, main: MainMenu) extends OtherMenu(main) {
   title = ViewSummary.title
   contents = navigationBox
 }
 
-
-private[swing] case object CalculateBudget extends KitName {
-  val title = "Calculate Budget"
-}
+private[swing] case object CalculateBudget extends KitName { val title = "Calculate Budget" }
 private[swing] class CalculateBudget(fontSpecs: Font, main: MainMenu) extends OtherMenu(main) {
   title = CalculateBudget.title
   contents = navigationBox

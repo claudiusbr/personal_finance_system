@@ -8,8 +8,8 @@ import scala.swing.{BoxPanel, GridPanel, Label, MainFrame, Orientation, Swing, D
 
 private [swing] class MainMenu(fontSpecs: Font) extends MainFrame {
 
-  private val WindowWidth = 710
-  private val WindowHeight = 390
+  private[swing]val WindowHeight = 390
+  private[swing] val WindowWidth = 710
   preferredSize = new Dimension(WindowWidth,WindowHeight)
 
   private val (manualEntry,uploadStatement,viewSummary,calcBudget) = (
