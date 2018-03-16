@@ -12,6 +12,8 @@ TODOs
     `businesslogic.transcaction.Currency` but not directly
   - make the breakdown box work like on requirements
 
+- improve quality of Dia images when exported -- maybe TIKZ?
+
 
 What I would like to do if I have the time
 -------------------------------------------
