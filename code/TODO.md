@@ -9,7 +9,7 @@ TODOs
 - on `ManualEntry`:
   - make date field more elegant -- now it's free text...
   - make currency field depend on depend on
-    `businesslogic.transcaction.Currency` but not directly
+    `personalfinance.businesslogic.transcaction.Currency` but not directly
   - make the breakdown box work like on requirements
 
 - improve quality of Dia images when exported -- maybe TIKZ?
