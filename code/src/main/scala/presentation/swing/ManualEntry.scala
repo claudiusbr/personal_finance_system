@@ -43,15 +43,17 @@ private[swing] class ManualEntry(fontSpecs: Font, main: MainMenu) extends OtherM
     contents += HGlue
     contents += currencyBox
     contents += HGlue
+    border = Swing.EmptyBorder(10,10,10,10)
   }
 
   // upper middle box
   private val descriptionLabel = new Label("Description")
-  private val descriptionBox = new TextField {columns = main.WindowWidth-20}
+  private val descriptionField = new TextField {columns = main.WindowWidth-20}
 
   private val upperMiddleBox = new BoxPanel(Vertical) {
     contents += descriptionLabel
-    contents += descriptionBox
+    contents += descriptionField
+    border = Swing.EmptyBorder(10,10,10,10)
   }
 
   // lower middle box
@@ -83,15 +85,22 @@ private[swing] class ManualEntry(fontSpecs: Font, main: MainMenu) extends OtherM
   }
 
   private val lowerMiddleBox = new BoxPanel(Vertical) {
-    contents += breakDownLabel
-    contents += breakDownBox
-    contents += newLineButton
+    contents += new BoxPanel(Vertical) {
+      contents += breakDownLabel
+      contents += breakDownBox
+      contents += newLineButton
+      border = Swing.EmptyBorder(10,10,10,10)
+    }
     border = Swing.EtchedBorder
   }
 
   // bottom box
   private val bottomBox = navigationBox
 
+
+  Array(amountField,percentField,categoryField,totalField,dateField,
+    descriptionField, typeDropDown, currencyDropDown)
+      .foreach { setMaxHeight }
 
   title = ManualEntry.title
   contents = new BoxPanel(Vertical) {

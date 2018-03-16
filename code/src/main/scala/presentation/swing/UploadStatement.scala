@@ -51,7 +51,7 @@ private[swing] class UploadStatement(fontSpecs: Font, main: MainMenu) extends Ot
     else ""
   }
 
-  fileField.maximumSize = new Dimension(Short.MaxValue, fileField.preferredSize.height)
+  setMaxHeight(fileField)
 
   title = UploadStatement.title
   contents = uploadStatementBox

@@ -19,6 +19,14 @@ abstract class OtherMenu(main: MainMenu) extends MainFrame {
       contents += okBtn
     }
 
+
+  /**
+    * an aid to set the maximum height of text fields and other components
+    * @param comp a Component to set maximum height
+    */
+  protected def setMaxHeight(comp: Component): Unit =
+    comp.maximumSize = new Dimension(Short.MaxValue, comp.preferredSize.height)
+
   listenTo(cancelBtn,okBtn, this)
   reactions += {
     case ButtonClicked(`cancelBtn`) =>
