@@ -4,9 +4,13 @@ package swing
 import java.awt.Font
 
 import scala.swing.event.ButtonClicked
-import scala.swing.{BoxPanel, GridPanel, Label, MainFrame, Orientation, Swing}
+import scala.swing.{BoxPanel, GridPanel, Label, MainFrame, Orientation, Swing, Dimension}
 
 private [swing] class MainMenu(fontSpecs: Font) extends MainFrame {
+
+  private val WindowWidth = 710
+  private val WindowHeight = 390
+  preferredSize = new Dimension(WindowWidth,WindowHeight)
 
   private val (manualEntry,uploadStatement,viewSummary,calcBudget) = (
     FrameKitFactory(fontSpecs, ManualEntry, this),
@@ -19,6 +23,21 @@ private [swing] class MainMenu(fontSpecs: Font) extends MainFrame {
     uploadStatement.button,manualEntry.button,
     viewSummary.button,calcBudget.button
   )
+
+  private def mainButtonAction(b: MainButton): Unit = {
+    val frameKit: FrameKit = b.kitName match {
+      case ManualEntry => manualEntry
+      case UploadStatement => uploadStatement
+      case ViewSummary => viewSummary
+      case CalculateBudget => calcBudget
+
+    }
+    val other = MainWindow.whatIsShowing
+    frameKit.frame.location = other.location
+    MainWindow.whatIsShowing = frameKit.frame
+    MainWindow.whatIsShowing.visible = true
+    other.visible = false
+  }
 
   title = "Personal Finance System"
   contents = new BoxPanel(Orientation.Vertical) {
@@ -44,32 +63,6 @@ private [swing] class MainMenu(fontSpecs: Font) extends MainFrame {
   listenTo(usBtn,meBtn,vsBtn,cbBtn)
 
   reactions += {
-    case ButtonClicked(`meBtn`) =>
-      val other = MainWindow.whatIsShowing
-      manualEntry.frame.location = other.location
-      MainWindow.whatIsShowing = manualEntry.frame
-      MainWindow.whatIsShowing.visible = true
-      other.visible = false
-
-    case ButtonClicked(`usBtn`) =>
-      val other = MainWindow.whatIsShowing
-      uploadStatement.frame.location = other.location
-      MainWindow.whatIsShowing = uploadStatement.frame
-      MainWindow.whatIsShowing.visible = true
-      other.visible = false
-
-    case ButtonClicked(`vsBtn`) =>
-      val other = MainWindow.whatIsShowing
-      viewSummary.frame.location = other.location
-      MainWindow.whatIsShowing = viewSummary.frame
-      MainWindow.whatIsShowing.visible = true
-      other.visible = false
-
-    case ButtonClicked(`cbBtn`) =>
-      val other = MainWindow.whatIsShowing
-      calcBudget.frame.location = MainWindow.whatIsShowing.location
-      MainWindow.whatIsShowing = calcBudget.frame
-      MainWindow.whatIsShowing.visible = true
-      other.visible = false
+    case ButtonClicked(b: MainButton) => mainButtonAction(b)
   }
 }

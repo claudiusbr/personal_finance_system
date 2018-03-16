@@ -12,7 +12,7 @@ import scala.swing.{Button, Frame}
   * @param frame the frame to be loaded
   * @param button the button which loads the frame
   */
-class FrameKit(val frame: Frame, val button: Button)
+class FrameKit(val frame: Frame, val button: MainButton)
 
 /**
   * this object is responsible for returning the right menu to the main menu
@@ -22,35 +22,30 @@ object FrameKitFactory {
 
     case ManualEntry => new FrameKit(
       new ManualEntry(fontSpecs, main),
-      new Button {
-        text = "Manual Entry"
+      new MainButton(ManualEntry,ManualEntry.title) {
         font = fontSpecs
       }
     )
 
     case UploadStatement => new FrameKit(
       new UploadStatement(fontSpecs, main),
-      new Button {
-        text = "Upload Statement"
+      new MainButton(UploadStatement,UploadStatement.title) {
         font = fontSpecs
       }
     )
 
     case ViewSummary => new FrameKit(
       new ViewSummary(fontSpecs, main),
-      new Button {
-        text = "View Summary"
+      new MainButton(ViewSummary,ViewSummary.title) {
         font = fontSpecs
       }
     )
 
     case CalculateBudget => new FrameKit(
       new CalculateBudget(fontSpecs, main),
-      new Button {
-        text = "Calculate Budget"
+      new MainButton(CalculateBudget,CalculateBudget.title) {
         font = fontSpecs
       }
     )
-
   }
 }
