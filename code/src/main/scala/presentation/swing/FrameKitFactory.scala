@@ -3,7 +3,7 @@ package swing
 
 import java.awt.Font
 
-import scala.swing.{Button, Frame}
+import scala.swing.Frame
 
 
 /**

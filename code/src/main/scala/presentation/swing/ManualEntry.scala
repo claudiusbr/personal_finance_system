@@ -5,6 +5,9 @@ import scala.swing.event._
 import Orientation.{Vertical,Horizontal}
 import Swing.{VGlue,VStrut,HGlue,HStrut}
 
+/**
+  * this is the implementation of the interface for manual entry
+  */
 private[swing] case object ManualEntry extends KitName { val title = "Manual Entry" }
 private[swing] class ManualEntry(fontSpecs: Font, main: MainMenu) extends OtherMenu(main) {
 
@@ -15,11 +18,13 @@ private[swing] class ManualEntry(fontSpecs: Font, main: MainMenu) extends OtherM
     contents ++= Array(typeLabel,VGlue,typeDropDown)
   }
 
-  private val dateLabel = new Label("Date")
-  private val dateField = new TextField {columns = 15}
-  private val dateBox = new BoxPanel(Vertical) {
-    contents ++= Array(dateLabel,VGlue,dateField)
-  }
+  //private val dateLabel = new Label("Date")
+  //private val dateField = new TextField {columns = 15}
+  //private val dateBox = new BoxPanel(Vertical) {
+  //  contents ++= Array(dateLabel,VGlue,dateField)
+  //}
+
+  private val dateBox = getDateBox()
 
   private val totalLabel = new Label("Total")
   private val totalField = new TextField {columns = 7}
@@ -97,14 +102,13 @@ private[swing] class ManualEntry(fontSpecs: Font, main: MainMenu) extends OtherM
   // bottom box
   private val bottomBox = navigationBox
 
+  private val allBoxes = Array(topBox,upperMiddleBox,lowerMiddleBox,bottomBox)
 
-  Array(amountField,percentField,categoryField,totalField,dateField,
-    descriptionField, typeDropDown, currencyDropDown)
-      .foreach { setMaxHeight }
+  allBoxes.foreach { setMaxHeight }
 
   title = ManualEntry.title
   contents = new BoxPanel(Vertical) {
-    contents ++= Array(topBox,upperMiddleBox,lowerMiddleBox,bottomBox)
+    contents ++= allBoxes
     border = Swing.EmptyBorder(30,30,30,30)
   }
 
