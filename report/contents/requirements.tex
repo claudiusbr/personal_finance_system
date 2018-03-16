@@ -132,6 +132,8 @@ listed above:
 \end{table}
 \FloatBarrier
 
+
+\subsubsection{Designing the User Experience with Wireframes}
 The wireframe below (Figure \ref{fig:Wireframe.CreateManualEntry}) was created
 to better illustrate the \emph{Manual Entry} requirement from the point of view
 of the user. It shows an example of an entry for a laptop and a licence for a
@@ -159,6 +161,26 @@ Statement} and \emph{Categorise Entries}, the activity diagram below (Figure
   \end{center}
   \caption{}
   \label{fig:AD.CategoriseEntries}
+\end{figure}
+\FloatBarrier
+
+At the first few iterations, in order to provide a minimum viable product, the
+process of categorisation will be a blocking one consisting of multiple calls
+being made to the process above -- for each call, the process will block awaiting
+user input when a category is not found. However, there are plans for future
+iterations where this process could be optimised by concurrency, and if there
+is enough time a more appropriate interface will be built for such a case.
+
+The initial interface for uploading a statement should be a simple one, such as
+the one below
+(\ref{fig:Wireframe.UploadStatement}), and at least initially the interface for
+manual entry will be used whenever user input is required:
+\begin{figure}[ht!]
+  \begin{center}
+    \includegraphics[width=12cm]{./contents/img/Wireframe_-_Upload_Statement.png}
+  \end{center}
+  \caption{}
+  \label{fig:Wireframe.UploadStatement}
 \end{figure}
 \FloatBarrier
 
