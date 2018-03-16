@@ -89,7 +89,6 @@ private[swing] class ManualEntry(fontSpecs: Font, main: MainMenu) extends OtherM
     border = Swing.EtchedBorder
   }
 
-
   // bottom box
   private val bottomBox = navigationBox
 

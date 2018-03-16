@@ -1,5 +1,6 @@
 package presentation
 package swing
+
 import java.awt.Font
 
 import scala.swing._
@@ -32,12 +33,6 @@ abstract class OtherMenu(main: MainMenu) extends MainFrame {
 }
 
 private[swing] trait KitName
-
-private[swing] case object UploadStatement extends KitName { val title = "Upload Statement" }
-private[swing] class UploadStatement(fontSpecs: Font, main: MainMenu) extends OtherMenu(main) {
-  title = UploadStatement.title
-  contents = navigationBox
-}
 
 private[swing] case object ViewSummary extends KitName { val title = "View Summary" }
 private[swing] class ViewSummary(fontSpecs: Font, main: MainMenu) extends OtherMenu(main) {
