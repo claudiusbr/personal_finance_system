@@ -36,6 +36,15 @@ class EntryParserTester extends BehaviourTester with Mocker {
     "bleble,2018-01-03,-10.00"
   )
 
+  private val interpolatedComma = List(
+    "transaction description,transaction date,credit/debit",
+    "\"blabla, and blo\",2018-01-03,200.00",
+    "\"bleble,and bla\",2018-01-03,-10.00"
+  )
+
+
+
+
   private val mockPL = mock[PropertiesLoader]
   when(mockPL.getProperty("date")).thenReturn("date")
   when(mockPL.getProperty("description")).thenReturn("description")
@@ -60,4 +69,10 @@ class EntryParserTester extends BehaviourTester with Mocker {
 
     ep.parseCSVLines(diffHeaders,mockPL) should be (expectedResult)
   }
+
+  it should "parse the contents even if they have interpolated commas" in {
+    ep.parseCSVLines(interpolatedComma,mockPL) should be (List(
+      Entry(200.00,mockDateRegistry,"\"blabla  and blo\""),
+      Entry(-10.00,mockDateRegistry,"\"bleble and bla\"")))
+    }
 }
