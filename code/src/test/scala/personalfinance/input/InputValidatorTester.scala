@@ -14,4 +14,11 @@ class InputValidatorTester extends BehaviourTester {
     iv.validate(notValid) should be (Fail("First line of CSV should" +
       " be in the format: date,description,amount",notValid.head))
   }
+
+  it should "ensure that the correct type argument has been passed" in {
+    iv.validate(invalidType) should be (Fail("An Iterable[String]" +
+      " argument is required",invalidType))
+    iv.validate(invalidType.asInstanceOf[List[String]]) should be (Fail(
+      "An Iterable[String] argument is required",invalidType))
+  }
 }
