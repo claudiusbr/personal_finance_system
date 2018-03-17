@@ -23,6 +23,11 @@ class DateFormatterTester extends BehaviourTester {
 
   it should "cause it to throw an exception if not"+
     " in any of the formats above" in {
-    an [IllegalArgumentException] should be thrownBy df.dateFromString("01&01&2001")
+    an [IllegalArgumentException] should be thrownBy df.dateFromString("31&12&2001")
+    an [IllegalArgumentException] should be thrownBy df.dateFromString("12&31&2001")
+    an [IllegalArgumentException] should be thrownBy df.dateFromString("2001&12&31")
+    an [IllegalArgumentException] should be thrownBy df.dateFromString("31122001")
+    an [IllegalArgumentException] should be thrownBy df.dateFromString("12312001")
+    an [IllegalArgumentException] should be thrownBy df.dateFromString("20011231")
   }
 }
