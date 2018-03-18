@@ -1,14 +1,20 @@
-\section{Analysis and Design} \label{sec:Design}
+\section{Analysis and Design} \label{sec:AnalysisAndDesign}
 
 The system will be designed in a layered architecture, and will consist of
 three layers: Presentation, Business Logic and Persistence. The presentation
-layer will take care of all the interactions between the user and the system
-and will depend only on the Business Logic layer below it. The business logic
-will contain the model of the concepts which will deliver a solution for the
-requirements, and will depend only on the persistence layer below it. Lastly,
-the persistence layer will ensure that the data is not lost when the
-application is stopped (\cite[][p.~32-33]{bauer2016hibernate}).
+layer will take care of the vast majority of the interactions between the user
+and the system, and will depend only on the Business Logic layer below it. The
+business logic will contain the model of the concepts which will attempt to
+implement a solution to the problems outlined in the requirements, and will
+depend only on the persistence layer below it. Lastly, the persistence layer
+will ensure that the data is not lost when the application is stopped
+(\cite[][p.~32-33]{bauer2016hibernate}).
 
+Most of the aesthetic designs of the presentation layer happened in chapter
+\ref{sec:Requirements.FunctionalRequirements}, so this one will focus on the
+analysis and design of the business logic and persistence ones.
+
+\subsection{Business Logic} \label{sec:AnalysisAndDesign.BusinessLogic}
 Seeing that this is a system dealing with finance, it would make sense to treat
 the categories as if they were \emph{accounts}. And, in order to make sure to
 imbue this system with knowledge acquired by more experienced programmers, it
@@ -77,7 +83,7 @@ in Chapter \ref{sec:Requirements}. At this point the objective will be to start
 modelling classes and interactions based on concepts or things found in the
 problem domain. This will be done in the following subsections.
 
-\subsection{Create Manual Entry} \label{sec:AnalysisAndDesign.ManualEntry}
+\subsubsection{Create Manual Entry} \label{sec:AnalysisAndDesign.BusinessLogic.ManualEntry}
 
 %TODO: check if this diagram still makes sense after implementation
 The \emph{Create Manual Entry} use case, which allows a
@@ -120,7 +126,7 @@ any object which implements this interface. This is to allow more flexibility
 in the implementation of the classes responsible for suggesting categories to
 the user.
 
-\subsection{Upload Statement} \label{sec:AnalysisAndDesign.UploadStatement}
+\subsubsection{Upload Statement} \label{sec:AnalysisAndDesign.BusinessLogic.UploadStatement}
 
 The user should be able to upload their bank statements, provided that they are
 in a suitable format. The specifics of the format will be described in the
@@ -152,11 +158,11 @@ this last part has already been illustrated in Figure
 When the \texttt{Classifier} cannot match a line item against any of the existing
 categories, it will pass the line in question to the \texttt{ManualEntryUI},
 which, apart from having all transaction details already populated, will rely
-on the process described at subsection \ref{sec:AnalysisAndDesign.ManualEntry}
+on the process described at subsection \ref{sec:AnalysisAndDesign.BusinessLogic.ManualEntry}
 to properly categorise the item and then forward it to \texttt{Transaction} to
 create the categories.
 
-\subsection{Visualise Categorised Summary} \label{sec:AnalysisAndDesign.ViewSummary}
+\subsubsection{Visualise Categorised Summary} \label{sec:AnalysisAndDesign.BusinessLogic.ViewSummary}
 As mentioned before, this feature will allow the user to view a summary of
 their income and expenditure by category.  The user will enter the period which
 they want to examine, and the system will retrieve the categories which have
@@ -180,7 +186,7 @@ communication diagram to illustrate this interaction:
 
 
 
-\subsection{Calculate Budget} \label{sec:AnalysisAndDesign.CalculateBudget}
+\subsubsection{Calculate Budget} \label{sec:AnalysisAndDesign.BusinessLogic.CalculateBudget}
 This feature will allow the user to request the system to calculate a budget
 for them over a period of time. What the system will do then is retrieve all
 categories over the last 12 months, then calculate their means and take them as
@@ -206,8 +212,7 @@ simplified}
 \FloatBarrier
 
 
-
-\subsection{Estimate Tax} \label{sec:AnalysisAndDesign.EstimateTax}
+\subsubsection{Estimate Tax} \label{sec:AnalysisAndDesign.BusinessLogic.EstimateTax}
 
 %TODO: refer to
 %\cite[][location~2071-rest~of~chapter~6~and~maybe~chapter~7]{fowler1997analysis}
@@ -294,7 +299,7 @@ exemplifies the application module which will model this functionality:
 \FloatBarrier
 
 
-\subsection{Final Class Diagram}
+\subsubsection{Final Class Diagram}
 The class diagram on Figure \ref{fig:ClassDiagram.AllClasses} is the result of
 joining the more relevant entities listed so far:
 \begin{figure}[ht!]
@@ -304,13 +309,14 @@ joining the more relevant entities listed so far:
   \caption{Class diagram of the most relevant classes of the Business Logic Layer}
   \label{fig:ClassDiagram.AllClasses}
 \end{figure}
+\FloatBarrier
 
 Note that the classes for estimating tax were not included in this iteration,
 but time permitting they should be included in subsequent ones.
 
 Manual entries and uploaded statements will inevitably always go against a Bank
 category. For this requirement alone, there does not seem to be any harm in
-hardcoding the \texttt{Bank} category. In this case, since most transactions
+hard-coding the \texttt{Bank} category. In this case, since most transactions
 are going to affect the this category, it was decided that no patterns should
 be assigned to it. Due to this, and also in order to the \emph{Memo Account}
 pattern with a \emph{contra} which should be applied to the \emph{Estimate Tax}
@@ -318,3 +324,24 @@ feature, it was decided to allow multiplicity of \texttt{0..*} to the
 association between \texttt{Pattern} and \texttt{Category}. This relationship
 has also been made into a composition, since patterns should not exist without
 categories on the system, but a category can exist without a pattern.
+
+
+\subsection{The Persistence Layer} \label{sec:AnalysisAndDesign.PersistenceLayer}
+
+\subsubsection{Database Diagram} \label{sec:AnalysisAndDesign.PersistenceLayer}
+The UML diagram below shows the design of the database schema for the
+application:
+\begin{figure}[ht!]
+  \begin{center}
+    \includegraphics[width=12cm]{./contents/img/Database_Diagram.png}
+  \end{center}
+  \caption{UML Diagram of database schema}
+  \label{fig:ClassDiagram.AllClasses}
+\end{figure}
+\FloatBarrier
+
+As the diagram indicates, the entities and relationships of the database are
+very similar to those of the business logic layer, except that it was felt
+that, since due to double-entry the \texttt{Entry} instances will occur
+multiple time, the description should be given a table of its own in order to
+contribute to optimising storage space usage.
