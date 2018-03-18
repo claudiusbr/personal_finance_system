@@ -55,6 +55,11 @@ implementation of the \emph{Observer Design Pattern}
 
 \subsection{Business Logic} \label{sec:Implementation.BusinessLogic}
 
+\textbf{TODO: write about Scala's own implementation of Mockito as one of the
+language features}
+
+\textbf{TODO: syntax highlighting for code listings}
+
 \textbf{TODO: write about how using properties file is a good way to decide
 otherwise static behaviour at runtime -- is this dependency injection?}
 
@@ -100,6 +105,47 @@ in the business logic code as follows:
     }
   ]{../code/src/main/scala/personalfinance/businesslogic/transaction/Patterns.scala}
 }
+
+\textbf{TODO: talk about the choice of ListBuffer for constant append and
+prepend time (\cite[][location~15415]{odersky2016scala}), and
+List[Map[String,Category]] for Classifier -- each map links the same Category
+to all its patterns, and since Maps have O(1) high probability/almost constant
+time, it was felt that this would be the best implementation for it. The
+mapping would work similar to this:} \begin{lstlisting}
+Welcome to Scala 2.12.4 (Java HotSpot(TM) 64-Bit 
+  Server VM, Java 1.8.0_161).
+Type in expressions for evaluation. Or try :help.
+
+scala> class K
+defined class K
+
+scala> val k = new K
+k: K = K@6dc1dc69
+
+scala> val map = Map(1 -> k, 2 -> k)
+map: scala.collection.immutable.Map[Int,K] = Map(
+  1 -> K@6dc1dc69, 2 -> K@6dc1dc69)
+
+scala> map(1)
+res0: K = K@6dc1dc69
+
+scala> map(1) == map(2)
+res1: Boolean = true
+
+scala> val map2 = new K
+map2: K = K@5fdb7394
+
+scala> val k2 = new K
+k2: K = K@70ee1963
+
+scala> val map2 = Map(1 -> k, 2 -> k2)
+map2: scala.collection.immutable.Map[Int,K] = Map(
+  1 -> K@6dc1dc69, 2 -> K@70ee1963)
+
+scala> map2(1) == map2(2)
+res2: Boolean = false
+
+\end{lstlisting}
 
 As Fowler (\citeyear[][]{fowler1997analysis}), one of the classes should be
 responsible for keeping track of the relationship. As seen above, it was
