@@ -24,3 +24,6 @@ out
 
 # mysql
 *.mwb.bak
+
+# private properties
+private.properties
