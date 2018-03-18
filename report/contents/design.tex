@@ -327,8 +327,15 @@ categories on the system, but a category can exist without a pattern.
 
 
 \subsection{The Persistence Layer} \label{sec:AnalysisAndDesign.PersistenceLayer}
+This is the layer which communicates directly with the database. It tries to
+encapsulate as much as possible the details of how it accesses the outside
+world by only exposing one singleton object, the \texttt{PersistenceMediator}.
+This is the object responsible for manipulating the database, with the help of
+other encapsulated package members. It uses a \emph{Java Properties} file to
+choose which database engine to use (at the moment only \emph{MySql} and
+\emph{H2} are available), but 
 
-\subsubsection{Database Diagram} \label{sec:AnalysisAndDesign.PersistenceLayer}
+\subsection{Database Diagram} \label{sec:AnalysisAndDesign.PersistenceLayer}
 The UML diagram below shows the design of the database schema for the
 application:
 \begin{figure}[ht!]
