@@ -19,10 +19,18 @@ class Classifier {
     *         still unmatched entries
     */
   def classify(categories: List[Map[String,Category]], entries: List[Entry]):
-  (List[TransactionUnit], List[Entry]) = {
+    (List[TransactionUnit], List[Entry]) =
+    classifyByDescription(categories,entries)
+
+  private def classifyByDescription(categories: List[Map[String,Category]],
+    entries: List[Entry]): (List[TransactionUnit], List[Entry]) = {
     entries.map(
-      (entry: Entry) => {
+      entry => (entry,categories.find(_.contains(entry.description))) match {
+        case (e: Entry, Some(map)) =>
+          TransactionUnit(map(e.description),List(e))
+        case (e: Entry, None) => e
       }
-    )
+    ).partition(_.isInstanceOf[TransactionUnit])
+      .asInstanceOf[(List[TransactionUnit],List[Entry])]
   }
 }
