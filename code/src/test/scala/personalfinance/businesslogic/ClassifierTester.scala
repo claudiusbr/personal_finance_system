@@ -37,9 +37,14 @@ class ClassifierTester extends BehaviourTester with Mocker {
   private val tu1 = TransactionUnit(mockCat1,List(entry1))
   private val tu2 = TransactionUnit(mockCat2,List(entry2))
 
-  private val expectedResult = (List(tu1,tu2),List(entry3))
-
   "A Classifier" should "assign categories to entries when it can find them" in {
+    val expectedResult = (List(tu1,tu2),List(entry3))
     classifier.classify(catMapList,entryList) should be (expectedResult)
+  }
+
+  it should "return return all entries when it cannot find them" in {
+    val listE3 = List(entry3,entry3,entry3)
+    val expectedResult = (List(),List(entry3,entry3,entry3))
+    classifier.classify(catMapList,listE3) should be (expectedResult)
   }
 }
