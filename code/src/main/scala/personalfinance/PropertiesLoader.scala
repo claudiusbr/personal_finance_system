@@ -1,8 +1,7 @@
 package personalfinance
-package input
 
-import java.util.Properties
 import java.io.FileInputStream
+import java.util.Properties
 
 /**
   * This class will be used to load properties onto the system

@@ -4,7 +4,6 @@ package transaction
 
 import org.mockito.Mockito.when
 import personalfinance.businesslogic.transaction.dates.{DateRegistry, DateRegistryFactory}
-import personalfinance.input.PropertiesLoader
 
 /**
   * Integration test between Entry and EntryParser

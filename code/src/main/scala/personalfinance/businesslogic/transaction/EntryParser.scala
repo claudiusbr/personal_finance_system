@@ -3,7 +3,6 @@ package businesslogic
 package transaction
 
 import personalfinance.businesslogic.transaction.dates.DateRegistryFactory
-import personalfinance.input.PropertiesLoader
 
 import scala.util.matching.Regex
 
