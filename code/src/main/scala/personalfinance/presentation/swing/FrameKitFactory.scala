@@ -4,22 +4,12 @@ package swing
 
 import java.awt.Font
 
-import scala.swing.Frame
-
-
-/**
-  * This class is just a bean to store a button object
-  * and a frame which gets triggered by it
-  * @param frame the frame to be loaded
-  * @param button the button which loads the frame
-  */
-class FrameKit(val frame: Frame, val button: MainButton)
-
 /**
   * this object is responsible for returning the right menu to the main menu
   */
 object FrameKitFactory {
-  def apply(fontSpecs: Font, kitName: KitName, main: MainMenu): FrameKit = kitName match {
+  def apply(fontSpecs: Font, kitName: KitName, main: MainMenu): FrameKit =
+    kitName match {
 
     case ManualEntry => new FrameKit(
       new ManualEntry(fontSpecs, main),

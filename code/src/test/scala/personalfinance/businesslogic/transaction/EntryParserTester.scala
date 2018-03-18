@@ -3,6 +3,7 @@ package businesslogic
 package transaction
 
 import org.mockito.Mockito.when
+import personalfinance.businesslogic.transaction.dates.{DateRegistry, DateRegistryFactory}
 import personalfinance.input.PropertiesLoader
 
 /**
@@ -41,9 +42,6 @@ class EntryParserTester extends BehaviourTester with Mocker {
     "\"blabla, and blo\",2018-01-03,200.00",
     "\"bleble,and bla\",2018-01-03,-10.00"
   )
-
-
-
 
   private val mockPL = mock[PropertiesLoader]
   when(mockPL.getProperty("date")).thenReturn("date")

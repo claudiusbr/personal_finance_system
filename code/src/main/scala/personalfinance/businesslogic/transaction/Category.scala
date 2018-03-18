@@ -6,7 +6,7 @@ import scala.util.matching.Regex
 
 /**
   * Creates Categories, which are the implementation of Fowler's Account pattern.
- *
+  *
   * @param name the class name
   * @param entries a list of Entry types
   */

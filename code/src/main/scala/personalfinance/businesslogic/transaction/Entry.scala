@@ -3,6 +3,7 @@ package businesslogic
 package transaction
 
 import org.joda.time.DateTime
+import personalfinance.businesslogic.transaction.dates.DateRegistry
 
 object Entry {
   def apply(amount: Double,dates: DateRegistry, description: String): Entry =

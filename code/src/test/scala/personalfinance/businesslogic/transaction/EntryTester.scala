@@ -2,14 +2,15 @@ package personalfinance
 package businesslogic
 package transaction
 
-import org.joda.time.DateTime
+import personalfinance.businesslogic.transaction.dates.{DateRegistry, DateRegistryFactory}
 
 /**
   * Integration test for Entry, Amount, DateRegistry and Currency
   */
 class EntryTester extends BehaviourTester with Mocker {
 
-  val dt: DateRegistry = new DateRegistry(DateTime.now,DateTime.now)
+  val dateRegistryFactory: DateRegistryFactory = new DateRegistryFactory
+  val dt: DateRegistry = dateRegistryFactory.getDateRegistry("2018/01/03")
 
   val amtUK: Amount = Amount(20.00,GBP)
   val amtEU: Amount = Amount(80.00,EUR)
