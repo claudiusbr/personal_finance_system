@@ -7,7 +7,7 @@ import org.joda.time.DateTime
 
 import scala.language.implicitConversions
 
-class DateFormatter {
+class RegexDateStringParser extends dates.DateStringParser {
 
   private val slashDotDashYYYYMMDD: Regex = """(\d{4})(/|\.|-)(\d{2})(/|\.|-)(\d{2})""".r
   private val slashDotDashDDMMYYYY: Regex = """(\d{2})(/|\.|-)(\d{2})(/|\.|-)(\d{4})""".r

@@ -8,7 +8,7 @@ import personalfinance.businesslogic.transaction.dates.{DateRegistry, DateRegist
 /**
   * Integration test between Entry and EntryParser
   */
-class EntryParserTester extends BehaviourTester with Mocker {
+class InputToEntryParserTester extends BehaviourTester with Mocker {
   private val mockDateRegistryFactory = mock[DateRegistryFactory]
   private val mockDateRegistry = mock[DateRegistry]
   when(mockDateRegistryFactory.getDateRegistry("2018-01-03"))
@@ -47,14 +47,14 @@ class EntryParserTester extends BehaviourTester with Mocker {
   when(mockPL.getProperty("description")).thenReturn("description")
   when(mockPL.getProperty("amount")).thenReturn("amount")
 
-  private val ep = new EntryParser(mockDateRegistryFactory)
+  private val ep = new InputToEntryParser(mockDateRegistryFactory)
 
   "an EntryParser" should "parse file contents into Entry instances" in{
-    ep.parseCSVLines(testContents,mockPL) should be (expectedResult)
+    ep.parseLines(testContents,mockPL) should be (expectedResult)
   }
 
   it should "parse the files even if the columns are not in order" in {
-    ep.parseCSVLines(diffOrder,mockPL) should be (expectedResult)
+    ep.parseLines(diffOrder,mockPL) should be (expectedResult)
   }
 
   it should "parse the files even with columns have different headers" in {
@@ -64,11 +64,11 @@ class EntryParserTester extends BehaviourTester with Mocker {
       .thenReturn("transaction description")
     when(mockPL.getProperty("amount")).thenReturn("credit/debit")
 
-    ep.parseCSVLines(diffHeaders,mockPL) should be (expectedResult)
+    ep.parseLines(diffHeaders,mockPL) should be (expectedResult)
   }
 
   it should "parse the contents even if they have interpolated commas" in {
-    ep.parseCSVLines(interpolatedComma,mockPL) should be (List(
+    ep.parseLines(interpolatedComma,mockPL) should be (List(
       Entry(200.00,mockDateRegistry,"\"blabla  and blo\""),
       Entry(-10.00,mockDateRegistry,"\"bleble and bla\"")))
     }
