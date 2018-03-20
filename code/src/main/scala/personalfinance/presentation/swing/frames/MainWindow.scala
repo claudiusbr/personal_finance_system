@@ -1,6 +1,4 @@
-package personalfinance
-package presentation
-package swing
+package personalfinance.presentation.swing.frames
 
 import java.awt.{Dimension, Font}
 
