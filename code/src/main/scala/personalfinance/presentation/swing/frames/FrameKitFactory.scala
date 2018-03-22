@@ -1,6 +1,7 @@
 package personalfinance
 package presentation
 package swing
+package frames
 
 import java.awt.Font
 

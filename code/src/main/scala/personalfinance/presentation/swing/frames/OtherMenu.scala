@@ -1,6 +1,7 @@
 package personalfinance
 package presentation
 package swing
+package frames
 
 import scala.swing._
 import scala.swing.event._

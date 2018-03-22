@@ -6,10 +6,10 @@ import personalfinance.businesslogic.transaction.dates.DateRegistryFactory
 
 import scala.util.matching.Regex
 
-class EntryParser(drf: DateRegistryFactory = new DateRegistryFactory)
-  extends Parser[Entry] {
+class InputToEntryParser(drf: DateRegistryFactory = new DateRegistryFactory)
+  extends InputParser[Entry] {
 
-  def parseCSVLines(lines: Iterable[String], props: PropertiesLoader): Iterable[Entry] = {
+  def parseLines(lines: Iterable[String], props: PropertiesLoader): Iterable[Entry] = {
     val headers = lines.head.split(",")
 
     val dateHeader: String = props.getProperty("date")

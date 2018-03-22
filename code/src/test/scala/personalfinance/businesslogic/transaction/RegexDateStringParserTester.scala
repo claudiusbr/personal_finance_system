@@ -7,8 +7,8 @@ import org.joda.time.DateTime
 /**
   * integration tester for DateFormatter and DateTime
   */
-class DateFormatterTester extends BehaviourTester {
-  val df = new DateFormatter
+class RegexDateStringParserTester extends BehaviourTester {
+  val df = new RegexDateStringParser
   "String dates passed to the `dateFromString` method of DateFormatter" should
     "be converted from yyyy(/.-)dd(/.-)dd to DateTime" in {
       df.dateFromString("2017/08/09") should be (new DateTime(2017,8,9,0,0))

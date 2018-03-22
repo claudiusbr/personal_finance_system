@@ -1,11 +1,12 @@
 package personalfinance
 package presentation
 package swing
+package frames
 
 import java.awt.Font
 
 import scala.swing.event.ButtonClicked
-import scala.swing.{BoxPanel, GridPanel, Label, MainFrame, Orientation, Swing, Dimension}
+import scala.swing.{BoxPanel, Dimension, GridPanel, Label, MainFrame, Orientation, Swing}
 
 private [swing] class MainMenu(fontSpecs: Font) extends MainFrame {
 

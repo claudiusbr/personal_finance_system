@@ -1,11 +1,11 @@
 package personalfinance
 package presentation
 package swing
+package frames
 
 import scala.swing._
-import scala.swing.event._
-import Orientation.{Vertical,Horizontal}
-import Swing.{VGlue,VStrut,HGlue,HStrut}
+import Orientation.{Horizontal, Vertical}
+import Swing.{HGlue, VGlue}
 
 /**
   * this is the implementation of the interface for manual entry

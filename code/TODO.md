@@ -17,7 +17,10 @@ TODOs
 
 What I would like to do if I have the time
 -------------------------------------------
+- See if there's any way to use R or some of the Scala data science libraries
+  to help with the budget.
 - Make the application more user friendly, and decorate it properly;
+- Learn Spring boot for the frontend;
 - create an interactive wireframe version of the application and allow it to be
   live so that examiners can 'play with it';
 - use multithreading to optimise categorisation;
