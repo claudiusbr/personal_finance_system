@@ -22,28 +22,15 @@ tools, with a defined syntax, which would help them better analyse and design
 software-based systems, and to model business and similar processes
 (\cite[][p.~43]{omg2015uml}). It defines several constructs which have been
 employed throughout this report in order to model the specifications of the
-system, such as:
-\begin{description}
-  \item[Use Case diagrams]
-    As a useful, high level tool to document users' requirements
-    (\cite[][p.~138]{bennett2010object}), use case diagrams have been used to
-    develop the requirements model of the system.
+system, such as Use Case, Activity, Class, Sequence and Communication Diagrams.  
 
-  \item[Activity diagrams]
-
-  \item[Class diagrams]
-    In the classes diagrams used, some thought has been given to how to model
-    the relationships between entities. In the end, it was decided that
-    transitory relationships should be modelled as dependencies, and more
-    permanent ones would be modelled as associations. An example can be seen in
-    Figure \ref{fig:ClassDiagram.SummaryCategory}, where the \texttt{Category}
-    interface has an association to the \texttt{Entry} class, since entries are
-    not going to be removed, only added, to categories, making it a more
-    permanent relationship.
-    
-  \item[Sequence diagrams]
-\end{description}
-
+In the class diagrams used, some thought was given to how to model the
+relationships between entities. In the end, it was decided that transitory
+relationships should be modelled as dependencies, and more permanent ones would
+be modelled as associations. An example can be seen in Figure
+\ref{fig:ClassDiagram.SummaryCategory}, where the \texttt{Category} interface
+has an association to the \texttt{Entry} class, since entries are not going to
+be removed, only added, to categories, making it a more permanent relationship.
 
 \subsection{Requirements Capture Methods} \label{sec:DevelopmentMethod.RequirementsCapture}
 Due to the nature of the system being for personal rather than commercial use

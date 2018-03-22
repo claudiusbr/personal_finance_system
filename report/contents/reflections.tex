@@ -1,35 +1,5 @@
 \section{Reflections} \label{sec:Reflections}
 
-\subsection{Expert Systems} \label{sec:Reflections.ExpertSystems}
-Originally, the author did not know about expert systems when the idea for this
-project was conceived. However this concept was found during the literature
-search and review, and many of the patterns of what an expert system does and
-what this system is supposed to do were identified to be similar. This led to
-the conclusion that the project has the potential to become an expert system,
-even if just with a budgeting tool. The expert knowledge being provided by it
-for its first iteration includes:
-\begin{itemize}
-  \item
-    Double entry bookkeeping;
-
-  \item
-    Budgeting by category.
-\end{itemize}
-
-It achieves the above by separating the inference engine, which is the tool
-responsible for knowing how to apply double entry to transactions, from its
-knowledge base which is the information input by the user -- for example, if
-the user tells the system a manual entry is income, the system will know to
-debit the cash book, and credit the category in question.
-
-Brown et al. (\citeyear{brown1990expert}) declare that the heuristics used by a
-financial planning system can be interpreted as a ``rule of thumb'' to be
-applied to a problem which will normally result in a correct solution for it.
-In the same article it is also stated that ``an expert system is most commonly
-and most effectively used as an advisor to a human decision maker''. I this is
-considered as the measure by which classify an expert system, then the
-budgeting tool alone might qualify this system as one.
-
 \subsection{Use Case Templates} \label{sec:Reflections.UseCaseTemplates}
 Originally, no template was used to document the use cases. The intention was
 to provide better ones at a later iteration, perhaps by researching the ones
@@ -37,14 +7,23 @@ mentioned by Bennett et al. (\citeyear[][p.~157]{bennett2010object}), but
 unfortunately there was not enough time, so the little there was had to be
 dedicated to the software itself.
 
-\subsection{Iterations within the analysis and design iteration}
-The analysis and design stages of the first iteration was delayed due to
-multiple `trials and errors' within it. Appendices \ref{appendix2} and
+\subsection{Nested iterations in Analysis and Design stage}
+The Analysis and Design stage of the first iteration was delayed due to
+multiple `trial and errors' within it. Appendices \ref{appendix2} and
 \ref{appendix3} show a examples of different models which had been incorporated
 into the final design, but which were later changed even before the
 implementation started -- that is, even before any coding was done. This caused
 a reflection on whether the development method was truly iterative, and whether
 or not it was more similar to the Waterfall model.
+
+Still, in the author's opinion, spending more time within the analysis and
+design stage were very helpful in implementing \emph{SOLID} classes, and as a
+result decreased the negative impacts that any refactoring in the code base
+would have caused, were it not to have been done as such. In previous
+iterations of similar projects by the author, but where the modelling normally
+done in the analysis/design stages were neglected, classes ended up with too
+many responsibilities and hard coded dependencies, which made any refactoring
+very challenging.
 
 \subsection{Dependency Injection} \label{sec:Reflections.DependencyInjection}
 Very often during the implementation it was felt that better dependency
@@ -66,3 +45,9 @@ which were used to enforce \emph{double-entry} could have been implemented at
 database or application levels, or both. Initially they were implemented in the
 business logic.
 
+\subsection{Design Patterns} \label{sec:Reflections.DesignPatterns}
+\textbf{TODO: see if this is still the case at the end of the project}
+Instead of the original plan to actually apply design patterns by writing
+implementations of those manually, the author noticed that the final version of
+this project currently uses mainly the patterns already available in the
+\emph{Scala} language.
