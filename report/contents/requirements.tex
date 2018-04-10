@@ -8,9 +8,9 @@ be analysed and properly converted into knowledge.
 
 The scope of the personal finance system developed for this project must
 include a feature to allow a user to upload their bank and credit card
-statements into it. Each transaction should be categorised based on categories
+statements into it. Each transaction should be classified based on categories
 which the user will create. The user should then be able to visualise a summary
-of their income and expenditure by category and period. This should allow them
+of their income and expenditure by category and period, which should allow them
 to have a concise and clear visibility of how much they have earned and spent
 over any period of time. The category must be handled with care -- there should
 not be a case where a user deletes a category and then all the entries in a
@@ -25,18 +25,21 @@ allow them to choose whether the transaction is a credit or a debit from a
 specific category, and then provide the corresponding debit or credit to a
 category of their choice. For example, if the user withdraws \pounds50, and
 spends half of it on weekly shopping and the other half on a cinema ticket,
-they should be able to `debit' \pounds50 to the \emph{Bank} category, and then
-`credit' \pounds25 to both \emph{Weekly Shopping} and \emph{Entertainment}
-categories.
+they should be able to `credit' (withdraw) \pounds50 from the \emph{Bank}
+category, and then `debit' \pounds25 to both \emph{Weekly Shopping} and
+\emph{Entertainment} categories.
 
 Once the system has enough data, it should be able to calculate a simple budget
 and display it for the user. The budget can be a simple average of income and
 expenditure over a long enough period of time, projected over the future
 month/year -- it would only be used as a guideline for the user, anyway.
 
+(\textbf{TODO:} \textsc{since the requirements on the next three paragraphs
+were never implemented, move them to an appendix})
+
 A feature to estimate tax would also be useful. Initially, this can be based on
 the system used to calculate personal tax in the UK, where all of an
-individual's income is added up, and depending on which threshold it reaches,
+individual's income is added up and, depending on which threshold it reaches,
 tax is deducted at that level. For example, for an individual earning
 \pounds75,000 per annum from their job where he or she is a company employee,
 initially their tax free allowance would be deducted from the gross figure,
@@ -45,8 +48,8 @@ be deducted from the rest. However, if they have any income from sources which
 have special taxation rules, such as interest on savings, these would be
 deducted right after the personal allowance -- that is, income from special
 taxation sources get added to the gross income figure, but tax from them is
-deducted at a different rate and before the base tax. (\textbf{TODO: CITATION
-NEEDED}).
+deducted at a different rate and before the base tax. (\textbf{TODO:}
+\textsc{CITATION NEEDED}).
 
 There should be an option to allow a user to determine whether a transaction is
 taxable. For income, the user should also be able to determine if it is already
@@ -105,8 +108,8 @@ listed above:
     \hline
     Create Manual Entry&The user should be able to create a manual transaction for
                         income or expenditure, include a date, amount and
-                        description, and either choose an existing category (or
-                        categories) for it or create a new one(s) in the
+                        description, and classify it among existing categories
+                        or create new ones in the
                         process\\
                         &\emph{Extends}: Create Category\\
     \hline
@@ -123,9 +126,10 @@ listed above:
     \hline
     Create Category&Creates a new category with the name suggested by the
                         user\\
-    \hline
-    Estimate Tax&Based on the information entered and the current tax year,
-                 calculate how much tax is due\\
+
+%    \hline
+%    Estimate Tax&Based on the information entered and the current tax year,
+%                 calculate how much tax is due\\
     \hline
   \end{tabular}
   \caption{Use Case Descriptions} \label{tab:UseCaseDescriptions}
