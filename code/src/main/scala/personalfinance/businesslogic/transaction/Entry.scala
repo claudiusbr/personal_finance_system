@@ -5,6 +5,7 @@ package transaction
 import org.joda.time.DateTime
 import personalfinance.businesslogic.transaction.dates.DateRegistry
 
+
 object Entry {
   def apply(amount: Double,dates: DateRegistry, description: String): Entry =
     apply(Amount(amount), dates, description)
@@ -13,8 +14,10 @@ object Entry {
     apply(Amount(amount,currency),dates, description)
 }
 
+/**
+  *
+  */
 case class Entry(amount: Amount, private val dates: DateRegistry, description: String) {
-
   def this(amount: Double, dates: DateRegistry, description: String) =
     this(Amount(amount),dates, description)
 

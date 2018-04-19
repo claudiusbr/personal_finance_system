@@ -7,6 +7,7 @@ import java.awt.Font
 import java.io.File
 
 import scala.swing._
+import event.FocusGained
 import Orientation.{Horizontal, Vertical}
 import Swing.HGlue
 
@@ -14,7 +15,8 @@ private[swing] case object UploadStatement extends KitName { val title = "Upload
 private[swing] class UploadStatement(fontSpecs: Font, main: MainMenu) extends OtherMenu(main) {
 
   private val fileLabel = new Label("CSV Path")
-  private val fileField = new TextField("(enter absolute file path or click 'Find'") {
+  private val fileFieldText = "(enter absolute file path or click 'Find')"
+  private val fileField = new TextField(fileFieldText) {
     columns = main.WindowWidth - 20
   }
   private val fileButton = Button("Open")(fileField.text = getFileName(
@@ -56,6 +58,14 @@ private[swing] class UploadStatement(fontSpecs: Font, main: MainMenu) extends Ot
 
   title = UploadStatement.title
   contents = uploadStatementBox
+
+  fileButton.requestFocus()
+
+  listenTo(fileField)
+
+  reactions += {
+    case FocusGained(`fileField`, None, false) if fileField.text == fileFieldText => fileField.text = ""
+  }
 }
 
 

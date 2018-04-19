@@ -158,3 +158,27 @@ res2: Boolean = false
 \textbf{TODO: talk about the decision to create constructor dependencies to
 traits rather than classes directly, as is the case with
 \texttt{DateStringParser}}
+
+\textbf{TODO: talk about choosing not to user the Builder pattern for the Entry
+class as it would turn into boilerplate town}
+
+
+\subsection{The Bridge Pattern}
+The Bridge pattern allows for an abstraction and its implementation to be
+decoupled, so that both can vary independently. In this project, the bridge
+pattern can be seen implemented in the \emph{presentation} and
+\emph{persistence} layers. In the first, the \texttt{Presentation} class is
+linked to the \texttt{PresentationBridge} trait by aggregation. The
+\texttt{Swing} class implements this trait and refers to the \emph{swing}
+package for the implementation. This was done so that the implementation of the
+\emph{presentation} layer can change easily at runtime -- for example, if there
+are a hosted and a portable version of the appliaction, the first which runs on
+a web framework and the latter with a desktop package such as Swing, the same
+application can be implemented to both without the code having to be
+recompiled.
+
+Another feature which facilitates this is the fact that the clients -- the
+\texttt{Presentation} class -- uses a combination of a
+\texttt{java.util.Properties} object and \emph{reflection} to determine which
+implementation it will run. This will also aid the above goal of having the
+behaviour of the application change without it having to be recompiled.
