@@ -51,3 +51,19 @@ Instead of the original plan to actually apply design patterns by writing
 implementations of those manually, the author noticed that the final version of
 this project currently uses mainly the patterns already available in the
 \emph{Scala} language.
+
+\subsection{Implementation of the Strategy Design Pattern for Parser}
+\textbf{TODO: see if this is still the case at the end of the project}
+One of the original intentions of the author was to utilise an implementation
+of the Strategy Design pattern when loading the user's bank statements into the
+system. The current implementation uploads data from CSV files, but making use
+of the Strategy pattern, which allows for different implementations of an
+algorithm to exist, and for the right one to be chosen while the application is
+\emph{running} (\cite[][Ch.~8,~Location~3152]{nikolov2016scala}), would allow
+for other formats to be used too. JSON and XML formats come to mind, especially
+if a version of the application could be made which would allow for it to
+communicate with a banking system's API -- API's (especially RESTful) tend to
+favour these two formats.
+
+Unfortunately, the time constraints prevented these to be successfully
+implemented and tested at this time.

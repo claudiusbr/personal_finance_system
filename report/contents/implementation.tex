@@ -173,7 +173,7 @@ linked to the \texttt{PresentationBridge} trait by aggregation. The
 \texttt{Swing} class implements this trait and refers to the \emph{swing}
 package for the implementation. This was done so that the implementation of the
 \emph{presentation} layer can change easily at runtime -- for example, if there
-are a hosted and a portable version of the appliaction, the first which runs on
+are a hosted and a portable version of the application, the first which runs on
 a web framework and the latter with a desktop package such as Swing, the same
 application can be implemented to both without the code having to be
 recompiled.
@@ -183,3 +183,31 @@ Another feature which facilitates this is the fact that the clients -- the
 \texttt{java.util.Properties} object and \emph{reflection} to determine which
 implementation it will run. This will also aid the above goal of having the
 behaviour of the application change without it having to be recompiled.
+
+
+\subsection{Algebraic Data Types and the Value Object Pattern}
+Throughout the code, examples of Algebraic Data Types can be seen. These appear
+in the form of sealed traits and case objects, and are normally used when
+instances need to be passed around as values, but also contain information
+which will be relevant to the code. Examples of these can be found in the
+\texttt{ConnectionType} hierarchy, where the number of possible instances for
+each case class would classify the trait and its subtypes as \emph{Product
+Types} (\cite[][p.~411]{wampler2015programming}). The code listing below
+illustrates this:
+
+{
+  \small
+  \lstinputlisting[
+    language=Scala,
+    caption={
+      extract of the \texttt{ConnectionType} hierarchy showing the case classes
+      used as value objects
+    }
+  ]{../code/src/main/scala/personalfinance/persistence/connections/ConnectionType.scala}
+}
+
+Algebraic data types could be said to be the natural implementation of the
+Value Object design pattern. This pattern is used widely for comparison of
+objects not by their identities, but rather by their values. They consist of
+small, immutable objects, and the instances of the case classes can be
+classified as just those (\cite[][Ch.~8,~Location~3068]{nikolov2016scala}).
