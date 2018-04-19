@@ -4,8 +4,8 @@ package presentation
 import swing.frames.MainWindow
 
 private[presentation] case class Swing() extends PresentationBridge {
-  private val swingMenus = MainWindow
-  override def startup(): Unit = swingMenus.startup()
+  private val mainWindow = MainWindow
 
-  override def quit(): Unit = swingMenus.quit()
+  override def startup(): Unit = mainWindow.startup()
+  override def quit(): Unit = mainWindow.quit()
 }
