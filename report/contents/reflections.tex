@@ -67,3 +67,26 @@ favour these two formats.
 
 Unfortunately, the time constraints prevented these to be successfully
 implemented and tested at this time.
+
+\subsection{Implementation of Presentation Layer using only Functional Paradigm}
+\textbf{THIS MAY HAVE BEEN CHANGED. LAST COMMIT WHERE TRUE WAS b0bae376264f}
+After the first iteration of the presentation layer, it was noticed that
+perhaps it could be fully implemented in a form more close to that of the
+functional paradigm. That is, make it a point to not use \texttt{var}'s, and
+only \texttt{val}'s for members (also not change state using Scala Swing's
+classes natural mutable fields, such as location, visible, etc -- the effects
+from these could be replicated by copying the values of the instances into new
+ones). This could have been achieved if the full \texttt{presentation.swing}
+package had been implemented from the start with this in mind: have an
+interaction mediator within the package, and then make more use of double
+dispatch, familiar to the \emph{Visitor Pattern}
+(\cite[][Ch.~8,~Location~3943]{nikolov2016scala}). Then, for the actual flow of
+the application, a strategy similar to that used by Felleisen et al.
+(\citeyear[][Ch.~5]{felleisen2013realm}), where each action would trigger a
+function which changes the state of the application, and then the GUI
+displaying the new state would be passed recursively to to the main function,
+ensures that the immutability of the functional paradigm is maintained
+throughout the presentation layer.
+
+Unfortunately, time constraints were once again too tight for this to be fully
+implemented.
