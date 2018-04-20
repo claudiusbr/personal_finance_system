@@ -8,17 +8,17 @@ import java.awt.Font
 import scala.swing.event.ButtonClicked
 import scala.swing.{BoxPanel, Dimension, GridPanel, Label, MainFrame, Orientation, Swing}
 
-private [swing] class MainMenu(fontSpecs: Font) extends MainFrame {
+private [swing] class MainMenu(fontSpecs: Font, mediator: SwingMediator) extends MainFrame {
 
   private[swing] val WindowHeight = 390
   private[swing] val WindowWidth = 710
   preferredSize = new Dimension(WindowWidth,WindowHeight)
 
   private val (manualEntry,uploadStatement,viewSummary,calcBudget) = (
-    FrameKitFactory(fontSpecs, ManualEntry, this),
-    FrameKitFactory(fontSpecs, UploadStatement, this),
-    FrameKitFactory(fontSpecs, ViewSummary, this),
-    FrameKitFactory(fontSpecs, CalculateBudget, this)
+    FrameKitFactory(fontSpecs, ManualEntry, this, mediator),
+    FrameKitFactory(fontSpecs, UploadStatement, this, mediator),
+    FrameKitFactory(fontSpecs, ViewSummary, this, mediator),
+    FrameKitFactory(fontSpecs, CalculateBudget, this, mediator)
   )
 
   val (usBtn,meBtn,vsBtn,cbBtn) = (

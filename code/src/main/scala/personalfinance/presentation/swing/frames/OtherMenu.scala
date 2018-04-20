@@ -27,20 +27,8 @@ abstract class OtherMenu(main: MainMenu) extends MainFrame {
   protected def setMaxHeight(comp: Component): Unit =
     comp.maximumSize = new Dimension(Short.MaxValue, comp.preferredSize.height)
 
-  /**
-    * returns a vertical box with a date field
-    * @param title the title of the box. "Date" by default
-    */
-  protected def getDateBox(title: String = "Date"): BoxPanel =
-    new BoxPanel(Orientation.Vertical) {
-      contents ++= Array(
-        new Label(title),
-        Swing.VGlue,
-        new TextField {columns = 15}
-      )
-    }
-
   listenTo(cancelBtn,okBtn, this)
+
   reactions += {
     case ButtonClicked(`cancelBtn`) =>
       main.location = this.location

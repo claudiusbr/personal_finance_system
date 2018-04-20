@@ -6,12 +6,16 @@ package frames
 import scala.swing._
 import Orientation.{Horizontal, Vertical}
 import Swing.{HGlue, VGlue}
+import scala.swing.event.ButtonClicked
 
 /**
   * this is the implementation of the interface for manual entry
+  * TODO: implement the New Line for breakdown
   */
 private[swing] case object ManualEntry extends KitName { val title = "Manual Entry" }
-private[swing] class ManualEntry(fontSpecs: Font, main: MainMenu) extends OtherMenu(main) {
+private[swing] class ManualEntry(fontSpecs: Font, main: MainMenu,
+                                 mediator: SwingMediator)
+  extends OtherMenu(main) {
 
   // top box
   private val typeLabel = new Label("Type")
@@ -20,13 +24,11 @@ private[swing] class ManualEntry(fontSpecs: Font, main: MainMenu) extends OtherM
     contents ++= Array(typeLabel,VGlue,typeDropDown)
   }
 
-  //private val dateLabel = new Label("Date")
-  //private val dateField = new TextField {columns = 15}
-  //private val dateBox = new BoxPanel(Vertical) {
-  //  contents ++= Array(dateLabel,VGlue,dateField)
-  //}
-
-  private val dateBox = getDateBox()
+  private val dateLabel = new Label("Date")
+  private val dateField = new TextField {columns = 15}
+  private val dateBox = new BoxPanel(Vertical) {
+    contents ++= Array(dateLabel,VGlue,dateField)
+  }
 
   private val totalLabel = new Label("Total")
   private val totalField = new TextField {columns = 7}
@@ -86,6 +88,8 @@ private[swing] class ManualEntry(fontSpecs: Font, main: MainMenu) extends OtherM
 
   private val newLineButton = new Button("New Line")
 
+
+  // TODO: This will have to be changed when the New Line option is implemented
   private val breakDownBox = new BoxPanel(Horizontal) {
     contents ++= Array(categoryBox,percentBox,amountBox)
     border = Swing.EtchedBorder
@@ -114,4 +118,19 @@ private[swing] class ManualEntry(fontSpecs: Font, main: MainMenu) extends OtherM
     border = Swing.EmptyBorder(30,30,30,30)
   }
 
+  listenTo(okBtn)
+
+  reactions += {
+    // TODO: This will have to be changed when the New Line option is implemented
+    case ButtonClicked(`okBtn`) =>
+      mediator.createManualEntry(
+        typeDropDown.selection.item, dateField.text, totalField.text,
+        Seq[Map[String,String]](
+          Map[String,String](
+            "currency" -> currencyDropDown.selection.item,
+            "description" -> descriptionField.text,
+            "category" -> categoryField.text,
+            "percentage" -> percentField.text,
+            "amount" -> amountField.text)))
+}
 }

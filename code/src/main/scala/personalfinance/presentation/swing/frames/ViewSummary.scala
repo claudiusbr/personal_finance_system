@@ -7,11 +7,23 @@ import java.awt.Font
 
 import scala.swing._
 import Orientation.{Horizontal, Vertical}
+import event.ButtonClicked
+import Swing.VGlue
 
 private[swing] case object ViewSummary extends KitName { val title = "View Summary" }
-private[swing] class ViewSummary(fontSpecs: Font, main: MainMenu) extends OtherMenu(main) {
-  private val fromBox = getDateBox("From")
-  private val toBox = getDateBox("To")
+private[swing] class ViewSummary(fontSpecs: Font, main: MainMenu,
+                                 mediator: SwingMediator) extends OtherMenu(main) {
+  private val fromLabel = new Label("From")
+  private val fromField = new TextField {columns = 15}
+  private val fromBox = new BoxPanel(Vertical) {
+    contents ++= Array(fromLabel,VGlue,fromField)
+  }
+
+  private val toLabel = new Label("To")
+  private val toField = new TextField {columns = 15}
+  private val toBox = new BoxPanel(Vertical) {
+    contents ++= Array(toLabel,VGlue,toField)
+  }
 
   private val topBox = new BoxPanel(Horizontal) {
     contents ++= Array(fromBox,Swing.HStrut(3),toBox)
@@ -35,6 +47,11 @@ private[swing] class ViewSummary(fontSpecs: Font, main: MainMenu) extends OtherM
     contents += middleBox
     contents += navigationBox
     border = Swing.EmptyBorder(30)
+  }
+
+  reactions += {
+    case ButtonClicked(`okBtn`) =>
+      mediator.viewSummary(fromField.text,toField.text)
   }
 }
 

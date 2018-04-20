@@ -9,12 +9,14 @@ import java.io.File
 import scala.swing._
 import Orientation.{Horizontal, Vertical}
 import Swing.HGlue
+import scala.swing.event.ButtonClicked
 
 private[swing] case object UploadStatement extends KitName { val title = "Upload Statement" }
-private[swing] class UploadStatement(fontSpecs: Font, main: MainMenu) extends OtherMenu(main) {
+private[swing] class UploadStatement(fontSpecs: Font, main: MainMenu, mediator: SwingMediator)
+  extends OtherMenu(main) {
 
   private val fileLabel = new Label("CSV Path")
-  private val fileFieldText = "(enter absolute file path or click 'Find')"
+  private val fileFieldText = "(enter absolute file path or click 'Open')"
   private val fileField = new TextField(fileFieldText) {
     columns = main.WindowWidth - 20
   }
@@ -59,6 +61,10 @@ private[swing] class UploadStatement(fontSpecs: Font, main: MainMenu) extends Ot
   contents = uploadStatementBox
 
   fileButton.requestFocus()
+
+  listenTo(okBtn)
+
+  reactions += {
+    case ButtonClicked(`okBtn`) => mediator.uploadStatement(fileField.text)
+  }
 }
-
-
