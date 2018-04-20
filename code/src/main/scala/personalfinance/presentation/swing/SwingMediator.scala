@@ -11,4 +11,6 @@ trait SwingMediator {
                         breakdown: Seq[Map[String,String]]): Unit
 
   def uploadStatement(filePath: String): Unit
+
+  def quit(): Unit
 }
