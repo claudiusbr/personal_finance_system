@@ -10,12 +10,12 @@ object MainWindow extends Reactor {
 
   private val mainMenu = new MainMenu(verdana)
 
-  private[swing] var whatIsShowing: Frame = mainMenu
+  //private[swing] var whatIsShowing: Frame = mainMenu
 
   //override def startup(args: Array[String]): Unit = {
   def startup(): Unit = {
-    if (whatIsShowing.size == new Dimension(0,0)) whatIsShowing.pack()
-    whatIsShowing.visible = true
+    if (mainMenu.size == new Dimension(0,0)) mainMenu.pack()
+    mainMenu.visible = true
   }
 
   /** Finalizes the application by calling `shutdown` and exits.*/

@@ -4,10 +4,16 @@ import personalfinance.persistence.PersistenceBridge
 import presentation.Presentation
 
 object App {
-  private val propertiesLoader = new PropertiesLoader("config.properties")
 
   def main(args: Array[String]): Unit = {
-    val presentation = new Presentation(propertiesLoader)
-    presentation.start()
+    val propertiesLoader = new PropertiesLoader("config.properties")
+    val privateLoader = new PropertiesLoader("private.properties")
+
+    val frontEndChoice: String = propertiesLoader.getProperty("currentfrontend")
+    val presentationBridge = Presentation.getBridge(frontEndChoice)
+
+    val persistenceBridge = new PersistenceBridge(propertiesLoader,privateLoader)
+
+    presentationBridge.startup()
   }
 }

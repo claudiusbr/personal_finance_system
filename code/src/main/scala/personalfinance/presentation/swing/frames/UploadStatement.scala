@@ -7,7 +7,6 @@ import java.awt.Font
 import java.io.File
 
 import scala.swing._
-import event.FocusGained
 import Orientation.{Horizontal, Vertical}
 import Swing.HGlue
 
@@ -60,12 +59,6 @@ private[swing] class UploadStatement(fontSpecs: Font, main: MainMenu) extends Ot
   contents = uploadStatementBox
 
   fileButton.requestFocus()
-
-  listenTo(fileField)
-
-  reactions += {
-    case FocusGained(`fileField`, None, false) if fileField.text == fileFieldText => fileField.text = ""
-  }
 }
 
 

@@ -32,13 +32,10 @@ private [swing] class MainMenu(fontSpecs: Font) extends MainFrame {
       case UploadStatement => uploadStatement
       case ViewSummary => viewSummary
       case CalculateBudget => calcBudget
-
     }
-    val other = MainWindow.whatIsShowing
-    frameKit.frame.location = other.location
-    MainWindow.whatIsShowing = frameKit.frame
-    MainWindow.whatIsShowing.visible = true
-    other.visible = false
+    frameKit.frame.location = this.location
+    frameKit.frame.visible = true
+    this.visible = false
   }
 
   title = "Personal Finance System"

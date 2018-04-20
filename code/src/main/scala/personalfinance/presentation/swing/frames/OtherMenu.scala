@@ -43,11 +43,9 @@ abstract class OtherMenu(main: MainMenu) extends MainFrame {
   listenTo(cancelBtn,okBtn, this)
   reactions += {
     case ButtonClicked(`cancelBtn`) =>
-      val other = MainWindow.whatIsShowing
-      main.location = other.location
-      MainWindow.whatIsShowing = main
-      MainWindow.whatIsShowing.visible = true
-      other.visible = false
+      main.location = this.location
+      main.visible = true
+      this.visible = false
 
     case WindowActivated(`me`) => this.size = main.size
   }
