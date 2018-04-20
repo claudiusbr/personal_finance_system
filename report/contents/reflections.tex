@@ -90,3 +90,18 @@ throughout the presentation layer.
 
 Unfortunately, time constraints were once again too tight for this to be fully
 implemented.
+
+\subsection{Layering vs Manual Dependency Injection}
+One of the original (implicit) goals of this project was to have a hierarchy
+system, where each sub-package would not depend super package, but super
+packages could depend on sub ones. That is, a highly specialised
+\texttt{presentation.swing.frames} package would not depend on elements of the
+\texttt{presentation} package, but the \texttt{swing.frames} package would
+declare interfaces which would then be implemented by \texttt{presentation}.
+What had not been taken into consideration, however, is how the fact that the
+super package having to implement the interface would make it difficult to
+truly implement dependency injection: the idea was to have the
+\texttt{InteractionMediator} implement the lower package's interfaces, so that
+it could be passed to the classes of the specialised package. But this would be
+a problem when the interface is too specialised. Therefore, a compromise had to
+be made and the interfaces had to be made more generic.

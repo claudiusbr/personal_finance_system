@@ -163,7 +163,8 @@ traits rather than classes directly, as is the case with
 class as it would turn into boilerplate town}
 
 
-\subsection{The Bridge Pattern}
+\subsection{The Bridge Pattern} \label{sec:Implementation.TheBridgePattern}
+\textbf{TODO: review this. It all changed after the 20th of April}
 The Bridge pattern allows for an abstraction and its implementation to be
 decoupled, so that both can vary independently
 (\cite[][Ch.~7,Location~2699]{nikolov2016scala}). In this project, the bridge
@@ -185,7 +186,19 @@ implementation it will run. This will also aid the above goal of having the
 behaviour of the application change without it having to be recompiled.
 
 
-\subsection{Algebraic Data Types and the Value Object Pattern}
+\subsection{The Strategy Pattern} \label{sec:Implementation.TheStrategyPattern}
+
+Thanks to Scala's mixin traits, the Strategy Pattern was implemented
+successfully in the \texttt{PresentationMediator} class with only a few lines
+of code. What happens here is that the combination of the Strategy and Factory
+patterns are allow enough flexibility that the more specialised packages do not
+have to depend on the packages which envelop it -- within the
+\texttt{presentation} package there is a \texttt{swing} package and a
+placeholder \texttt{play} package for the front-end implementations. So long as
+the outer packages implement the interfaces for each specialised package, 
+
+\subsection{Algebraic Data Types and the Value Object Pattern} \label{sec:Implementation.ADTAndValueObject}
+
 Throughout the code, examples of Algebraic Data Types can be seen. These appear
 in the form of sealed traits and case objects, and are normally used when
 instances need to be passed around as values, but also contain information
