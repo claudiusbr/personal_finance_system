@@ -121,18 +121,17 @@ private[swing] class ManualEntry(fontSpecs: Font, main: MainMenu,
   listenTo(okBtn)
 
   reactions += {
-    // TODO: This will have to be changed when the New Line option is implemented
     case ButtonClicked(`okBtn`) =>
       mediator.createManualEntry(
         typeDropDown.selection.item,
         dateField.text,
         descriptionField.text,
         totalField.text,
-        Seq[Map[String,String]](
+        Seq[Map[String,String]]( // TODO: This will have to be changed when the New Line option is implemented
           Map[String,String](
             "currency" -> currencyDropDown.selection.item,
             "category" -> categoryField.text,
             "percentage" -> percentField.text,
             "amount" -> amountField.text)))
-}
+  }
 }
