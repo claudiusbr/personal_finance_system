@@ -1,7 +1,7 @@
 package personalfinance
 package persistence
 
-import java.sql.Connection
+import java.sql.{Connection, ResultSet}
 
 import personalfinance.persistence.connections._
 
@@ -20,11 +20,19 @@ class PersistenceBridge(propertiesLoader: PropertiesLoader, privateLoader: Prope
       .getConstructor().newInstance().asInstanceOf[ConnectionType]
 
   def connect(): Unit =
-    connection = DBConnector .connect(url,driver,username,password)
+    connection = DBConnector.connect(url, driver, username, password)
 
   def closeConnection(): Unit = connection.close()
 
   def isConnected: Boolean = !connection.isClosed
 
-  def getAllCategories: String = sqlDialect.queryForAllCategories
+  def getAllCategories: ResultSet =
+    runQuery(sqlDialect.queryForAllCategories)
+
+  def getCategory(name: String): ResultSet =
+    runQuery(sqlDialect.queryForACategory(name))
+
+  private def runQuery(query: String): ResultSet =
+    connection.createStatement.executeQuery(query)
+
 }

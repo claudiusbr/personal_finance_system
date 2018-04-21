@@ -1,20 +1,21 @@
 package personalfinance
 
 import presentation.{PresentationFactory, PresentationMediator}
-import persistence.PersistenceBridge
-import personalfinance.input.Input
 
-object InteractionMediator extends PresentationMediator {
-  private val propertiesLoader = new PropertiesLoader("config.properties")
-  private val privateLoader = new PropertiesLoader("private.properties")
-
+/**
+  * this object handles the interactions between the application logic and
+  * the presentation layer. It hands over all interactions with the persistence
+  * layer to the PersistenceMediator
+  */
+object InteractionMediator extends PresentationMediator with Mediator {
   private val frontEndChoice: String = propertiesLoader.getProperty("currentfrontend")
   private val presentationMediator =
     PresentationFactory.getPresentationAmbassador(frontEndChoice, this)
 
-  private val persistenceBridge = new PersistenceBridge(propertiesLoader,privateLoader)
-
-  override def startup(): Unit = presentationMediator.startup()
+  override def startup(): Unit = {
+    PersistenceMediator.startup()
+    presentationMediator.startup()
+  }
 
   override def calculateBudget(): Unit = ???
 
@@ -25,14 +26,18 @@ object InteractionMediator extends PresentationMediator {
   override def createManualEntry(entryType: String, date: String,
                                  total: String, breakdown: Seq[Map[String,String]]): Unit = {
     /**
-      * Create a transacitonUnit with the entry for the category,
-      * then another with the opposite entry for the bank, create a transaction,
+      * Create a transacitonUnit with the entry for the category chosen by the user,
+      * then another with the opposite entry for bank, create a transaction,
       * and only if the transaction is valid then save it to the database
       *
       * this does not account for: a category that does not exist yet
       */
   }
 
-  override def quit(): Unit = persistenceBridge.closeConnection()
-
+  /**
+    * on the Swing implementation, this is being called by MainWindow,
+    * which will then stop the system. This is because MainWindow is the
+    * reactor, which detects when the user closes the window.
+    */
+  override def quit(): Unit = PersistenceMediator.quit()
 }
