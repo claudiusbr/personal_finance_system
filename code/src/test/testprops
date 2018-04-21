@@ -2,3 +2,9 @@ test=result
 date=Date Created
 description=a bag of rice
 amount=20.00
+
+currentdbengine=MySql
+dbname=test_personal_finance
+
+MySqlUrl=jdbc:mysql://localhost:3306/personal_finance_system
+MySqlDriver=com.mysql.jdbc.Driver

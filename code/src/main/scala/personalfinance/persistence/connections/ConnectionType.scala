@@ -14,7 +14,7 @@ private[persistence] sealed trait ConnectionType {
 
   def dbName: String
 
-  def queryForAllCategories: String
+  def queryForAllCategoriesAndPatterns: String
 
   def queryForACategory(name: String): String
 
@@ -28,7 +28,7 @@ private[persistence] final case class MySql(_dbName: String) extends ConnectionT
 
   override def dbName: String = _dbName
 
-  override def queryForAllCategories: String =
+  override def queryForAllCategoriesAndPatterns: String =
     s"""select *
       |from $category cat
       |   left join $pattern pat
@@ -55,7 +55,7 @@ private[persistence] final case class H2(_dbName: String) extends ConnectionType
 
   override def dbName: String = _dbName
 
-  override def queryForAllCategories: String = ???
+  override def queryForAllCategoriesAndPatterns: String = ???
 
   override def queryForACategory(name: String): String = ???
 

@@ -38,10 +38,10 @@ class PersistenceBridge(propertiesLoader: PropertiesLoader, privateLoader: Prope
 
   def closeConnection(): Unit = connection.close()
 
-  def isConnected: Boolean = !connection.isClosed
+  def isConnected: Boolean = if (connection != null) !connection.isClosed else false
 
-  def getAllCategories: ResultSet =
-    runQuery(sqlDialect.queryForAllCategories)
+  def getAllCategoriesAndPatterns: ResultSet =
+    runQuery(sqlDialect.queryForAllCategoriesAndPatterns)
 
   def getCategory(name: String): ResultSet =
     runQuery(sqlDialect.queryForACategory(name))
@@ -61,11 +61,11 @@ class PersistenceBridge(propertiesLoader: PropertiesLoader, privateLoader: Prope
       st.executeQuery(query)
     } catch {
       // TODO: handle this better: pass it to a logger
-      case e: SQLException => throw e
-    } finally {
-      if (st != null) st close()
+      case e: SQLException => {
+        if (st != null) st close()
+        throw e
+      }
     }
     rs
   }
-
 }

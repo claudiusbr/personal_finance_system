@@ -129,9 +129,9 @@ private[swing] class ManualEntry(fontSpecs: Font, main: MainMenu,
         totalField.text,
         Seq[Map[String,String]]( // TODO: This will have to be changed when the New Line option is implemented
           Map[String,String](
-            "currency" -> currencyDropDown.selection.item,
-            "category" -> categoryField.text,
-            "percentage" -> percentField.text,
-            "amount" -> amountField.text)))
+            "currency" -> currencyDropDown.selection.item.trim(),
+            "category" -> categoryField.text.trim(),
+            "percentage" -> percentField.text.trim(),
+            "amount" -> amountField.text.trim())))
   }
 }

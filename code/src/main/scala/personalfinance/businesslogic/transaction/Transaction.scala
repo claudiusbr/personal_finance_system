@@ -12,7 +12,8 @@ import validation._
   * code can be executed in multiple threads
   */
 class Transaction(validators: List[Validator] = List(
-  new TransactionEntriesValidator, new TransactionUnitValidator
+  new TransactionEntriesValidator,
+  new TransactionUnitValidator
 )) {
 
   /**
@@ -20,7 +21,7 @@ class Transaction(validators: List[Validator] = List(
     * Decided to use dependency injection on method here, so that one Transaction
     * object can still be reused with multiple Category/Entries pairs
     */
-  def execute(transactionUnits: List[TransactionUnit]): List[Category] = {
+  def execute(transactionUnits: Seq[TransactionUnit]): Seq[Category] = {
     validators.foreach({vdr: Validator =>
       // TODO: make this more meaningful -- not using the TestResults at all
       vdr.validate(transactionUnits) match {

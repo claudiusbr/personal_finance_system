@@ -1,6 +1,6 @@
 package personalfinance
 
-import java.sql.ResultSet
+import java.sql.{ResultSet, SQLException}
 
 import businesslogic._
 import transaction._
@@ -25,19 +25,28 @@ object PersistenceMediator extends Mediator {
     // Assuming a schema `idcategory,name`, and that RS
     // can be read from left to right, as indicated here
     // https://docs.oracle.com/javase/tutorial/jdbc/basics/retrieving.html
-    val categoryName = rs.getString(2)
-    val categoryId = rs.getInt(1)
-    val categoryPatterns: ResultSet = persistenceBridge.getCategoryPatterns(categoryId)
+    if (rs.next()) {
+      val categoryName = rs.getString(2)
+      val categoryId = rs.getInt(1)
+      rs.close()
+      val categoryPatterns: ResultSet = persistenceBridge.getCategoryPatterns(categoryId)
 
-    // assuming a schema `idpattern,value,category_id`
-    val patterns: Patterns = Patterns(
-      iterateResultSet[List[String]](
-        categoryPatterns,
-        (res,patList) => { res.getString(2) +: patList },
-        List[String]())
+      // assuming a schema `idpattern,value,category_id`
+      val patterns: Patterns = Patterns(
+        iterateResultSet[List[String]](
+          categoryPatterns,
+          (res, patList) => {
+            res.getString(2) +: patList
+          },
+          List[String]())
           .reverse)
 
-    new Category(categoryName, patterns, categoryId)
+      categoryPatterns.close()
+
+      new Category(categoryName, patterns, categoryId)
+    } else {
+      throw new SQLException(s"The query for category $name did not return any results.")
+    }
   }
 
   private def iterateResultSet[A](rs: ResultSet, op: (ResultSet,A) => A, acc: A): A = {
