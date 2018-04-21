@@ -93,5 +93,4 @@ class PersistenceBridge(propertiesLoader: PropertiesLoader, privateLoader: Prope
     rs
   }
 
-
 }

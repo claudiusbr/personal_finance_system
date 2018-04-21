@@ -45,8 +45,8 @@ private[persistence] final case class MySql(_dbName: String) extends ConnectionT
   override def queryForCategoryPatterns(catId: Int): String =
     s"select idpattern,value,category_id from $pattern where category_id = $catId"
 
-  override def createCategoryOnly(name: String): String =
-    s"insert into $category (`name`) valuer (`$name`)"
+  override def createCategoryOnly(catName: String): String =
+    s"insert into $category (`name`) values ('$catName')"
 }
 
 /**

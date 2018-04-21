@@ -48,7 +48,7 @@ object InteractionMediator extends PresentationMediator with Mediator {
           transactionDate,
           description
         )
-        val bkdnCategory: Category = PersistenceMediator.getOrMakeCategory("category")
+        val bkdnCategory: Category = PersistenceMediator.getOrMakeCategory(mapBkdn("category"))
         TransactionUnit(bkdnCategory,List(entry))
       }
     )
