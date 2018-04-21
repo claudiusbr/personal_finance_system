@@ -42,6 +42,23 @@ class PersistenceBridgeTest extends BehaviourTester {
     val hardcoded = "1 Bank"
     stringFromResultSet(
       persistenceBridge.getCategory("Bank")) should be (hardcoded)
+
+    val hardcoded2 = "2 hardware"
+    stringFromResultSet(
+      persistenceBridge.getCategory("hardware")) should be (hardcoded2)
   }
 
+  it should "return the patterns for a category" in {
+    val patterns = "1 new laptop 22 laptop from some store 2"
+    stringFromResultSet(
+      persistenceBridge.getCategoryPatterns(2)) should be (patterns)
+  }
+
+
+
+  // run this test last
+  it should "close the connection once it is done" in {
+    persistenceBridge.closeConnection()
+    persistenceBridge.isConnected should be (false)
+  }
 }

@@ -19,6 +19,7 @@ private[persistence] sealed trait ConnectionType {
   def queryForACategory(name: String): String
 
   def queryForCategoryPatterns(id: Int): String
+
 }
 
 /**
@@ -40,11 +41,8 @@ private[persistence] final case class MySql(_dbName: String) extends ConnectionT
        |where cat.name = '$name';
      """.stripMargin
 
-  override def queryForCategoryPatterns(id: Int): String =
-    s"""select idpattern,value,category_id
-       |from pattern
-       |where category_id = $id""".stripMargin
-
+  override def queryForCategoryPatterns(catId: Int): String =
+    s"select * from $pattern where category_id = ? ;"
 }
 
 /**
