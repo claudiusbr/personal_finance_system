@@ -38,7 +38,7 @@ object InteractionMediator extends PresentationMediator with Mediator {
     val transactionDate = dateRegistryFactory.getDateRegistry(date)
 
     val bankEntry = new Entry(bankTotal,transactionDate,description)
-    val bankCategory = PersistenceMediator.getCategory("Bank")
+    val bankCategory = PersistenceMediator.getOrMakeCategory("Bank")
 
     val bankTU: TransactionUnit = TransactionUnit(bankCategory,List(bankEntry))
     val breakDownTUs: Seq[TransactionUnit] = breakdown.map(
@@ -48,13 +48,23 @@ object InteractionMediator extends PresentationMediator with Mediator {
           transactionDate,
           description
         )
-        val bkdnCategory: Category = PersistenceMediator.getCategory(mapBkdn("category"))
+        val bkdnCategory: Category = PersistenceMediator.getOrMakeCategory("category")
         TransactionUnit(bkdnCategory,List(entry))
       }
     )
 
     val transaction = new Transaction
-    transaction.execute(bankTU +: breakDownTUs).foreach(println)
+    val transactionResult: Seq[Category] = transaction.execute(bankTU +: breakDownTUs)
+    saveTransaction(transactionResult)
+  }
+
+  private def saveTransaction(cats: Seq[Category]): Unit = {
+    cats.foreach {
+      cat => {
+        // TODO
+        println(cat)
+      }
+    }
   }
 
   /**
@@ -63,6 +73,7 @@ object InteractionMediator extends PresentationMediator with Mediator {
     * reactor, which detects when the user closes the window.
     */
   override def quit(): Unit = PersistenceMediator.quit()
+
 
   /**
     * this method converts the amount entered by the user

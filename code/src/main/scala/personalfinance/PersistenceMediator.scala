@@ -19,34 +19,41 @@ object PersistenceMediator extends Mediator {
 
   def quit(): Unit = persistenceBridge.closeConnection()
 
-  def getCategory(name: String): Category = {
+  def getOrMakeCategory(name: String): Category = {
     val rs: ResultSet =  persistenceBridge.getCategory(name)
 
     // Assuming a schema `idcategory,name`, and that RS
     // can be read from left to right, as indicated here
     // https://docs.oracle.com/javase/tutorial/jdbc/basics/retrieving.html
-    if (rs.next()) {
-      val categoryName = rs.getString(2)
-      val categoryId = rs.getInt(1)
-      rs.close()
-      val categoryPatterns: ResultSet = persistenceBridge.getCategoryPatterns(categoryId)
-
-      // assuming a schema `idpattern,value,category_id`
-      val pats: Patterns = Patterns(
-        iterateResultSet[List[String]](
-          categoryPatterns,
-          (res, patList) => {
-            res.getString(2) +: patList
-          },
-          List[String]())
-          .reverse)
-
-      categoryPatterns.close()
-
-      Category(categoryName, patterns = pats, id = categoryId)
+    if (!rs.next()) {
+      val newRs: ResultSet = persistenceBridge.createCategory(name)
+      if (newRs.next()) getExistingCategory(newRs)
+      else throw new RuntimeException(s"tried to make category $name but " +
+        "something went terribly wrong. Check Database or Stacktrace")
     } else {
-      throw new SQLException(s"The query for category $name did not return any results.")
+      getExistingCategory(rs)
     }
+  }
+
+  def getExistingCategory(rs: ResultSet): Category = {
+    val categoryName = rs.getString(2)
+    val categoryId = rs.getInt(1)
+    rs.close()
+    val categoryPatterns: ResultSet = persistenceBridge.getCategoryPatterns(categoryId)
+
+    // assuming a schema `idpattern,value,category_id`
+    val pats: Patterns = Patterns(
+      iterateResultSet[List[String]](
+        categoryPatterns,
+        (res, patList) => {
+          res.getString(2) +: patList
+        },
+        List[String]())
+        .reverse)
+
+    categoryPatterns.close()
+
+    Category(categoryName, patterns = pats, id = categoryId)
   }
 
   private def iterateResultSet[A](rs: ResultSet, op: (ResultSet,A) => A, acc: A): A = {

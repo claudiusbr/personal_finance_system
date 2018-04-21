@@ -55,6 +55,29 @@ class PersistenceBridge(propertiesLoader: PropertiesLoader, privateLoader: Prope
   def getCategoryPatterns(categoryId: Int): ResultSet =
     runQuery(sqlDialect.queryForCategoryPatterns(categoryId))
 
+  /**
+    * Creates a category and immediately retrieves its ID in the database
+    * @param name the name of the new category
+    * @return a ResultSet with the Category from the database
+    */
+  def createCategory(name: String): ResultSet = {
+    val statement = sqlDialect.createCategoryOnly(name)
+    if (executeUpdate(statement) > 0) {
+      getCategory(name)
+    } else {
+      throw new Exception(s"statement $statement did not execute any updates")
+    }
+  }
+
+  private def executeUpdate(statement: String): Int = {
+    val st = connection.createStatement
+    val result: Int = try {
+      st.executeUpdate(statement)
+    } catch {
+      case e: Throwable => throw e
+    }
+    result
+  }
 
   private def runQuery(query: String): ResultSet = {
     val st = connection.createStatement
@@ -69,4 +92,6 @@ class PersistenceBridge(propertiesLoader: PropertiesLoader, privateLoader: Prope
     }
     rs
   }
+
+
 }
