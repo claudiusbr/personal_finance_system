@@ -1,10 +1,9 @@
 package personalfinance
 
-import java.util.InputMismatchException
-
-import presentation.{PresentationFactory, PresentationMediator}
-import businesslogic.EntryType
-import personalfinance.businesslogic.transaction.dates.DateRegistryFactory
+import presentation._
+import businesslogic._
+import transaction._
+import dates._
 
 /**
   * this object handles the interactions between the application logic and
@@ -33,25 +32,29 @@ object InteractionMediator extends PresentationMediator with Mediator {
 
   override def createManualEntry(entryType: String, date: String, description: String,
                                  total: String, breakdown: Seq[Map[String,String]]): Unit = {
-    /**
-      * Create a transacitonUnit with the entry for the category chosen by the user,
-      * then another with the opposite entry for bank, create a transaction,
-      * and only if the transaction is valid then save it to the database
-      *
-      * this does not account for: a category that does not exist yet
-      */
 
-    val (bankTotal: Int, breakdownTotal: Int) =
-      EntryType.values.find(_.toString == entryType) match {
-        case Some(t) => t match {
-          case EntryType.income => (-1 * total.toInt, total.toInt)
-          case EntryType.expenditure => (total.toInt, -1 * total.toInt)
-        }
-        case None => throw new InputMismatchException("invalid entry type passed by ManualEntry frontend")
-      }
+    val bankTotal: Double = convertAmountForBank(total, entryType)
 
     val transactionDate = dateRegistryFactory.getDateRegistry(date)
 
+    val bankEntry = new Entry(bankTotal,transactionDate,description)
+    val bankCategory = PersistenceMediator.getCategory("Bank")
+
+    val bankTU: TransactionUnit = TransactionUnit(bankCategory,List(bankEntry))
+    val breakDownTUs: Seq[TransactionUnit] = breakdown.map(
+      mapBkdn => {
+        val entry = new Entry(
+          convertAmountForBreakdown(mapBkdn("amount"),entryType),
+          transactionDate,
+          description
+        )
+        val bkdnCategory = PersistenceMediator.getCategory(mapBkdn("category"))
+        TransactionUnit(bkdnCategory,List(entry))
+      }
+    )
+
+    val transaction = new Transaction
+    transaction.execute(bankTU +: breakDownTUs).foreach(println)
   }
 
   /**
@@ -60,4 +63,32 @@ object InteractionMediator extends PresentationMediator with Mediator {
     * reactor, which detects when the user closes the window.
     */
   override def quit(): Unit = PersistenceMediator.quit()
+
+  /**
+    * this method converts the amount entered by the user
+    * as String to a positive double, if Income, or negative if expenditure.
+    * @param amt the amount entered by the user
+    * @return the amount converted to a signed double
+    */
+  def convertAmountForBank(amt: String, entryType: String): Double =
+    EntryType.values.find(_.toString == entryType) match {
+      case Some(t) => t match {
+        case EntryType.expenditure => -1.0 * amt.toDouble
+        case EntryType.income => amt.toDouble
+      }
+      case None =>
+        throw new IllegalArgumentException(
+          "invalid entry type passed by ManualEntry frontend")
+    }
+
+  /**
+    * this is the counterpart of the above, except that it converts the amount
+    * to positive if Expenditure, and negative if Income -- this is the `other side`
+    * of the double entry with the bank
+    * @param amt the amount entered by the user
+    * @return the amount converted to a signed double
+    */
+  def convertAmountForBreakdown(amt: String, entryType: String): Double =
+    -1 * convertAmountForBank(amt, entryType)
+
 }
