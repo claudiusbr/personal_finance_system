@@ -42,7 +42,7 @@ private[persistence] final case class MySql(_dbName: String) extends ConnectionT
      """.stripMargin
 
   override def queryForCategoryPatterns(catId: Int): String =
-    s"select * from $pattern where category_id = ? ;"
+    s"select idpattern,value,category_id from $pattern where category_id = $catId"
 }
 
 /**

@@ -32,7 +32,7 @@ object PersistenceMediator extends Mediator {
       val categoryPatterns: ResultSet = persistenceBridge.getCategoryPatterns(categoryId)
 
       // assuming a schema `idpattern,value,category_id`
-      val patterns: Patterns = Patterns(
+      val pats: Patterns = Patterns(
         iterateResultSet[List[String]](
           categoryPatterns,
           (res, patList) => {
@@ -43,7 +43,7 @@ object PersistenceMediator extends Mediator {
 
       categoryPatterns.close()
 
-      new Category(categoryName, patterns, categoryId)
+      Category(categoryName, patterns = pats, id = categoryId)
     } else {
       throw new SQLException(s"The query for category $name did not return any results.")
     }

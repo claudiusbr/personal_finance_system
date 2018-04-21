@@ -48,6 +48,11 @@ class PersistenceBridgeTest extends BehaviourTester {
       persistenceBridge.getCategory("hardware")) should be (hardcoded2)
   }
 
+
+  it should "return nothing the single category requested does not exist" in {
+    persistenceBridge.getCategory("Blorg").next() should be (false)
+  }
+
   it should "return the patterns for a category" in {
     val patterns = "1 new laptop 22 laptop from some store 2"
     stringFromResultSet(

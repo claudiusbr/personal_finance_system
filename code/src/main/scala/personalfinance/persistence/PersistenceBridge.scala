@@ -52,16 +52,8 @@ class PersistenceBridge(propertiesLoader: PropertiesLoader, privateLoader: Prope
     * @param categoryId the id of the category for which a pattern is needed
     * @return the ResultSet of the query
     */
-  def getCategoryPatterns(categoryId: Int): ResultSet = {
-    val ps: PreparedStatement =
-      connection.prepareStatement(sqlDialect.queryForCategoryPatterns(categoryId))
-    try {
-      ps.setInt(1, categoryId)
-      ps.executeQuery()
-    } catch {
-      case e: Throwable => throw e
-    }
-  }
+  def getCategoryPatterns(categoryId: Int): ResultSet =
+    runQuery(sqlDialect.queryForCategoryPatterns(categoryId))
 
 
   private def runQuery(query: String): ResultSet = {

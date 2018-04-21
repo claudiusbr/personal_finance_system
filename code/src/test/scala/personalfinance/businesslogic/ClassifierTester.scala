@@ -16,12 +16,12 @@ class ClassifierTester extends BehaviourTester with Mocker {
   private val cat2entry1desc = "weekly shopping from local grocer"
   private val cat2entry2desc = "monthly shopping from supermarket"
 
-  private val cat1 = new Category("hardware",patterns = Patterns(List(
+  private val cat1 = Category("hardware",patterns = Patterns(List(
     cat1entry1desc.substring(2,12),
     cat1entry2desc.substring(2,24)
   )))
 
-  private val cat2 = new Category("groceries",patterns = Patterns(List(
+  private val cat2 = Category("groceries", patterns = Patterns(List(
     cat2entry1desc.substring(0,15),
     cat2entry2desc.substring(0,16)
   )))
