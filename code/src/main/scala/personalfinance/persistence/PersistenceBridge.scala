@@ -1,7 +1,7 @@
 package personalfinance
 package persistence
 
-import java.sql.{Connection, ResultSet}
+import java.sql.{Connection, ResultSet, SQLException}
 
 import personalfinance.persistence.connections._
 
@@ -43,7 +43,26 @@ class PersistenceBridge(propertiesLoader: PropertiesLoader, privateLoader: Prope
   def getCategory(name: String): ResultSet =
     runQuery(sqlDialect.queryForACategory(name))
 
-  private def runQuery(query: String): ResultSet =
-    connection.createStatement.executeQuery(query)
+  /**
+    * retrieve all patterns for a category found in the database
+    * based on the category's id
+    * @param categoryId the id of the category for which a pattern is needed
+    * @return the ResultSet of the query
+    */
+  def getCategoryPatterns(categoryId: Int): ResultSet =
+    runQuery(sqlDialect.queryForCategoryPatterns(categoryId))
+
+  private def runQuery(query: String): ResultSet = {
+    val st = connection.createStatement
+    val rs: ResultSet = try {
+      st.executeQuery(query)
+    } catch {
+      // TODO: handle this better: pass it to a logger
+      case e: SQLException => throw e
+    } finally {
+      if (st != null) st close()
+    }
+    rs
+  }
 
 }

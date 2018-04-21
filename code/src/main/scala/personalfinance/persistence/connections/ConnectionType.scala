@@ -17,6 +17,8 @@ private[persistence] sealed trait ConnectionType {
   def queryForAllCategories: String
 
   def queryForACategory(name: String): String
+
+  def queryForCategoryPatterns(id: Int): String
 }
 
 /**
@@ -34,14 +36,33 @@ private[persistence] final case class MySql() extends ConnectionType {
        |from $category cat
        |where cat.name = '$name';
      """.stripMargin
+
+  override def queryForCategoryPatterns(id: Int): String =
+    s"""select idpattern,value,category_id
+       |from pattern
+       |where category_id = $id""".stripMargin
 }
 
 /**
   * This is a placeholder for a possible future
-  * implementation of an H2 database
+  * implementation of a H2 database
   */
 private[persistence] final case class H2() extends ConnectionType {
   override def queryForAllCategories: String = ???
 
   override def queryForACategory(name: String): String = ???
+
+  override def queryForCategoryPatterns(id: Int): String = ???
+
+}
+
+/**
+  * This is a placeholder for a possible future
+  * implementation of a H2 database
+  */
+private[persistence] final case class H2() extends ConnectionType {
+  override def queryForAllCategories: String = ???
+
+  override def queryForACategory(name: String): String = ???
+}
 }
