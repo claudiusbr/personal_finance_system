@@ -19,7 +19,7 @@ private[swing] class ManualEntry(fontSpecs: Font, main: MainMenu,
 
   // top box
   private val typeLabel = new Label("Type")
-  private val typeDropDown = new ComboBox[String](Seq("Income","Expenditure"))
+  private val typeDropDown = new ComboBox[String](mediator.entryTypes)
   private val typeBox = new BoxPanel(Vertical) {
     contents ++= Array(typeLabel,VGlue,typeDropDown)
   }
@@ -124,11 +124,13 @@ private[swing] class ManualEntry(fontSpecs: Font, main: MainMenu,
     // TODO: This will have to be changed when the New Line option is implemented
     case ButtonClicked(`okBtn`) =>
       mediator.createManualEntry(
-        typeDropDown.selection.item, dateField.text, totalField.text,
+        typeDropDown.selection.item,
+        dateField.text,
+        descriptionField.text,
+        totalField.text,
         Seq[Map[String,String]](
           Map[String,String](
             "currency" -> currencyDropDown.selection.item,
-            "description" -> descriptionField.text,
             "category" -> categoryField.text,
             "percentage" -> percentField.text,
             "amount" -> amountField.text)))

@@ -2,6 +2,10 @@ package personalfinance
 package persistence
 package connections
 
+/**
+  * This trait needs to be implemented by classes which will hold the hardcoded
+  * references to the query dialect they represent
+  */
 private[persistence] sealed trait ConnectionType {
   protected val dbName = "personal_finance_system"
 
@@ -15,6 +19,9 @@ private[persistence] sealed trait ConnectionType {
   def queryForACategory(name: String): String
 }
 
+/**
+  * this is an implementation of MySql's dialect
+  */
 private[persistence] final case class MySql() extends ConnectionType {
   override def queryForAllCategories: String =
     s"""select *
@@ -31,7 +38,7 @@ private[persistence] final case class MySql() extends ConnectionType {
 
 /**
   * This is a placeholder for a possible future
-  * implementation of H2 databases
+  * implementation of an H2 database
   */
 private[persistence] final case class H2() extends ConnectionType {
   override def queryForAllCategories: String = ???

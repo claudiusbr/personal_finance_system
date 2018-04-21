@@ -5,6 +5,17 @@ import java.sql.{Connection, ResultSet}
 
 import personalfinance.persistence.connections._
 
+/**
+  * this class is responsible for translating the requests of external classes into
+  * the right query dialect of the databases running in the persistence layer.
+  * The specific database flavour is chosen by entries in the `config.properties` and
+  * `private.properties` files, placed in the root directory from which the
+  * application is running
+  * @param propertiesLoader a PropertiesLoader instance containing a reference to
+  *                         `config.properties`
+  * @param privateLoader a PropertiesLoader instance containing a reference to
+  *                      `private.properties`
+  */
 class PersistenceBridge(propertiesLoader: PropertiesLoader, privateLoader: PropertiesLoader) {
   private var connection: Connection = _
 

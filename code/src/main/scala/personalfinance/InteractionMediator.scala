@@ -1,6 +1,10 @@
 package personalfinance
 
+import java.util.InputMismatchException
+
 import presentation.{PresentationFactory, PresentationMediator}
+import businesslogic.EntryType
+import personalfinance.businesslogic.transaction.dates.DateRegistryFactory
 
 /**
   * this object handles the interactions between the application logic and
@@ -12,10 +16,14 @@ object InteractionMediator extends PresentationMediator with Mediator {
   private val presentationMediator =
     PresentationFactory.getPresentationAmbassador(frontEndChoice, this)
 
+  private val dateRegistryFactory = new DateRegistryFactory
+
   override def startup(): Unit = {
     PersistenceMediator.startup()
     presentationMediator.startup()
   }
+
+  override def entryTypes: Seq[String] = EntryType.values.map(_.toString).toSeq
 
   override def calculateBudget(): Unit = ???
 
@@ -23,7 +31,7 @@ object InteractionMediator extends PresentationMediator with Mediator {
 
   override def uploadStatement(filePath: String): Unit = ???
 
-  override def createManualEntry(entryType: String, date: String,
+  override def createManualEntry(entryType: String, date: String, description: String,
                                  total: String, breakdown: Seq[Map[String,String]]): Unit = {
     /**
       * Create a transacitonUnit with the entry for the category chosen by the user,
@@ -32,6 +40,18 @@ object InteractionMediator extends PresentationMediator with Mediator {
       *
       * this does not account for: a category that does not exist yet
       */
+
+    val (bankTotal: Int, breakdownTotal: Int) =
+      EntryType.values.find(_.toString == entryType) match {
+        case Some(t) => t match {
+          case EntryType.income => (-1 * total.toInt, total.toInt)
+          case EntryType.expenditure => (total.toInt, -1 * total.toInt)
+        }
+        case None => throw new InputMismatchException("invalid entry type passed by ManualEntry frontend")
+      }
+
+    val transactionDate = dateRegistryFactory.getDateRegistry(date)
+
   }
 
   /**
