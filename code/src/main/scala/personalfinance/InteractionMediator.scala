@@ -70,7 +70,7 @@ object InteractionMediator extends PresentationMediator with Mediator {
     * @param amt the amount entered by the user
     * @return the amount converted to a signed double
     */
-  def convertAmountForBank(amt: String, entryType: String): Double =
+  private def convertAmountForBank(amt: String, entryType: String): Double =
     EntryType.values.find(_.toString == entryType) match {
       case Some(t) => t match {
         case EntryType.expenditure => -1.0 * amt.toDouble
@@ -88,7 +88,7 @@ object InteractionMediator extends PresentationMediator with Mediator {
     * @param amt the amount entered by the user
     * @return the amount converted to a signed double
     */
-  def convertAmountForBreakdown(amt: String, entryType: String): Double =
+  private def convertAmountForBreakdown(amt: String, entryType: String): Double =
     -1 * convertAmountForBank(amt, entryType)
 
 }

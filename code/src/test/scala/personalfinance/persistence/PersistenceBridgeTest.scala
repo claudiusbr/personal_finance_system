@@ -15,6 +15,14 @@ class PersistenceBridgeTest extends BehaviourTester {
     else iterateResultSet(rs, op, op(rs,acc))
   }
 
+  private def returnAsString(rs: ResultSet, str: String): String =
+    str + (for (i <- 1 to rs.getMetaData.getColumnCount)
+      yield rs.getString(i))
+      .mkString(" ")
+
+  private def stringFromResultSet(rs: ResultSet): String =
+    iterateResultSet[String](rs, returnAsString, "")
+
   "PersistenceBridge with MySql" should "connect to a database" in {
     persistenceBridge.isConnected should be (true)
   }
@@ -26,11 +34,14 @@ class PersistenceBridgeTest extends BehaviourTester {
       "3 groceries 4 monthly shopping 3" +
       "1 Bank null null null"
 
-    iterateResultSet[String](
-      persistenceBridge.getAllCategoriesAndPatterns,
-      (rs,str) => {str + s"${rs.getString(1)} ${rs.getString(2)} ${rs.getString(3)} ${rs.getString(4)} ${rs.getString(5)}"},
-      ""
-    ) should be (hardcoded)
+     stringFromResultSet(
+       persistenceBridge.getAllCategoriesAndPatterns) should be (hardcoded)
+  }
+
+  it should "return a single category when requested" in {
+    val hardcoded = "1 Bank"
+    stringFromResultSet(
+      persistenceBridge.getCategory("Bank")) should be (hardcoded)
   }
 
 }
