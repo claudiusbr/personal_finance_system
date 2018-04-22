@@ -65,7 +65,7 @@ object InteractionMediator extends PresentationMediator with Mediator {
         /**
           * For each category:
           * - save entries to DB
-          * - save any new patterns
+          * - save new patterns to DB
           */
         println(cat)
       }

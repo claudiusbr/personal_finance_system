@@ -26,7 +26,7 @@ object PersistenceMediator extends Mediator {
     // can be read from left to right, as indicated here
     // https://docs.oracle.com/javase/tutorial/jdbc/basics/retrieving.html
     if (!rs.next()) {
-      val newRs: ResultSet = persistenceBridge.createCategory(name)
+      val newRs: ResultSet = persistenceBridge.createAndReturnCategory(name)
       if (newRs.next()) getExistingCategory(newRs)
       else throw new RuntimeException(s"tried to make category $name but " +
         "something went terribly wrong. Check Database or Stacktrace")

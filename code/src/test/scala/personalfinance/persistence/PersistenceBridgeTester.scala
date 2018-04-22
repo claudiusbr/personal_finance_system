@@ -3,12 +3,18 @@ package persistence
 
 import java.sql.ResultSet
 
-class PersistenceBridgeTest extends BehaviourTester {
-  val propertiesLoader = new personalfinance.PropertiesLoader("./src/test/testprops")
-  val privateLoader = new personalfinance.PropertiesLoader("private.properties")
-  val persistenceBridge = new PersistenceBridge(propertiesLoader,privateLoader)
+class PersistenceBridgeTester extends BehaviourTester {
 
-  persistenceBridge.connect()
+  /* overwrite any changes to test db with the latest test db dump
+  * this file needs to be created with
+  * $ mysqldump -B test_personal_finance --comments=false test_personal_finance > test_schema.sql*/
+  PersistenceTesterHelper
+    .loadTestDBFromDump("./original_db_schemas/mysql/test_schema.sql")
+
+  private val propertiesLoader = PersistenceTesterHelper.propertiesLoader
+  private val privateLoader = PersistenceTesterHelper.privateLoader
+  private val persistenceBridge =
+    new PersistenceBridge(propertiesLoader,privateLoader)
 
   private def iterateResultSet[A](rs: ResultSet, op: (ResultSet,A) => A, acc: A): A = {
     if (!rs.next()) acc
@@ -23,7 +29,10 @@ class PersistenceBridgeTest extends BehaviourTester {
   private def stringFromResultSet(rs: ResultSet): String =
     iterateResultSet[String](rs, returnAsString, "")
 
+
+
   "PersistenceBridge with MySql" should "connect to a database" in {
+    persistenceBridge.connect()
     persistenceBridge.isConnected should be (true)
   }
 
@@ -64,5 +73,6 @@ class PersistenceBridgeTest extends BehaviourTester {
   it should "close the connection once it is done" in {
     persistenceBridge.closeConnection()
     persistenceBridge.isConnected should be (false)
+    PersistenceTesterHelper.connection.close()
   }
 }

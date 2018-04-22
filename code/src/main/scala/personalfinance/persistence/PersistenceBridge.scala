@@ -60,13 +60,35 @@ class PersistenceBridge(propertiesLoader: PropertiesLoader, privateLoader: Prope
     * @param name the name of the new category
     * @return a ResultSet with the Category from the database
     */
-  def createCategory(name: String): ResultSet = {
+  def createAndReturnCategory(name: String): ResultSet = {
     val statement = sqlDialect.createCategoryOnly(name)
     if (executeUpdate(statement) > 0) {
       getCategory(name)
     } else {
       throw new Exception(s"statement $statement did not execute any updates")
     }
+  }
+
+  /**
+    * Tries to create a category and returns true if it can create,
+    * and false if cannot. Exceptions should be handled the caller
+    * @param name the name of the category to be created
+    * @return true if the category has been created, false if otherwise.
+    */
+  def createCategory(name: String): Boolean = {
+    val statement = sqlDialect.createCategoryOnly(name)
+    executeUpdate(statement) > 0
+  }
+
+  /**
+    * Tries to create a pattern
+    * @param categoryId the id of the category attached to this pattern
+    * @param patternValue the value of the pattern
+    * @return true if the pattern was created, false otherwise
+    */
+  def createPattern(categoryId: Int, patternValue: String): Boolean = {
+    val statement = sqlDialect.createPatternOnly(categoryId,patternValue)
+    executeUpdate(statement) > 0
   }
 
   private def executeUpdate(statement: String): Int = {

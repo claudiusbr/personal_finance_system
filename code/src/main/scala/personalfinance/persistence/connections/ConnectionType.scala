@@ -21,6 +21,8 @@ private[persistence] sealed trait ConnectionType {
   def queryForCategoryPatterns(id: Int): String
 
   def createCategoryOnly(name: String): String
+
+  def createPatternOnly(categoryId: Int, patternValue: String): String
 }
 
 /**
@@ -47,6 +49,10 @@ private[persistence] final case class MySql(_dbName: String) extends ConnectionT
 
   override def createCategoryOnly(catName: String): String =
     s"insert into $category (`name`) values ('$catName')"
+
+  override def createPatternOnly(categoryId: Int, patternValue: String): String =
+    s"insert into $pattern (`value`,`category_id`) " +
+      s"values ('$patternValue', '$categoryId');"
 }
 
 /**
@@ -64,4 +70,6 @@ private[persistence] final case class H2(_dbName: String) extends ConnectionType
   override def queryForCategoryPatterns(id: Int): String = ???
 
   override def createCategoryOnly(name: String): String = ???
+
+  override def createPatternOnly(categoryId: Int, patternValue: String): String = ???
 }
