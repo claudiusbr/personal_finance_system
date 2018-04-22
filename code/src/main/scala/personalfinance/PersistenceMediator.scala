@@ -1,6 +1,7 @@
 package personalfinance
 
 import java.sql.{ResultSet, SQLException}
+import java.util.InputMismatchException
 
 import businesslogic._
 import transaction._
@@ -54,6 +55,28 @@ object PersistenceMediator extends Mediator {
     categoryPatterns.close()
 
     Category(categoryName, patterns = pats, id = Some(categoryId))
+  }
+
+  def commitTransactionToDB(cats: Seq[Category]): Unit = {
+    /*
+    cats.map {
+      cat => {
+        cat match {
+          case Category(n,_ ,_ ,None) =>
+            throw new RuntimeException(s"Category '$n' not registered.")
+
+          case Category(n,es,ps,Some(id)) =>
+            ps.list.foreach(
+              pat => {
+              pat match {
+                case Pattern(n,None) => persistenceBridge.
+              }
+            })
+        }
+      }
+        1
+    }
+    */
   }
 
   private def iterateResultSet[A](rs: ResultSet, op: (ResultSet,A) => A, acc: A): A = {

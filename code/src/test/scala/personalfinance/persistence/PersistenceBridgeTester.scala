@@ -1,11 +1,10 @@
 package personalfinance
 package persistence
 
-import java.sql.ResultSet
+import java.sql.{ResultSet, SQLException}
 import java.lang.{Integer => JInteger}
 
 import org.joda.time.DateTime
-
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll}
 
 class PersistenceBridgeTester extends BehaviourTester with BeforeAndAfter with BeforeAndAfterAll {
@@ -124,6 +123,10 @@ class PersistenceBridgeTester extends BehaviourTester with BeforeAndAfter with B
     val date = new DateTime(1514764800000L)
     persistenceBridge
       .createEntrySet(date,date,10.00,-10.00,1,3,1) should be (true)
+
+    persistenceBridge
+      .createEntrySet(
+        Seq((date,date,10.0,1,3),(date,date,-10.0,2,3))) should be (true)
   }
 
   it should "fail when the entries do not add up to zero" in {
@@ -132,6 +135,11 @@ class PersistenceBridgeTester extends BehaviourTester with BeforeAndAfter with B
     intercept [IllegalArgumentException] {
       persistenceBridge
         .createEntrySet(date, date, 10.01, -10.00, 1, 3, 1)
+    }
+
+    intercept [RuntimeException] {
+      persistenceBridge
+        .createEntrySet(Seq((date,date,10.0,1,3),(date,date,-10.0,2,3), (date,date,-10.0,2,3)))
     }
   }
 

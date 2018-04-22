@@ -59,17 +59,7 @@ object InteractionMediator extends PresentationMediator with Mediator {
   }
 
   private def saveTransaction(cats: Seq[Category]): Unit = {
-    cats.foreach {
-      cat => {
-        // TODO
-        /**
-          * For each category:
-          * - save entries to DB
-          * - save new patterns to DB
-          */
-        println(cat)
-      }
-    }
+    PersistenceMediator.commitTransactionToDB(cats)
   }
 
   /**

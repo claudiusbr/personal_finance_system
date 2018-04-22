@@ -98,6 +98,58 @@ class PersistenceBridge(propertiesLoader: PropertiesLoader, privateLoader: Prope
   def getEntryDescription(description: String): ResultSet =
     runQuery(sqlDialect.getEntryDescription(description))
 
+
+  /**
+    * this is the class for commiting entries to the database.
+    * This instance allows for two entries to be commited.
+    * @param entries a seq of Tuple5, each with the following:
+    *          date created: DateTime,
+    *          date recorded: DateTime,
+    *          entry amount: Double,
+    *          category Id: Int,
+    *          entry description Id: Int
+    * @return true if the update was successful, otherwise false
+    */
+  def createEntrySet(entries: Seq[(DateTime,DateTime,Double,Int,Int)]): Boolean = {
+    if (entries.foldLeft(0.0)((sum,entry) => sum + entry._3) != 0)
+      throw new RuntimeException(
+        "Sum of entries did not equal 0. Transaction not commited")
+
+    connection.setAutoCommit(false)
+    try {
+      val st = connection.prepareStatement(sqlDialect.createEntryPS)
+      val updateResult: Seq[Boolean] = entries.map {
+        case (created: DateTime, recorded: DateTime, amount: Double, catId: Int, descriptionId: Int) =>
+          st.setDate(1, new JDate(created.getMillis))
+          st.setDate(2, new JDate(recorded.getMillis))
+          st.setDouble(3, amount)
+          st.setInt(4,catId)
+          st.setInt(5,descriptionId)
+          st.executeUpdate() > 0
+      }
+
+      connection.commit()
+
+      updateResult.reduce(_ && _)
+
+    } catch {
+      case e: SQLException => {
+        e.printStackTrace()
+        if (connection != null) try {
+          System.err.print("Attempting to roll back")
+          connection.rollback()
+        } catch {
+          case otherE: SQLException => {
+            otherE.printStackTrace()
+            throw otherE
+          }
+        }
+        throw e
+      }
+    } finally connection setAutoCommit true
+
+  }
+
   /**
     * this is the class for commiting entries to the database.
     * This instance allows for two entries to be commited.
@@ -140,9 +192,21 @@ class PersistenceBridge(propertiesLoader: PropertiesLoader, privateLoader: Prope
 
       resultDebit && resultCredit
 
-    } finally {
-      connection.setAutoCommit(true)
-    }
+    } catch {
+      case e: SQLException => {
+        e.printStackTrace()
+        if (connection != null) try {
+          System.err.print("Attempting to roll back")
+          connection.rollback()
+        } catch {
+          case otherE: SQLException => {
+            otherE.printStackTrace()
+            throw otherE
+          }
+        }
+        throw e
+      }
+    } finally connection setAutoCommit true
   }
 
 
