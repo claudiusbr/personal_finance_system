@@ -3,6 +3,7 @@ package persistence
 
 import java.sql.{Connection, PreparedStatement, ResultSet, SQLException}
 
+import com.sun.org.glassfish.gmbal.Description
 import personalfinance.persistence.connections._
 
 /**
@@ -17,6 +18,20 @@ import personalfinance.persistence.connections._
   *                      `private.properties`
   */
 class PersistenceBridge(propertiesLoader: PropertiesLoader, privateLoader: PropertiesLoader) {
+  def createEntryDescriptionAndReturnID(description: String): Int = {
+    if (executeUpdate(sqlDialect.createEntryDescription(description)) > 0) {
+      val rs: ResultSet = runQuery(sqlDialect.getEntryDescription(description))
+      if (rs.next()) rs.getInt(1)
+      else throw new SQLException(s"entry description for '$description' " +
+        "created, but could not be retrieved. " +
+        "check logs/stacktrace/database.")
+    } else {
+      throw new SQLException(s"could not create entry description for '$description'. " +
+        s"check logs/stacktrace/database")
+    }
+  }
+
+
   private var connection: Connection = _
 
   private val db: String = propertiesLoader.getProperty("currentdbengine")

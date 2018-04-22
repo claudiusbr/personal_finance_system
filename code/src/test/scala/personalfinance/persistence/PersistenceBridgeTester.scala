@@ -2,6 +2,7 @@ package personalfinance
 package persistence
 
 import java.sql.ResultSet
+import java.lang.{Integer => JInteger}
 
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll}
 
@@ -93,13 +94,25 @@ class PersistenceBridgeTester extends BehaviourTester with BeforeAndAfter with B
   it should "create a category and return the category details" in {
     val rs = persistenceBridge.createAndReturnCategory("Test2")
     val _ = rs.next()
-    rs.getInt(1) shouldBe a [java.lang.Integer]
+    rs.getInt(1) shouldBe a [JInteger]
     rs.getString(2) should be ("Test2")
   }
 
   it should "create a pattern and return true if it works" in {
     persistenceBridge.createPattern(1,"test pattern") should be (true)
   }
+
+  it should "create entry descriptions" in {
+    persistenceBridge
+      .createEntryDescriptionAndReturnID(
+        "test entry description") shouldBe a [JInteger]
+  }
+
+  /*
+  it should "add entries to the database when requested" in {
+    persistenceBridge.addEntryToCategory(categoryId = 1, )
+  }
+  */
 
   // run this test last
   it should "close the connection once it is done" in {
