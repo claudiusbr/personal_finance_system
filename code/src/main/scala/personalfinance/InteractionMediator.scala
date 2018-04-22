@@ -4,6 +4,8 @@ import presentation._
 import businesslogic._
 import transaction._
 import dates._
+import input._
+import personalfinance.validation._
 
 /**
   * this object handles the interactions between the application logic and
@@ -11,7 +13,8 @@ import dates._
   * layer to the PersistenceMediator
   */
 object InteractionMediator extends PresentationMediator with Mediator {
-  private val frontEndChoice: String = propertiesLoader.getProperty("currentfrontend")
+  private val frontEndChoice: String = propertiesLoader
+    .getProperty("currentfrontend")
   private val presentationMediator =
     PresentationFactory.getPresentationAmbassador(frontEndChoice, this)
 
@@ -28,10 +31,37 @@ object InteractionMediator extends PresentationMediator with Mediator {
 
   override def viewSummary(from: String, to: String): Unit = ???
 
-  override def uploadStatement(filePath: String): Unit = ???
+  override def uploadStatement(filePath: String): Unit = {
+    val input = new Input
+    val validator = new InputValidator
+    val linesFromFile: Seq[String] = validator.validate(input.lines(filePath)) match {
+      case Pass(lines) => lines.asInstanceOf[Seq[String]]
+      case Fail(message, _) => throw new RuntimeException(message)
+    }
 
-  override def createManualEntry(entryType: String, date: String, description: String,
-                                 total: String, breakdown: Seq[Map[String,String]]): Unit = {
+    val entries: Seq[Entry] = {
+      val headers: Array[String] = linesFromFile.head.split(",")
+      val date: Int = headers.indexOf("date")
+      val description: Int = headers.indexOf("description")
+      val amount: Int = headers.indexOf("amount")
+
+      linesFromFile.tail.map({ tuple => {
+          val tmp: Array[String] = tuple.split(",")
+          Entry(
+            Amount(tmp(amount).toDouble),
+            dateRegistryFactory.getDateRegistry(tmp(date)),
+            tmp(description))
+        }
+      })
+    }
+
+    val categories: Seq[Category] = PersistenceMediator.getAllCategoriesAndPatterns()
+    val classifier = new Classifier
+  }
+
+  override def createManualEntry(entryType: String, date: String,
+                                 description: String, total: String,
+                                 breakdown: Seq[Map[String,String]]): Unit = {
 
     val bankTotal: Double = convertAmountForBank(total, entryType)
 

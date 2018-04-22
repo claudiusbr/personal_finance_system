@@ -66,25 +66,62 @@ object PersistenceMediator extends Mediator {
             val newCatID = getExistingCategory(
               persistenceBridge.createAndReturnCategory(n)).id
 
-            ps.list.foreach { case Pattern(v, None) =>
-              persistenceBridge.createPattern(newCatID.get, v)
+            ps.list.foreach {
+              case Pattern(v, None) =>
+                persistenceBridge.createPattern(newCatID.get, v)
+
+              case _ => throw new RuntimeException("this should never happen." +
+                "just suppressing warnings")
             }
 
             entriesFromCategory(Category(n, es, ps, newCatID))
           }
 
-          case Category(_, _, ps, Some(id)) =>
-            ps.list.foreach { case Pattern(v, None) =>
-              persistenceBridge.createPattern(id, v)
+          case Category(_, _, ps, Some(id)) => {
+            ps.list.foreach {
+              case Pattern(v, None) =>
+                persistenceBridge.createPattern(id, v)
+
+              case _ => throw new RuntimeException("this should never happen" +
+                " just suppressing warnings")
             }
 
             entriesFromCategory(cat)
+          }
+
+          case _ => throw new RuntimeException("this should never happen." +
+            "just suppressing warnings")
         }
       }
     }
 
     // TODO: communicate with user: did it work? did it fail?
     persistenceBridge.createEntrySet(entriesToCommit)
+  }
+
+  def getAllCategoriesAndPatterns(): Seq[Category] = {
+    val (categories: Set[Category], patternsAndCatIds: Map[Int,Seq[Pattern]]) =
+      iterateResultSet[(Set[Category], Map[Int,Seq[Pattern]])](
+        rs = persistenceBridge.getAllCategoriesAndPatterns,
+        op = (res, catAndPat) => {
+          (catAndPat._1 + Category(res.getString(2), id = Some(res.getInt(1))), {
+            val patternValue: String = res.getString(4)
+            if (patternValue == null || patternValue.isEmpty) catAndPat._2
+            else catAndPat._2 + (
+              res.getInt(1) -> (
+                Pattern(patternValue, Some(res.getInt(3)))
+                  +: catAndPat._2.getOrElse(res.getInt(1),Seq[Pattern]())))
+          })
+        },
+        acc = (Set[Category](), Map[Int,Seq[Pattern]]()))
+
+    categories.map {
+      case Category(n,e,_,Some(id)) =>
+        Category(n,e,Patterns(patternsAndCatIds
+            .getOrElse(id,Seq[Pattern]())
+          .toList),Some(id))
+      case _ => throw new RuntimeException(s"Category does not have an ID")
+    }.toSeq
   }
 
   private def entriesFromCategory(cat: Category): Seq[(DateTime, DateTime, Double,Int,Int)] = {
@@ -99,6 +136,9 @@ object PersistenceMediator extends Mediator {
 
         (dateReg.dateCreated, dateReg.dateRecorded, amt.total, cat.id.get, entryDescriptionId)
       }
+
+      case _ => throw new RuntimeException("this should never happen." +
+        " just suppressing warnings")
     }
   }
 
