@@ -43,12 +43,12 @@ object PersistenceMediator extends Mediator {
 
     // assuming a schema `idpattern,value,category_id`
     val pats: Patterns = Patterns(
-      iterateResultSet[List[String]](
+      iterateResultSet[List[Pattern]](
         categoryPatterns,
         (res, patList) => {
-          res.getString(2) +: patList
+          Pattern(res.getString(2)) +: patList
         },
-        List[String]())
+        List[Pattern]())
         .reverse)
 
     categoryPatterns.close()

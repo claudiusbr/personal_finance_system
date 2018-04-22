@@ -62,6 +62,11 @@ object InteractionMediator extends PresentationMediator with Mediator {
     cats.foreach {
       cat => {
         // TODO
+        /**
+          * For each category:
+          * - save entries to DB
+          * - save any new patterns
+          */
         println(cat)
       }
     }

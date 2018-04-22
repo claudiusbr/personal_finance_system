@@ -2,7 +2,7 @@ package personalfinance
 package businesslogic
 
 import org.mockito.Mockito.when
-import personalfinance.businesslogic.transaction.{Category, Entry, Patterns, TransactionUnit}
+import personalfinance.businesslogic.transaction.{Category, Entry, Patterns, Pattern, TransactionUnit}
 
 /**
   * integration test between Classifier, Entry,
@@ -17,13 +17,13 @@ class ClassifierTester extends BehaviourTester with Mocker {
   private val cat2entry2desc = "monthly shopping from supermarket"
 
   private val cat1 = Category("hardware",patterns = Patterns(List(
-    cat1entry1desc.substring(2,12),
-    cat1entry2desc.substring(2,24)
+    Pattern(cat1entry1desc.substring(2,12)),
+    Pattern(cat1entry2desc.substring(2,24))
   )))
 
   private val cat2 = Category("groceries", patterns = Patterns(List(
-    cat2entry1desc.substring(0,15),
-    cat2entry2desc.substring(0,16)
+    Pattern(cat2entry1desc.substring(0,15)),
+    Pattern(cat2entry2desc.substring(0,16))
   )))
 
 

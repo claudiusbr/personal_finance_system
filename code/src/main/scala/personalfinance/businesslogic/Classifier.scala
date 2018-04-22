@@ -27,7 +27,7 @@ class Classifier {
     entries.map({
       entry => (entry,categories.find({
           cat => cat.patterns.list.foldLeft(false)({
-            (test,pat) => entry.description.contains(pat) || test})
+            (test,pat) => entry.description.contains(pat.value) || test})
       })) match {
         case (e: Entry, Some(cat)) =>
           TransactionUnit(cat,List(e))

@@ -10,7 +10,7 @@ package transaction
   */
 case class Category private[transaction](name: String,
                                          entries: List[Entry] = List[Entry](),
-                                         patterns: Patterns = Patterns(List[String]()),
+                                         patterns: Patterns = Patterns(List[Pattern]()),
                                          id: Int = 0) {
   require(name.nonEmpty, "name must not be null or empty")
 }

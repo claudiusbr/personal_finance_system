@@ -5,4 +5,6 @@ package transaction
 /**
   * This is the pattern class which will be a part of Category
   */
-case class Patterns(list: List[String])
+case class Patterns(list: List[Pattern])
+
+case class Pattern(value: String, id: Int = 0)
