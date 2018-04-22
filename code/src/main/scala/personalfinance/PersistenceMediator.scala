@@ -6,6 +6,7 @@ import java.util.InputMismatchException
 import businesslogic._
 import transaction._
 import dates._
+import org.joda.time.DateTime
 import persistence.PersistenceBridge
 
 /**
@@ -58,25 +59,47 @@ object PersistenceMediator extends Mediator {
   }
 
   def commitTransactionToDB(cats: Seq[Category]): Unit = {
-    /*
-    cats.map {
+    val entriesToCommit: Seq[(DateTime, DateTime, Double,Int,Int)] = cats.flatMap {
       cat => {
         cat match {
-          case Category(n,_ ,_ ,None) =>
-            throw new RuntimeException(s"Category '$n' not registered.")
+          case Category(n, es, ps, None) => {
+            val newCatID = getExistingCategory(
+              persistenceBridge.createAndReturnCategory(n)).id
 
-          case Category(n,es,ps,Some(id)) =>
-            ps.list.foreach(
-              pat => {
-              pat match {
-                case Pattern(n,None) => persistenceBridge.
-              }
-            })
+            ps.list.foreach { case Pattern(v, None) =>
+              persistenceBridge.createPattern(newCatID.get, v)
+            }
+
+            entriesFromCategory(Category(n, es, ps, newCatID))
+          }
+
+          case Category(_, _, ps, Some(id)) =>
+            ps.list.foreach { case Pattern(v, None) =>
+              persistenceBridge.createPattern(id, v)
+            }
+
+            entriesFromCategory(cat)
         }
       }
-        1
     }
-    */
+
+    // TODO: communicate with user: did it work? did it fail?
+    persistenceBridge.createEntrySet(entriesToCommit)
+  }
+
+  private def entriesFromCategory(cat: Category): Seq[(DateTime, DateTime, Double,Int,Int)] = {
+    cat.entries.map {
+      case Entry(amt, dateReg, desc, None) => {
+        val _ = persistenceBridge.createEntryDescription(desc)
+        val entryDescriptionId = {
+          val rs: ResultSet = persistenceBridge.getEntryDescription(desc)
+          val _ = rs.next()
+          rs.getInt(1)
+        }
+
+        (dateReg.dateCreated, dateReg.dateRecorded, amt.total, cat.id.get, entryDescriptionId)
+      }
+    }
   }
 
   private def iterateResultSet[A](rs: ResultSet, op: (ResultSet,A) => A, acc: A): A = {

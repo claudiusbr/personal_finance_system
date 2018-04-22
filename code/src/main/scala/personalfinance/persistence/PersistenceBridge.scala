@@ -116,8 +116,8 @@ class PersistenceBridge(propertiesLoader: PropertiesLoader, privateLoader: Prope
         "Sum of entries did not equal 0. Transaction not commited")
 
     connection.setAutoCommit(false)
+    val st = connection.prepareStatement(sqlDialect.createEntryPS)
     try {
-      val st = connection.prepareStatement(sqlDialect.createEntryPS)
       val updateResult: Seq[Boolean] = entries.map {
         case (created: DateTime, recorded: DateTime, amount: Double, catId: Int, descriptionId: Int) =>
           st.setDate(1, new JDate(created.getMillis))
@@ -146,7 +146,10 @@ class PersistenceBridge(propertiesLoader: PropertiesLoader, privateLoader: Prope
         }
         throw e
       }
-    } finally connection setAutoCommit true
+    } finally {
+      connection setAutoCommit true
+      if (st != null) st.close()
+    }
 
   }
 
@@ -206,7 +209,11 @@ class PersistenceBridge(propertiesLoader: PropertiesLoader, privateLoader: Prope
         }
         throw e
       }
-    } finally connection setAutoCommit true
+    } finally {
+      connection setAutoCommit true
+      if (stDebit != null) stDebit.close()
+      if (stCredit != null) stCredit.close()
+    }
   }
 
 
