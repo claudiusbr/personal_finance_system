@@ -2,8 +2,10 @@ package personalfinance
 package persistence
 
 import java.sql.{Connection, PreparedStatement, ResultSet, SQLException}
+import java.sql.{Date => JDate}
+import java.util.InputMismatchException
 
-import com.sun.org.glassfish.gmbal.Description
+import org.joda.time.DateTime
 import personalfinance.persistence.connections._
 
 /**
@@ -18,20 +20,6 @@ import personalfinance.persistence.connections._
   *                      `private.properties`
   */
 class PersistenceBridge(propertiesLoader: PropertiesLoader, privateLoader: PropertiesLoader) {
-  def createEntryDescriptionAndReturnID(description: String): Int = {
-    if (executeUpdate(sqlDialect.createEntryDescription(description)) > 0) {
-      val rs: ResultSet = runQuery(sqlDialect.getEntryDescription(description))
-      if (rs.next()) rs.getInt(1)
-      else throw new SQLException(s"entry description for '$description' " +
-        "created, but could not be retrieved. " +
-        "check logs/stacktrace/database.")
-    } else {
-      throw new SQLException(s"could not create entry description for '$description'. " +
-        s"check logs/stacktrace/database")
-    }
-  }
-
-
   private var connection: Connection = _
 
   private val db: String = propertiesLoader.getProperty("currentdbengine")
@@ -101,10 +89,62 @@ class PersistenceBridge(propertiesLoader: PropertiesLoader, privateLoader: Prope
     * @param patternValue the value of the pattern
     * @return true if the pattern was created, false otherwise
     */
-  def createPattern(categoryId: Int, patternValue: String): Boolean = {
-    val statement = sqlDialect.createPatternOnly(categoryId,patternValue)
-    executeUpdate(statement) > 0
+  def createPattern(categoryId: Int, patternValue: String): Boolean =
+    executeUpdate(sqlDialect.createPatternOnly(categoryId,patternValue)) > 0
+
+  def createEntryDescription(description: String): Boolean =
+    executeUpdate(sqlDialect.createEntryDescription(description)) > 0
+
+  def getEntryDescription(description: String): ResultSet =
+    runQuery(sqlDialect.getEntryDescription(description))
+
+  /**
+    * this is the class for commiting entries to the database.
+    * This instance allows for two entries to be commited.
+    * @param dateCreated the date created
+    * @param dateRecorded the date recorded
+    * @param amountDebit the amount for the debit side -- normally positive
+    * @param amountCredit the amount for the debit side -- normally negative
+    * @param categoryIdDebit the category to be debited
+    * @param categoryIdCredit the category to be credited
+    * @param entryDescriptionId the description of the entry
+    * @return true if the update was successful, otherwise false
+    */
+  def createEntrySet(dateCreated: DateTime, dateRecorded: DateTime,
+                     amountDebit: Double, amountCredit: Double,
+                     categoryIdDebit: Int, categoryIdCredit: Int,
+                     entryDescriptionId: Int): Boolean = {
+    if (amountCredit + amountDebit != 0)
+      throw new IllegalArgumentException("")
+
+    connection.setAutoCommit(false)
+    val stDebit = connection.prepareStatement(sqlDialect.createEntryPS)
+    val stCredit = connection.prepareStatement(sqlDialect.createEntryPS)
+
+    try {
+      stDebit.setDate(1, new JDate(dateCreated.getMillis))
+      stDebit.setDate(2, new JDate(dateRecorded.getMillis))
+      stDebit.setDouble(3, amountDebit)
+      stDebit.setInt(4, categoryIdDebit)
+      stDebit.setInt(5, entryDescriptionId)
+      stCredit.setDate(1, new JDate(dateCreated.getMillis))
+      stCredit.setDate(2, new JDate(dateRecorded.getMillis))
+      stCredit.setDouble(3,amountCredit)
+      stCredit.setInt(4,categoryIdCredit)
+      stCredit.setInt(5,entryDescriptionId)
+
+      val resultDebit: Boolean = stDebit.executeUpdate() > 0
+      val resultCredit: Boolean = stCredit.executeUpdate() > 0
+
+      connection.commit()
+
+      resultDebit && resultCredit
+
+    } finally {
+      connection.setAutoCommit(true)
+    }
   }
+
 
   private def executeUpdate(statement: String): Int = {
     val st = connection.createStatement

@@ -166,6 +166,13 @@ class as it would turn into boilerplate town}
 version being for a desktop app only, but that if a hosted version were to be
 made available more validation would be added}
 
+\textbf{TODO: talk about the decision to have single methods to commit to the
+database one entry at a time, which was because the database is local and
+because it gives more control over when something goes wrong, both for
+debugging or informing the end user. In future iterations, though, the plan was
+to use batch versions as exemplified here
+https://docs.oracle.com/javase/tutorial/jdbc/basics/prepared.html}
+
 \subsection{The Bridge Pattern} \label{sec:Implementation.TheBridgePattern}
 \textbf{TODO: review this. It all changed after the 20th of April}
 The Bridge pattern allows for an abstraction and its implementation to be

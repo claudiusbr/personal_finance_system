@@ -4,26 +4,28 @@ package persistence
 import java.sql.ResultSet
 import java.lang.{Integer => JInteger}
 
+import org.joda.time.DateTime
+
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll}
 
 class PersistenceBridgeTester extends BehaviourTester with BeforeAndAfter with BeforeAndAfterAll {
 
-  protected val propertiesLoader =
+  private val propertiesLoader =
     new personalfinance.PropertiesLoader("./src/test/testprops")
-  protected val privateLoader =
+  private val privateLoader =
     new personalfinance.PropertiesLoader("private.properties")
 
-  protected def iterateResultSet[A](rs: ResultSet, op: (ResultSet,A) => A, acc: A): A = {
+  private def iterateResultSet[A](rs: ResultSet, op: (ResultSet,A) => A, acc: A): A = {
     if (!rs.next()) acc
     else iterateResultSet(rs, op, op(rs,acc))
   }
 
-  protected def returnAsString(rs: ResultSet, str: String): String =
+  private def returnAsString(rs: ResultSet, str: String): String =
     str + (for (i <- 1 to rs.getMetaData.getColumnCount)
       yield rs.getString(i))
       .mkString(" ")
 
-  protected def stringFromResultSet(rs: ResultSet): String =
+  private def stringFromResultSet(rs: ResultSet): String =
     iterateResultSet[String](rs, returnAsString, "")
 
   private val persistenceBridge =
@@ -34,6 +36,7 @@ class PersistenceBridgeTester extends BehaviourTester with BeforeAndAfter with B
   private def overWriteTestDB(): Unit =
     helper.loadTestDBFromDump(propertiesLoader.getProperty("testDumpPath"))
 
+  private val entryDescription: String = "test entry description"
 
   override def beforeAll(): Unit = overWriteTestDB()
 
@@ -104,15 +107,33 @@ class PersistenceBridgeTester extends BehaviourTester with BeforeAndAfter with B
 
   it should "create entry descriptions" in {
     persistenceBridge
-      .createEntryDescriptionAndReturnID(
-        "test entry description") shouldBe a [JInteger]
+      .createEntryDescription(
+        entryDescription) should be (true)
   }
 
-  /*
-  it should "add entries to the database when requested" in {
-    persistenceBridge.addEntryToCategory(categoryId = 1, )
+  it should "retrieve entry descriptions details" in {
+    val rs: ResultSet = persistenceBridge
+      .getEntryDescription(entryDescription)
+
+    val _ = rs.next()
+    rs.getInt(1) shouldBe a [JInteger]
+    rs.getString(2) should be (entryDescription)
   }
-  */
+
+  it should "add entries to the database when requested" in {
+    val date = new DateTime(1514764800000L)
+    persistenceBridge
+      .createEntrySet(date,date,10.00,-10.00,1,3,1) should be (true)
+  }
+
+  it should "fail when the entries do not add up to zero" in {
+    val date = new DateTime(1514764800000L)
+
+    intercept [IllegalArgumentException] {
+      persistenceBridge
+        .createEntrySet(date, date, 10.01, -10.00, 1, 3, 1)
+    }
+  }
 
   // run this test last
   it should "close the connection once it is done" in {
