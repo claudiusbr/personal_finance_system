@@ -10,9 +10,9 @@ class InputValidatorTester extends BehaviourTester {
   val invalidType: List[Int] = List(1,2,3)
 
   "An InputValidator" should "ensure the csv columns are correct" in {
-    iv.validate(valid) should be (Pass(valid.head))
+    iv.validate(valid) should be (Pass(valid))
     iv.validate(notValid) should be (Fail("First line of CSV should" +
-      " be in the format: date,description,amount",notValid.head))
+      " be in the format: date,description,amount",notValid))
   }
 
   it should "ensure that the correct type argument has been passed" in {

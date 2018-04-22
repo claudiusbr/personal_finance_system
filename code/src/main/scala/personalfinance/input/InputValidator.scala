@@ -13,7 +13,7 @@ class InputValidator extends Validator {
       case "date,description,amount" => Pass(input)
       case _ =>
         Fail("First line of CSV should be in the format:"+
-          " date,description,amount",firstLine)
+          " date,description,amount",input)
     }
   }
 }
