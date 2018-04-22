@@ -13,3 +13,10 @@ end}
 MySql because the present version uses a local db, but that in the future for
 performance reasons they should be done using a self-generated portable db
 version instead (such as H2)}
+
+\textbf{TODO: had to make a decision when testing the persistence regarding the
+reloading of the whole DB from the dump after performing Create/Update/Delete only.
+Reloading it every time using `before` was just taking too long, so to improve
+performance I redid it in an unelegant way. The alternative of having one test suite for 
+reading and another one for writing was not working also, as many problems were happening,
+possibly due to so many classes overwriting the database concurrently}

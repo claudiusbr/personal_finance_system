@@ -6,5 +6,9 @@ amount=20.00
 currentdbengine=MySql
 dbname=test_personal_finance
 
+# this file needs to be created with
+# $ mysqldump -B test_personal_finance --comments=false test_personal_finance > test_schema.sql*/
+testDumpPath=./original_db_schemas/mysql/test_schema.sql
+
 MySqlUrl=jdbc:mysql://localhost:3306/personal_finance_system
 MySqlDriver=com.mysql.jdbc.Driver

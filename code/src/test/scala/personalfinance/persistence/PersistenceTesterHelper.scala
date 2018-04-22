@@ -2,9 +2,8 @@ package personalfinance.persistence
 
 import java.sql.{Connection, DriverManager, Statement}
 
-object PersistenceTesterHelper {
-  val propertiesLoader = new personalfinance.PropertiesLoader("./src/test/testprops")
-  val privateLoader = new personalfinance.PropertiesLoader("private.properties")
+private[persistence] class PersistenceTesterHelper(propertiesLoader: PropertiesLoader,
+                                                   privateLoader: PropertiesLoader) {
 
   private val db: String = propertiesLoader.getProperty("currentdbengine")
 

@@ -3,33 +3,50 @@ package persistence
 
 import java.sql.ResultSet
 
-class PersistenceBridgeTester extends BehaviourTester {
+import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll}
 
-  /* overwrite any changes to test db with the latest test db dump
-  * this file needs to be created with
-  * $ mysqldump -B test_personal_finance --comments=false test_personal_finance > test_schema.sql*/
-  PersistenceTesterHelper
-    .loadTestDBFromDump("./original_db_schemas/mysql/test_schema.sql")
+class PersistenceBridgeTester extends BehaviourTester with BeforeAndAfter with BeforeAndAfterAll {
 
-  private val propertiesLoader = PersistenceTesterHelper.propertiesLoader
-  private val privateLoader = PersistenceTesterHelper.privateLoader
-  private val persistenceBridge =
-    new PersistenceBridge(propertiesLoader,privateLoader)
+  protected val propertiesLoader =
+    new personalfinance.PropertiesLoader("./src/test/testprops")
+  protected val privateLoader =
+    new personalfinance.PropertiesLoader("private.properties")
 
-  private def iterateResultSet[A](rs: ResultSet, op: (ResultSet,A) => A, acc: A): A = {
+  protected def iterateResultSet[A](rs: ResultSet, op: (ResultSet,A) => A, acc: A): A = {
     if (!rs.next()) acc
     else iterateResultSet(rs, op, op(rs,acc))
   }
 
-  private def returnAsString(rs: ResultSet, str: String): String =
+  protected def returnAsString(rs: ResultSet, str: String): String =
     str + (for (i <- 1 to rs.getMetaData.getColumnCount)
       yield rs.getString(i))
       .mkString(" ")
 
-  private def stringFromResultSet(rs: ResultSet): String =
+  protected def stringFromResultSet(rs: ResultSet): String =
     iterateResultSet[String](rs, returnAsString, "")
 
+  private val persistenceBridge =
+    new PersistenceBridge(propertiesLoader,privateLoader)
 
+  private val helper = new PersistenceTesterHelper(propertiesLoader,privateLoader)
+
+  private def overWriteTestDB(): Unit =
+    helper.loadTestDBFromDump(propertiesLoader.getProperty("testDumpPath"))
+
+
+  override def beforeAll(): Unit = overWriteTestDB()
+
+  override def afterAll(): Unit = {
+    overWriteTestDB()
+    helper.connection.close()
+  }
+
+  /* overwrite any changes to test db with the latest test db dump
+     see testpropsdb on how to recreate this file if the test db changed
+
+     TODO find a better way to do this. Reloading before each test is causing performance issues
+
+   */
 
   "PersistenceBridge with MySql" should "connect to a database" in {
     persistenceBridge.connect()
@@ -43,8 +60,8 @@ class PersistenceBridgeTester extends BehaviourTester {
       "3 groceries 4 monthly shopping 3" +
       "1 Bank null null null"
 
-     stringFromResultSet(
-       persistenceBridge.getAllCategoriesAndPatterns) should be (hardcoded)
+    stringFromResultSet(
+      persistenceBridge.getAllCategoriesAndPatterns) should be (hardcoded)
   }
 
   it should "return a single category when requested" in {
@@ -68,11 +85,25 @@ class PersistenceBridgeTester extends BehaviourTester {
   }
 
 
+  it should "create a category and return true if it works" in {
+    persistenceBridge.createCategory("Test1") should be (true)
+  }
+
+
+  it should "create a category and return the category details" in {
+    val rs = persistenceBridge.createAndReturnCategory("Test2")
+    val _ = rs.next()
+    rs.getInt(1) shouldBe a [java.lang.Integer]
+    rs.getString(2) should be ("Test2")
+  }
+
+  it should "create a pattern and return true if it works" in {
+    persistenceBridge.createPattern(1,"test pattern") should be (true)
+  }
 
   // run this test last
   it should "close the connection once it is done" in {
     persistenceBridge.closeConnection()
     persistenceBridge.isConnected should be (false)
-    PersistenceTesterHelper.connection.close()
   }
 }
