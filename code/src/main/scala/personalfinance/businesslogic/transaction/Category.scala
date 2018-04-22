@@ -11,6 +11,6 @@ package transaction
 case class Category private[transaction](name: String,
                                          entries: List[Entry] = List[Entry](),
                                          patterns: Patterns = Patterns(List[Pattern]()),
-                                         id: Int = 0) {
+                                         id: Option[Int] = None) {
   require(name.nonEmpty, "name must not be null or empty")
 }

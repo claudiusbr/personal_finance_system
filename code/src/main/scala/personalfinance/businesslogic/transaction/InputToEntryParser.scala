@@ -22,11 +22,12 @@ class InputToEntryParser(drf: DateRegistryFactory = new DateRegistryFactory)
     val description = new ColumnName(descriptionHeader, headers.indexOf(descriptionHeader))
     val amount = new ColumnName(amountHeader, headers.indexOf(amountHeader))
 
+    // TODO: validate input
     lines.tail.map(
       (line: String) => {
         val contents = replCommas(line).split(",")
         Entry(
-          amount = contents(amount.index).toDouble,
+          amount = Amount(contents(amount.index).toDouble),
           dates = drf.getDateRegistry(contents(date.index)),
           description = contents(description.index)
         )

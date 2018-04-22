@@ -46,14 +46,14 @@ object PersistenceMediator extends Mediator {
       iterateResultSet[List[Pattern]](
         categoryPatterns,
         (res, patList) => {
-          Pattern(res.getString(2)) +: patList
+          Pattern(res.getString(2), Some(res.getInt(1))) +: patList
         },
         List[Pattern]())
         .reverse)
 
     categoryPatterns.close()
 
-    Category(categoryName, patterns = pats, id = categoryId)
+    Category(categoryName, patterns = pats, id = Some(categoryId))
   }
 
   private def iterateResultSet[A](rs: ResultSet, op: (ResultSet,A) => A, acc: A): A = {

@@ -24,7 +24,7 @@ class EntryTester extends BehaviourTester with Mocker {
   }
 
   it should "have a constructor which allows it to be created with value, dates and description only" in {
-    val e: Entry = Entry(20.00,dt,"TestE")
+    val e: Entry = Entry(Amount(20.00),dt,"TestE")
     e.amount should be (amtUK)
   }
 

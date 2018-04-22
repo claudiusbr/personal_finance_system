@@ -37,14 +37,14 @@ object InteractionMediator extends PresentationMediator with Mediator {
 
     val transactionDate = dateRegistryFactory.getDateRegistry(date)
 
-    val bankEntry = new Entry(bankTotal,transactionDate,description)
+    val bankEntry = Entry(Amount(bankTotal),transactionDate,description)
     val bankCategory = PersistenceMediator.getOrMakeCategory("Bank")
 
     val bankTU: TransactionUnit = TransactionUnit(bankCategory,List(bankEntry))
     val breakDownTUs: Seq[TransactionUnit] = breakdown.map(
       mapBkdn => {
-        val entry = new Entry(
-          convertAmountForBreakdown(mapBkdn("amount"),entryType),
+        val entry = Entry(
+          Amount(convertAmountForBreakdown(mapBkdn("amount"),entryType)),
           transactionDate,
           description
         )

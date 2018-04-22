@@ -21,8 +21,8 @@ class TransactionTester extends BehaviourTester with Mocker {
 
   protected val trans: Transaction = new Transaction
 
-  protected val laptop: Category = new Category("Laptop")
-  protected val bank: Category = new Category("Bank")
+  protected val laptop: Category = Category("Laptop")
+  protected val bank: Category = Category("Bank")
 
   protected val tuMatch: TransactionUnit = TransactionUnit(laptop, List(mockEntry, mockOtherEntry))
   protected val tuAlsoMatch: TransactionUnit = TransactionUnit(bank, List(mockOtherEntry, mockEntry))

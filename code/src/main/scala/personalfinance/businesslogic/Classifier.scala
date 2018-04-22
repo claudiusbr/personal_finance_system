@@ -18,9 +18,10 @@ class Classifier {
     * @return a Tuple2 of the categorised transaction units and
     *         still unmatched entries
     */
-  def classify(categories: List[Category], entries: List[Entry]):
-    (List[TransactionUnit], List[Entry]) =
+  def classify(categories: List[Category],
+               entries: List[Entry]): (List[TransactionUnit], List[Entry]) =
     classifyByDescription(categories,entries)
+
 
   private def classifyByDescription(categories: List[Category],
     entries: List[Entry]): (List[TransactionUnit], List[Entry]) = {

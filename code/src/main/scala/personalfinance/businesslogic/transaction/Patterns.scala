@@ -7,4 +7,4 @@ package transaction
   */
 case class Patterns(list: List[Pattern])
 
-case class Pattern(value: String, id: Int = 0)
+case class Pattern(value: String, id: Option[Int] = None)

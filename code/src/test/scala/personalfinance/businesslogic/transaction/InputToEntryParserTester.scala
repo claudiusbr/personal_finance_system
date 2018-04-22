@@ -15,8 +15,8 @@ class InputToEntryParserTester extends BehaviourTester with Mocker {
     .thenReturn(mockDateRegistry)
 
   private val expectedResult = List(
-    Entry(200.00,mockDateRegistry,"blabla"),
-    Entry(-10.00,mockDateRegistry,"bleble"))
+    Entry(Amount(200.00),mockDateRegistry,"blabla"),
+    Entry(Amount(-10.00),mockDateRegistry,"bleble"))
 
   private val testContents = List(
     "date,description,amount",
@@ -69,7 +69,7 @@ class InputToEntryParserTester extends BehaviourTester with Mocker {
 
   it should "parse the contents even if they have interpolated commas" in {
     ep.parseLines(interpolatedComma,mockPL) should be (List(
-      Entry(200.00,mockDateRegistry,"\"blabla  and blo\""),
-      Entry(-10.00,mockDateRegistry,"\"bleble and bla\"")))
+      Entry(Amount(200.00),mockDateRegistry,"\"blabla  and blo\""),
+      Entry(Amount(-10.00),mockDateRegistry,"\"bleble and bla\"")))
     }
 }
