@@ -34,7 +34,7 @@ class Transaction(validators: List[Validator] = List(
 
   private def addEntries(tu: TransactionUnit): Category = {
     val cat: Category = tu.category
-    val ents: List[Entry] = tu.entries
+    val ents: Seq[Entry] = tu.entries
     if (cat.entries.isEmpty) cat.copy(entries = ents)
     else cat.copy(entries = cat.entries ++ ents)
   }

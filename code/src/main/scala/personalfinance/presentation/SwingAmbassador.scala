@@ -15,6 +15,8 @@ private[presentation] case class SwingAmbassador(mediator: PresentationMediator)
     */
   private val mainWindow = new MainWindow(mediator)
 
+  override def createCategoryUI(entryType: String, date: String, description: String, amount: String): Unit = ???
+
   override def startup(): Unit = mainWindow.startup()
 
   override def calculateBudget(): Unit = mediator.calculateBudget()

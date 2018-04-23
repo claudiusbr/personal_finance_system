@@ -16,6 +16,8 @@ trait SwingMediator {
   def createManualEntry(entryType: String, date: String, description: String, total: String,
                         breakdown: Seq[Map[String,String]]): Unit
 
+  def createCategoryUI(entryType: String, date: String, description: String, amount: String)
+
   def uploadStatement(filePath: String): Unit
 
   def quit(): Unit

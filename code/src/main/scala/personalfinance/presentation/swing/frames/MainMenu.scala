@@ -21,7 +21,7 @@ private [swing] class MainMenu(fontSpecs: Font, mediator: SwingMediator) extends
     FrameKitFactory(fontSpecs, CalculateBudget, this, mediator)
   )
 
-  val (usBtn,meBtn,vsBtn,cbBtn) = (
+  private val (usBtn,meBtn,vsBtn,cbBtn) = (
     uploadStatement.button,manualEntry.button,
     viewSummary.button,calcBudget.button
   )

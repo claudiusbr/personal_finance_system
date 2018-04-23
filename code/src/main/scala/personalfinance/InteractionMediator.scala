@@ -57,18 +57,23 @@ object InteractionMediator extends PresentationMediator with Mediator {
 
     val categories: Seq[Category] = PersistenceMediator.getAllCategoriesAndPatterns()
     val classifier = new Classifier
+    val (readyToCommitTUs,uncategorised): (Seq[TransactionUnit], Seq[Entry]) =
+      classifier.classify(categories,entries)
   }
 
   override def createManualEntry(entryType: String, date: String,
                                  description: String, total: String,
                                  breakdown: Seq[Map[String,String]]): Unit = {
 
+    // TODO: improve this: it would be inefficient with a non-local database
+    // Since the bank category is static, it could be optimised
+    val bankCategory = PersistenceMediator.getOrMakeCategory("Bank")
+
     val bankTotal: Double = convertAmountForBank(total, entryType)
 
     val transactionDate = dateRegistryFactory.getDateRegistry(date)
 
     val bankEntry = Entry(Amount(bankTotal),transactionDate,description)
-    val bankCategory = PersistenceMediator.getOrMakeCategory("Bank")
 
     val bankTU: TransactionUnit = TransactionUnit(bankCategory,List(bankEntry))
     val breakDownTUs: Seq[TransactionUnit] = breakdown.map(
@@ -78,6 +83,10 @@ object InteractionMediator extends PresentationMediator with Mediator {
           transactionDate,
           description
         )
+        // TODO: add a different implementation for this: as it stands, it could not
+        // be re-used, since the instances of Category would always be recreated here
+        // perhaps make this variable be populated from a function argument which
+        // gets passed by the caller -- this way it would be more dynamic
         val bkdnCategory: Category = PersistenceMediator.getOrMakeCategory(mapBkdn("category"))
         TransactionUnit(bkdnCategory,List(entry))
       }
@@ -87,6 +96,9 @@ object InteractionMediator extends PresentationMediator with Mediator {
     val transactionResult: Seq[Category] = transaction.execute(bankTU +: breakDownTUs)
     saveTransaction(transactionResult)
   }
+
+
+  override def createCategoryUI(entryType: String, date: String, description: String, amount: String): Unit = ???
 
   private def saveTransaction(cats: Seq[Category]): Unit = {
     PersistenceMediator.commitTransactionToDB(cats)
@@ -126,5 +138,4 @@ object InteractionMediator extends PresentationMediator with Mediator {
     */
   private def convertAmountForBreakdown(amt: String, entryType: String): Double =
     -1 * convertAmountForBank(amt, entryType)
-
 }
