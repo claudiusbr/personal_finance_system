@@ -41,6 +41,30 @@ INSERT INTO `category` VALUES (1,'Bank');
 UNLOCK TABLES;
 
 --
+-- Table structure for table `currency`
+--
+
+DROP TABLE IF EXISTS `currency`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `currency` (
+  `idcurrency` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(5) DEFAULT NULL,
+  PRIMARY KEY (`idcurrency`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `currency`
+--
+
+LOCK TABLES `currency` WRITE;
+/*!40000 ALTER TABLE `currency` DISABLE KEYS */;
+INSERT INTO `currency` VALUES (1,'GBP');
+/*!40000 ALTER TABLE `currency` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `entry`
 --
 
@@ -49,16 +73,17 @@ DROP TABLE IF EXISTS `entry`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `entry` (
   `identry` int(11) NOT NULL AUTO_INCREMENT,
-  `date_created` datetime NOT NULL,
-  `date_recorded` datetime NOT NULL,
   `amount` decimal(10,0) NOT NULL,
   `category_id` int(11) NOT NULL,
-  `description_id` int(11) DEFAULT NULL,
+  `description_id` int(11) NOT NULL,
+  `currency_id` int(11) NOT NULL,
   PRIMARY KEY (`identry`),
   KEY `fk_entry_1_idx` (`category_id`),
   KEY `fk_entry_2_idx` (`description_id`),
+  KEY `fk_entry_3_idx` (`currency_id`),
   CONSTRAINT `fk_entry_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`idcategory`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_entry_2` FOREIGN KEY (`description_id`) REFERENCES `entry_description` (`id_entry_description`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_entry_2` FOREIGN KEY (`description_id`) REFERENCES `entry_description` (`id_entry_description`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_entry_3` FOREIGN KEY (`currency_id`) REFERENCES `currency` (`idcurrency`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -79,6 +104,8 @@ DROP TABLE IF EXISTS `entry_description`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `entry_description` (
+  `date_recorded` datetime NOT NULL,
+  `date_created` datetime NOT NULL,
   `id_entry_description` int(11) NOT NULL AUTO_INCREMENT,
   `value` varchar(100) NOT NULL,
   PRIMARY KEY (`id_entry_description`)
@@ -130,4 +157,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-03-18 16:28:12
+-- Dump completed on 2018-04-23 14:50:56
