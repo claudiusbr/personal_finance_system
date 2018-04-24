@@ -12,8 +12,8 @@ class EntryTester extends BehaviourTester with Mocker {
   val dateRegistryFactory: DateRegistryFactory = new DateRegistryFactory
   val dt: DateRegistry = dateRegistryFactory.getDateRegistry("2018/01/03")
 
-  val amtUK: Amount = Amount(20.00,GBP)
-  val amtEU: Amount = Amount(80.00,EUR)
+  val amtUK: Amount = Amount(20.00)
+  val amtEU: Amount = Amount(80.00)
 
   val e: Entry = Entry(amtUK,dt,"TestE")
 

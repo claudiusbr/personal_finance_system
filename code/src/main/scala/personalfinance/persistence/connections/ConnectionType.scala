@@ -24,7 +24,7 @@ private[persistence] sealed trait ConnectionType {
 
   def createPatternOnly(categoryId: Int, patternValue: String): String
 
-  def createEntryDescription(description: String): String
+  def createEntryDescriptionPS: String
 
   def getEntryDescription(description: String): String
 
@@ -60,16 +60,16 @@ private[persistence] final case class MySql(_dbName: String) extends ConnectionT
     s"insert into $pattern (`value`,`category_id`) " +
       s"values ('$patternValue', '$categoryId');"
 
-  override def createEntryDescription(description: String): String =
-    s"insert into $entry_description (`value`) values ('$description')"
+  override def createEntryDescriptionPS: String =
+    s"insert into $entry_description (`date_created`, `date_recorded`, `value`) values (?,?,?)"
 
   override def getEntryDescription(description: String): String =
     s"select id_entry_description,value from $entry_description " +
       s"where value = '$description'"
 
   override def createEntryPS: String =
-    s"insert into $entry (`date_created`, `date_recorded`, `amount`," +
-      " `category_id`, `description_id`) values (?, ?, ?, ?, ?)"
+    s"insert into $entry (`amount`, `category_id`, `description_id`, `currency_id`)" +
+      "values (?, ?, ?, ?)"
 }
 
 /**
@@ -90,7 +90,7 @@ private[persistence] final case class H2(_dbName: String) extends ConnectionType
 
   override def createPatternOnly(categoryId: Int, patternValue: String): String = ???
 
-  override def createEntryDescription(description: String): String = ???
+  override def createEntryDescriptionPS: String = ???
 
   override def getEntryDescription(description: String): String = ???
 

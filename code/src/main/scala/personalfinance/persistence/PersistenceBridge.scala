@@ -3,7 +3,6 @@ package persistence
 
 import java.sql.{Connection, PreparedStatement, ResultSet, SQLException}
 import java.sql.{Date => JDate}
-import java.util.InputMismatchException
 
 import org.joda.time.DateTime
 import personalfinance.persistence.connections._
@@ -92,8 +91,26 @@ class PersistenceBridge(propertiesLoader: PropertiesLoader, privateLoader: Prope
   def createPattern(categoryId: Int, patternValue: String): Boolean =
     executeUpdate(sqlDialect.createPatternOnly(categoryId,patternValue)) > 0
 
-  def createEntryDescription(description: String): Boolean =
-    executeUpdate(sqlDialect.createEntryDescription(description)) > 0
+
+  def createEntryDescription(entryDescriptions: Seq[(DateTime, DateTime, String)]): Boolean = {
+
+    val result: Boolean = executePSUpdate(sqlDialect.createEntryDescriptionPS,
+      (st: PreparedStatement) => {
+      val updateResult: Seq[Boolean] = {
+        entryDescriptions.map {
+          case (created: DateTime, recorded: DateTime, description: String) =>
+            st.setDate(1, new JDate(created.getMillis))
+            st.setDate(2, new JDate(recorded.getMillis))
+            st.setString(3, description)
+            st.executeUpdate() > 0
+        }
+      }
+      connection.commit()
+      updateResult.reduce( _ && _)
+    })
+
+    result
+  }
 
   def getEntryDescription(description: String): ResultSet =
     runQuery(sqlDialect.getEntryDescription(description))
@@ -110,29 +127,92 @@ class PersistenceBridge(propertiesLoader: PropertiesLoader, privateLoader: Prope
     *          entry description Id: Int
     * @return true if the update was successful, otherwise false
     */
-  def createEntrySet(entries: Seq[(DateTime,DateTime,Double,Int,Int)]): Boolean = {
-    if (entries.foldLeft(0.0)((sum,entry) => sum + entry._3) != 0)
+  def createEntrySet(entries: Seq[(Double,Int,Int, Int)]): Boolean = {
+    if (entries.foldLeft(0.0)((sum,entry) => sum + entry._1) != 0)
       throw new RuntimeException(
         "Sum of entries did not equal 0. Transaction not commited")
-
-    connection.setAutoCommit(false)
-    val st = connection.prepareStatement(sqlDialect.createEntryPS)
-    try {
+    val result = executePSUpdate(sqlDialect.createEntryPS,(st: PreparedStatement) => {
       val updateResult: Seq[Boolean] = entries.map {
-        case (created: DateTime, recorded: DateTime, amount: Double, catId: Int, descriptionId: Int) =>
-          st.setDate(1, new JDate(created.getMillis))
-          st.setDate(2, new JDate(recorded.getMillis))
-          st.setDouble(3, amount)
-          st.setInt(4,catId)
-          st.setInt(5,descriptionId)
+        case (amount: Double, catId: Int, descriptionId: Int, currencyId: Int) =>
+          st.setDouble(1, amount)
+          st.setInt(2, catId)
+          st.setInt(3, descriptionId)
+          st.setInt(4, currencyId)
           st.executeUpdate() > 0
       }
 
       connection.commit()
 
       updateResult.reduce(_ && _)
+    })
 
+    result
+  }
+
+
+  //TODO: add functionality to allow for more than two entries to be commited at a time
+  /**
+    * this is the class for commiting entries to the database.
+    * This instance allows for two entries to be commited.
+    * @param amountDebit the amount for the debit side -- normally positive
+    * @param amountCredit the amount for the debit side -- normally negative
+    * @param categoryIdDebit the category to be debited
+    * @param categoryIdCredit the category to be credited
+    * @param entryDescriptionId the description of the entry
+    * @param currencyId the id of the currency
+    * @return true if the update was successful, otherwise false
+    */
+  def createEntrySet(amountDebit: Double, amountCredit: Double,
+                     categoryIdDebit: Int, categoryIdCredit: Int,
+                     entryDescriptionId: Int, currencyId: Int): Boolean = {
+
+    if (amountCredit + amountDebit != 0) throw new IllegalArgumentException("")
+
+    val result: Boolean = executePSUpdate(sqlDialect.createEntryPS,
+      (st: PreparedStatement) =>{
+      // for readability
+      val stDebit = st
+      val stCredit = st
+
+      stDebit.setDouble(1, amountDebit)
+      stDebit.setInt(2, categoryIdDebit)
+      stDebit.setInt(3, entryDescriptionId)
+      stDebit.setInt(4, currencyId)
+      val resultDebit: Boolean = stDebit.executeUpdate() > 0
+
+      stCredit.setDouble(1,amountCredit)
+      stCredit.setInt(2,categoryIdCredit)
+      stCredit.setInt(3,entryDescriptionId)
+      stCredit.setInt(4,currencyId)
+      val resultCredit: Boolean = stCredit.executeUpdate() > 0
+
+      connection.commit()
+
+      resultDebit && resultCredit
+    })
+
+
+    result
+  }
+
+  private def executeUpdate(statement: String): Int = {
+    val st = connection.createStatement
+    val result: Int = try {
+      st.executeUpdate(statement)
     } catch {
+      case e: Throwable => throw e
+    }
+    result
+  }
+
+  private def executePSUpdate(statement: String, op: (PreparedStatement) => Boolean): Boolean = {
+
+    connection setAutoCommit false
+
+    val st = connection prepareStatement statement
+
+    try op(st) catch {
+
       case e: SQLException => {
         e.printStackTrace()
         if (connection != null) try {
@@ -150,81 +230,6 @@ class PersistenceBridge(propertiesLoader: PropertiesLoader, privateLoader: Prope
       connection setAutoCommit true
       if (st != null) st.close()
     }
-
-  }
-
-  /**
-    * this is the class for commiting entries to the database.
-    * This instance allows for two entries to be commited.
-    * @param dateCreated the date created
-    * @param dateRecorded the date recorded
-    * @param amountDebit the amount for the debit side -- normally positive
-    * @param amountCredit the amount for the debit side -- normally negative
-    * @param categoryIdDebit the category to be debited
-    * @param categoryIdCredit the category to be credited
-    * @param entryDescriptionId the description of the entry
-    * @return true if the update was successful, otherwise false
-    */
-  def createEntrySet(dateCreated: DateTime, dateRecorded: DateTime,
-                     amountDebit: Double, amountCredit: Double,
-                     categoryIdDebit: Int, categoryIdCredit: Int,
-                     entryDescriptionId: Int): Boolean = {
-    if (amountCredit + amountDebit != 0)
-      throw new IllegalArgumentException("")
-
-    connection.setAutoCommit(false)
-    val stDebit = connection.prepareStatement(sqlDialect.createEntryPS)
-    val stCredit = connection.prepareStatement(sqlDialect.createEntryPS)
-
-    try {
-      stDebit.setDate(1, new JDate(dateCreated.getMillis))
-      stDebit.setDate(2, new JDate(dateRecorded.getMillis))
-      stDebit.setDouble(3, amountDebit)
-      stDebit.setInt(4, categoryIdDebit)
-      stDebit.setInt(5, entryDescriptionId)
-      stCredit.setDate(1, new JDate(dateCreated.getMillis))
-      stCredit.setDate(2, new JDate(dateRecorded.getMillis))
-      stCredit.setDouble(3,amountCredit)
-      stCredit.setInt(4,categoryIdCredit)
-      stCredit.setInt(5,entryDescriptionId)
-
-      val resultDebit: Boolean = stDebit.executeUpdate() > 0
-      val resultCredit: Boolean = stCredit.executeUpdate() > 0
-
-      connection.commit()
-
-      resultDebit && resultCredit
-
-    } catch {
-      case e: SQLException => {
-        e.printStackTrace()
-        if (connection != null) try {
-          System.err.print("Attempting to roll back")
-          connection.rollback()
-        } catch {
-          case otherE: SQLException => {
-            otherE.printStackTrace()
-            throw otherE
-          }
-        }
-        throw e
-      }
-    } finally {
-      connection setAutoCommit true
-      if (stDebit != null) stDebit.close()
-      if (stCredit != null) stCredit.close()
-    }
-  }
-
-
-  private def executeUpdate(statement: String): Int = {
-    val st = connection.createStatement
-    val result: Int = try {
-      st.executeUpdate(statement)
-    } catch {
-      case e: Throwable => throw e
-    }
-    result
   }
 
   private def runQuery(query: String): ResultSet = {

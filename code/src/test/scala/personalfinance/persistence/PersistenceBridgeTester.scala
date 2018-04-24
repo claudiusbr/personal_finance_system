@@ -6,6 +6,7 @@ import java.lang.{Integer => JInteger}
 
 import org.joda.time.DateTime
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll}
+import personalfinance.businesslogic.transaction.dates.DateRegistryFactory
 
 class PersistenceBridgeTester extends BehaviourTester with BeforeAndAfter with BeforeAndAfterAll {
 
@@ -13,6 +14,16 @@ class PersistenceBridgeTester extends BehaviourTester with BeforeAndAfter with B
     new personalfinance.PropertiesLoader("./src/test/testprops")
   private val privateLoader =
     new personalfinance.PropertiesLoader("private.properties")
+
+  private val persistenceBridge =
+    new PersistenceBridge(propertiesLoader,privateLoader)
+
+  private val helper = new PersistenceTesterHelper(propertiesLoader,privateLoader)
+
+  private val sampleDR = (new DateRegistryFactory).getDateRegistry("2018/04/21")
+
+  private val entryDescription: Seq[(DateTime,DateTime,String)] =
+    Seq((sampleDR.dateCreated,sampleDR.dateRecorded,"test entry description"))
 
   private def iterateResultSet[A](rs: ResultSet, op: (ResultSet,A) => A, acc: A): A = {
     if (!rs.next()) acc
@@ -27,15 +38,8 @@ class PersistenceBridgeTester extends BehaviourTester with BeforeAndAfter with B
   private def stringFromResultSet(rs: ResultSet): String =
     iterateResultSet[String](rs, returnAsString, "")
 
-  private val persistenceBridge =
-    new PersistenceBridge(propertiesLoader,privateLoader)
-
-  private val helper = new PersistenceTesterHelper(propertiesLoader,privateLoader)
-
   private def overWriteTestDB(): Unit =
     helper.loadTestDBFromDump(propertiesLoader.getProperty("testDumpPath"))
-
-  private val entryDescription: String = "test entry description"
 
   override def beforeAll(): Unit = overWriteTestDB()
 
@@ -112,21 +116,21 @@ class PersistenceBridgeTester extends BehaviourTester with BeforeAndAfter with B
 
   it should "retrieve entry descriptions details" in {
     val rs: ResultSet = persistenceBridge
-      .getEntryDescription(entryDescription)
+      .getEntryDescription(entryDescription.head._3)
 
     val _ = rs.next()
     rs.getInt(1) shouldBe a [JInteger]
-    rs.getString(2) should be (entryDescription)
+    rs.getString(2) should be (entryDescription.head._3)
   }
 
   it should "add entries to the database when requested" in {
     val date = new DateTime(1514764800000L)
     persistenceBridge
-      .createEntrySet(date,date,10.00,-10.00,1,3,1) should be (true)
+      .createEntrySet(10.00,-10.00,1,3,1,1) should be (true)
 
     persistenceBridge
       .createEntrySet(
-        Seq((date,date,10.0,1,3),(date,date,-10.0,2,3))) should be (true)
+        Seq((10.0,1,3,1),(-10.0,2,3,1))) should be (true)
   }
 
   it should "fail when the entries do not add up to zero" in {
@@ -134,12 +138,12 @@ class PersistenceBridgeTester extends BehaviourTester with BeforeAndAfter with B
 
     intercept [IllegalArgumentException] {
       persistenceBridge
-        .createEntrySet(date, date, 10.01, -10.00, 1, 3, 1)
+        .createEntrySet(10.01, -10.00, 1, 3, 1,1)
     }
 
     intercept [RuntimeException] {
       persistenceBridge
-        .createEntrySet(Seq((date,date,10.0,1,3),(date,date,-10.0,2,3), (date,date,-10.0,2,3)))
+        .createEntrySet(Seq((10.0,1,3,1),(-10.0,2,3,1), (-10.0,2,3,1)))
     }
   }
 

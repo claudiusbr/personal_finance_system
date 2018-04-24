@@ -59,7 +59,7 @@ object PersistenceMediator extends Mediator {
   }
 
   def commitTransactionToDB(cats: Seq[Category]): Unit = {
-    val entriesToCommit: Seq[(DateTime, DateTime, Double,Int,Int)] = cats.flatMap {
+    val entriesToCommit: Seq[(Double,Int,Int,Int)] = cats.flatMap {
       cat => {
         cat match {
           case Category(n, es, ps, None) => {
@@ -124,17 +124,19 @@ object PersistenceMediator extends Mediator {
     }.toSeq
   }
 
-  private def entriesFromCategory(cat: Category): Seq[(DateTime, DateTime, Double,Int,Int)] = {
+  private def entriesFromCategory(cat: Category): Seq[(Double,Int,Int,Int)] = {
     cat.entries.map {
-      case Entry(amt, dateReg, desc, None) => {
-        val _ = persistenceBridge.createEntryDescription(desc)
+      case Entry(amt, dateRegistry, desc, None) => {
+        val created = dateRegistry.dateCreated
+        val recorded =dateRegistry.dateRecorded
+        val _ = persistenceBridge.createEntryDescription(Seq((created,recorded, desc)))
         val entryDescriptionId = {
           val rs: ResultSet = persistenceBridge.getEntryDescription(desc)
           val _ = rs.next()
           rs.getInt(1)
         }
 
-        (dateReg.dateCreated, dateReg.dateRecorded, amt.total, cat.id.get, entryDescriptionId)
+        (amt.total, cat.id.get, entryDescriptionId, amt.currency.id)
       }
 
       case _ => throw new RuntimeException("this should never happen." +

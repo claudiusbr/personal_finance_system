@@ -10,6 +10,6 @@ class AmountTester extends BehaviourTester {
 
   "an Amount instance" should "should default to GBP if"+
     " no currency is provided" in {
-    amtUK.currency should be (GBP)
+    amtUK.currency should be (Currency("GBP",1))
   }
 }
