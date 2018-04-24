@@ -64,7 +64,10 @@ Another design choice which can be observed in Figure
 also possesses an attribute for currency. This has been designed so as to allow
 for the possibility of extending the system to keep track of transactions in
 multiple currencies, although this was not a specific requirements. Initially,
-there will only be a single default currency which shall be set at runtime.
+there will only be a single default currency (GBP), so this will be hardcoded.
+But the class should be implemented in a way which also allows for different
+currencies to be loaded from another layer, such as the database, or an
+external API.
 
 The next step is to provide a way for these entries to be added to categories.
 For this to happen, there needs to be a constraint to ensure that double entry
@@ -339,6 +342,7 @@ choose which database engine to use (at the moment only \emph{MySql} and
 \emph{H2} are available), but 
 
 \subsection{Database Diagram} \label{sec:AnalysisAndDesign.PersistenceLayer}
+\textbf{TODO: redo this diagram -- include the currency tables}
 The UML diagram below shows the design of the database schema for the
 application:
 \begin{figure}[ht!]

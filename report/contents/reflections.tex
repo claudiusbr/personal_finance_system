@@ -108,5 +108,16 @@ be made and the interfaces had to be made more generic.
 
 \subsection{Not Implemented}
 Unfortunately, the only feature actually delivered was a very crude
-implementation of the manual entry feature.
-The business logic for classification, which would enable the uploading of statements, has also been created, but the linking of it to the GUI was not done in time.
+implementation of the manual entry feature.  The business logic for
+classification, which would enable the uploading of statements, has also been
+created, but the linking of it to the GUI was not done in time.
+
+The \texttt{PersistenceMediator} class should be handling exceptions which
+might be thrown by \texttt{PersistenceBridge}'s every time the first calls the
+latter's methods. The intention of allowing the Mediator to catch exceptions
+was because this could then be passed to the user as informative messages, or
+be handled internally depending on the nature of the exception (e.g.,
+connection exceptions would have to be handled internally, and exceptions
+related to user input should be passed to the user). Therefore, some exceptions
+should be handled by the \texttt{PersistenceBridge}, and others by the
+mediator. Unfortunately, time constraints prevented this from happening.

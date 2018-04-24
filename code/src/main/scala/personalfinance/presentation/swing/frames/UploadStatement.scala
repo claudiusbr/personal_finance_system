@@ -17,12 +17,15 @@ private[swing] class UploadStatement(fontSpecs: Font, main: MainMenu, mediator: 
 
   private val fileLabel = new Label("CSV Path")
   private val fileFieldText = "(enter absolute file path or click 'Open')"
+
   private val fileField = new TextField(fileFieldText) {
     columns = main.WindowWidth - 20
   }
+
   private val fileButton = Button("Open")(fileField.text = getFileName(
     new FileChooser(new File("."))
   ))
+
   private val fileBox = new BoxPanel(Horizontal) {
     contents ++= Array(fileField, HGlue, fileButton)
   }

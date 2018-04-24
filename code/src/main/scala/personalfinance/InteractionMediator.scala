@@ -15,14 +15,14 @@ import personalfinance.validation._
 object InteractionMediator extends PresentationMediator with Mediator {
   private val frontEndChoice: String = propertiesLoader
     .getProperty("currentfrontend")
-  private val presentationMediator =
+  private val presentationAmbassador =
     PresentationFactory.getPresentationAmbassador(frontEndChoice, this)
 
   private val dateRegistryFactory = new DateRegistryFactory
 
   override def startup(): Unit = {
     PersistenceMediator.startup()
-    presentationMediator.startup()
+    presentationAmbassador.startup()
   }
 
   override def entryTypes: Seq[String] = EntryType.values.map(_.toString).toSeq
