@@ -64,6 +64,8 @@ object InteractionMediator extends PresentationMediator with Mediator {
       * Think of categorymaker
       * for each uncategorised: return a list of categorised
       *   - ask user for category and pattern
+      *     - show a dialog with a list of categories as combo-box.
+      *     - user chooses category, or chooses to create new one, and presses ok;
       *   - existing category?
       *     - add pattern to category
       *   - new category?
