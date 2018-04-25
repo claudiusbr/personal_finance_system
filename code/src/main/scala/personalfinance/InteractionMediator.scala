@@ -59,6 +59,19 @@ object InteractionMediator extends PresentationMediator with Mediator {
     val classifier = new Classifier
     val (readyToCommitTUs,uncategorised): (Seq[TransactionUnit], Seq[Entry]) =
       classifier.classify(categories,entries)
+
+    /**
+      * Think of categorymaker
+      * for each uncategorised: return a list of categorised
+      *   - ask user for category and pattern
+      *   - existing category?
+      *     - add pattern to category
+      *   - new category?
+        *   - create category with pattern
+      *   - get categoryId
+      *   - run every other uncategorised through new pattern
+      *     - if any matches, remove it from list of uncategorised
+      */
   }
 
   override def createManualEntry(entryType: String, date: String,
