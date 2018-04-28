@@ -5,7 +5,6 @@ import businesslogic._
 import transaction._
 import dates._
 import input._
-import org.joda.time.DateTime
 import validation._
 
 /**
@@ -129,6 +128,9 @@ object InteractionMediator extends PresentationMediator with Mediator {
     PersistenceMediator.commitTransactionToDB(cats)
   }
 
+  override def getAllCategoryNames(): Seq[String] = PersistenceMediator
+    .getAllCategoriesAndPatterns().map { _.name }.sorted
+
   /**
     * this method converts the amount entered by the user
     * as String to a positive double, if Income, or negative if expenditure.
@@ -169,5 +171,4 @@ object InteractionMediator extends PresentationMediator with Mediator {
 
     presentationAmbassador.createCategoryUI(entryType,date,description,amount)
   }
-
 }

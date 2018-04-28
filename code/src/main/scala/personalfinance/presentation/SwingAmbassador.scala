@@ -7,7 +7,7 @@ import personalfinance.presentation.swing.MainWindow
   * This class exists in order to pass a direct reference to the swing package.
   * This is the only reason it exists -- it acts as a channel between the external
   * class that implements the PresentationMediator and the swing frontend.
- *
+  *
   * @param mediator an instance of the PresentationMediator trait
   */
 private[presentation] case class SwingAmbassador(mediator: PresentationMediator) extends PresentationMediator {
@@ -35,4 +35,6 @@ private[presentation] case class SwingAmbassador(mediator: PresentationMediator)
   override def quit(): Unit = mediator.quit()
 
   override def entryTypes: Seq[String] = mediator.entryTypes
+
+  override def getAllCategoryNames(): Seq[String] = mediator.getAllCategoryNames()
 }

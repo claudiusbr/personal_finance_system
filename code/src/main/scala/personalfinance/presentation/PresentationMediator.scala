@@ -10,6 +10,6 @@ import play.PlayMediator
   * ambassador of the class chosen at runtime with the aid of the
   * PresentationFactory
   */
-trait PresentationMediator extends SwingMediator with PlayMediator {
+trait PresentationMediator extends PlayMediator with SwingMediator {
   def startup(): Unit
 }

@@ -20,5 +20,7 @@ trait PlayMediator {
 
   def createCategoryUI(entryType: String, date: String, description: String, amount: String)
 
+  def getAllCategoryNames(): Seq[String]
+
   def uploadStatement(filePath: String): Unit
 }

@@ -20,5 +20,7 @@ trait SwingMediator {
 
   def uploadStatement(filePath: String): Unit
 
+  def getAllCategoryNames(): Seq[String]
+
   def quit(): Unit
 }
