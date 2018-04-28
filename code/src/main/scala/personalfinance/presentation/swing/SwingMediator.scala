@@ -16,6 +16,9 @@ trait SwingMediator {
   def createManualEntry(entryType: String, date: String, description: String, total: String,
                         breakdown: Seq[Map[String,String]]): Unit
 
+  def classifyWithNewCategory(catName: String, catPattern: String,
+                              entries: Seq[(String,String,String,String)]): Unit
+
   /**
     * this method takes a list of entries as a Tuple4[String] and
     * asks the user for a category for the first entry
@@ -25,7 +28,7 @@ trait SwingMediator {
     *                entries._3 is the description
     *                entries._4 is the amount
     */
-  def createCategoryUI(entries: Seq[(String,String,String,String)])
+  def getCategoryFromUser(entries: Seq[(String,String,String,String)]): Unit
 
   def uploadStatement(filePath: String): Unit
 

@@ -55,7 +55,7 @@ private[swing] class CreateCategory(entryType: String, date: String, description
         patternField,Swing.VStrut(2))
     }
 
-    border = Swing.EmptyBorder(30, 30, 30, 30)
+    border = Swing.EmptyBorder(10, 10, 10, 10)
   }
 
 

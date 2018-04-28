@@ -38,7 +38,6 @@ object InteractionMediator extends PresentationMediator with Mediator {
       case Pass(lines) => lines.asInstanceOf[Seq[String]]
       case Fail(message, _) => throw new RuntimeException(message)
     }
-
     val entries: Seq[Entry] = {
       val headers: Array[String] = linesFromFile.head.split(",")
       val date: Int = headers.indexOf("date")
@@ -46,35 +45,18 @@ object InteractionMediator extends PresentationMediator with Mediator {
       val amount: Int = headers.indexOf("amount")
 
       linesFromFile.tail.map({ tuple => {
-          val tmp: Array[String] = tuple.split(",")
-          Entry(
-            Amount(tmp(amount).toDouble),
-            dateRegistryFactory.getDateRegistry(tmp(date)),
-            tmp(description))
-        }
+        val tmp: Array[String] = tuple.split(",")
+        Entry(
+          Amount(tmp(amount).toDouble),
+          dateRegistryFactory.getDateRegistry(tmp(date)),
+          tmp(description))
+      }
       })
     }
 
-    val categories: Seq[Category] = PersistenceMediator.getAllCategoriesAndPatterns()
-    val classifier = new Classifier
-    val (readyToCommitTUs,uncategorised): (Seq[TransactionUnit], Seq[Entry]) =
-      classifier.classify(categories,entries)
-
-    /**
-      * Think of categorymaker
-      * for each uncategorised: return a list of categorised
-      *   - ask user for category and pattern
-      *     - show a dialog with a list of categories as combo-box.
-      *     - user chooses category, or chooses to create new one, and presses ok;
-      *   - existing category?
-      *     - add pattern to category
-      *   - new category?
-        *   - create category with pattern
-      *   - get categoryId
-      *   - run every other uncategorised through new pattern
-      *     - if any matches, remove it from list of uncategorised
-      */
+    categorise(entries)
   }
+
 
   override def createManualEntry(entryType: String, date: String,
                                  description: String, total: String,
@@ -103,6 +85,10 @@ object InteractionMediator extends PresentationMediator with Mediator {
         // perhaps make this variable be populated from a function argument which
         // gets passed by the caller -- this way it would be more dynamic
         val bkdnCategory: Category = PersistenceMediator.getOrMakeCategory(mapBkdn("category"))
+
+        val _ = if (mapBkdn("pattern").nonEmpty) PersistenceMediator
+          .createPattern(bkdnCategory.id.get,mapBkdn("pattern"))
+
         TransactionUnit(bkdnCategory,List(entry))
       }
     )
@@ -113,8 +99,34 @@ object InteractionMediator extends PresentationMediator with Mediator {
   }
 
 
-  override def createCategoryUI(entries: Seq[(String,String,String,String)]): Unit = {
+  override def getCategoryFromUser(entries: Seq[(String,String,String,String)]): Unit = {
+    presentationAmbassador.getCategoryFromUser(entries)
   }
+
+
+  override def classifyWithNewCategory(catName: String, catPattern: String, entries: Seq[(String, String, String, String)]): Unit = {
+    val c = PersistenceMediator.getOrMakeCategory(catName)
+    val _ = PersistenceMediator.createPattern(c.id.get,catPattern)
+    categorise(entries.map(e => {
+      Entry(
+        Amount(e._4.toDouble),
+        dateRegistryFactory.getDateRegistry(e._2),
+        e._3)
+    }))
+  }
+
+  private def categorise(entries:Seq[Entry]): Unit = {
+    val categories: Seq[Category] = PersistenceMediator.getAllCategoriesAndPatterns()
+    val classifier = new Classifier
+    val (readyToCommitTUs,uncategorised): (Seq[TransactionUnit], Seq[Entry]) =
+      classifier.classify(categories,entries)
+
+    PersistenceMediator.commitTransactionToDB(readyToCommitTUs.map(tu => {
+      tu.category.copy(entries = tu.entries)
+    }))
+    classifyTheUnCategorised(uncategorised)
+  }
+
 
   /**
     * on the Swing implementation, this is being called by MainWindow,
@@ -159,20 +171,22 @@ object InteractionMediator extends PresentationMediator with Mediator {
 
 
   private def classifyTheUnCategorised(uncategorised: Seq[Entry]): Unit = {
-    val toSendToUser: Seq[(String, String, String, String)] = uncategorised.map(
-      (e:Entry) => {
-        val entryType: String = e.amount.total match {
-          case a if a > 0.0 => EntryType.expenditure.toString
-          case _ => EntryType.income.toString
-        }
+    if (uncategorised.nonEmpty) {
+      val toSendToUser: Seq[(String, String, String, String)] = uncategorised.map(
+        (e: Entry) => {
+          val entryType: String = e.amount.total match {
+            case a if a > 0.0 => EntryType.expenditure.toString
+            case _ => EntryType.income.toString
+          }
 
-        val date: String = e.dateCreated.toString("dd/MM/YYYY")
-        val description: String = e.description
-        val amount: String = e.amount.total.toString
+          val date: String = e.dateCreated.toString("dd/MM/YYYY")
+          val description: String = e.description
+          val amount: String = e.amount.total.toString
 
-        (entryType, date, description, amount)
-      })
+          (entryType, date, description, amount)
+        })
 
-    presentationAmbassador.createCategoryUI(toSendToUser)
+      getCategoryFromUser(toSendToUser)
+    }
   }
 }

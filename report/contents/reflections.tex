@@ -140,3 +140,13 @@ whether it is impossible for multiple transactions in a statement to have the
 exact same creation date, description and value. The same is true for manual
 entries: if the user wants, they can enter as many entries with the same amount
 as they want}
+
+
+\textbf{The lack of experience of the author really showed when it came to
+getting individual categories from the user. The idea of making subpackages
+unaware of super packages led to ``awkward'' uses of tuples and maps as
+parameters on the user interface, and a somewhat unelegant way of handling the
+remaining uncategorised entries after a new category has been created: since
+every method has a Unit value, the whole block of entries had to be passed
+around as messages so that the state would not be lost. Hence why there are so
+many Seq String String String String flying around.}

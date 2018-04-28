@@ -37,6 +37,9 @@ object PersistenceMediator extends Mediator {
     }
   }
 
+  def createPattern(categoryId: Int, patternValue: String): Boolean =
+    persistenceBridge.createPattern(categoryId,patternValue)
+
   def getExistingCategory(rs: ResultSet): Category = {
     val categoryName = rs.getString(2)
     val categoryId = rs.getInt(1)

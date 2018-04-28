@@ -45,7 +45,11 @@ private[presentation] case class SwingAmbassador(mediator: PresentationMediator)
     *                entries._3 is the description
     *                entries._4 is the amount
     */
-  override def createCategoryUI(entries: Seq[(String, String, String, String)]): Unit = {
+  override def getCategoryFromUser(entries: Seq[(String, String, String, String)]): Unit = {
     mainWindow.createCategory(entries)
   }
+
+  override def classifyWithNewCategory(catName: String, catPattern: String,
+                                       entries: Seq[(String, String, String, String)]): Unit =
+    mediator.classifyWithNewCategory(catName,catPattern,entries)
 }

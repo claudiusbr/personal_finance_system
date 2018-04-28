@@ -128,6 +128,7 @@ private[swing] class ManualEntry(fontSpecs: Font, main: MainMenu,
           Map[String,String](
             "currency" -> currencyDropDown.selection.item.trim(),
             "category" -> categoryField.text.trim(),
+            "pattern" -> "",
             "percentage" -> percentField.text.trim(),
             "amount" -> amountField.text.trim())))
   }
