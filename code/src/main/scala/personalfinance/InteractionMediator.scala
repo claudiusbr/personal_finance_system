@@ -113,8 +113,7 @@ object InteractionMediator extends PresentationMediator with Mediator {
   }
 
 
-  override def createCategoryUI(entryType: String, date: String,
-                                description: String, amount: String): Unit = {
+  override def createCategoryUI(entries: Seq[(String,String,String,String)]): Unit = {
   }
 
   /**
@@ -159,16 +158,21 @@ object InteractionMediator extends PresentationMediator with Mediator {
     -1 * convertAmountForBank(amt, entryType)
 
 
-  private def classifyTheUnCategorised(uncategorised: Entry): Unit = {
-    val entryType: String = uncategorised.amount.total match {
-      case a if a > 0.0 => EntryType.expenditure.toString
-      case _ => EntryType.income.toString
-    }
+  private def classifyTheUnCategorised(uncategorised: Seq[Entry]): Unit = {
+    val toSendToUser: Seq[(String, String, String, String)] = uncategorised.map(
+      (e:Entry) => {
+        val entryType: String = e.amount.total match {
+          case a if a > 0.0 => EntryType.expenditure.toString
+          case _ => EntryType.income.toString
+        }
 
-    val date: String = uncategorised.dateCreated.toString("dd/MM/YYYY")
-    val description: String = uncategorised.description
-    val amount: String = uncategorised.amount.total.toString
+        val date: String = e.dateCreated.toString("dd/MM/YYYY")
+        val description: String = e.description
+        val amount: String = e.amount.total.toString
 
-    presentationAmbassador.createCategoryUI(entryType,date,description,amount)
+        (entryType, date, description, amount)
+      })
+
+    presentationAmbassador.createCategoryUI(toSendToUser)
   }
 }

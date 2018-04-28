@@ -18,7 +18,16 @@ trait PlayMediator {
   def createManualEntry(entryType: String, date: String, description: String, total: String,
                         breakdown: Seq[Map[String,String]]): Unit
 
-  def createCategoryUI(entryType: String, date: String, description: String, amount: String)
+  /**
+    * this method takes a list of entries as a Tuple4[String] and
+    * asks the user for a category for the first entry
+    * @param entries a Tuple4[String] where:
+    *                entries._1 is the entry type
+    *                entries._2 is the date
+    *                entries._3 is the description
+    *                entries._4 is the amount
+    */
+  def createCategoryUI(entries: Seq[(String,String,String,String)])
 
   def getAllCategoryNames(): Seq[String]
 

@@ -23,10 +23,15 @@ private [swing] class MainMenu(fontSpecs: Font, mediator: SwingMediator) extends
     viewSummary.button,calcBudget.button
   )
 
-  def createCategory(entryType: String, date: String, description: String,
-                     amount: String): Unit = {
+  def createCategory(entries: Seq[(String,String,String,String)]): Unit = {
+    val toBeCategorised = entries.head
+    val toSendBack = entries.tail
+    val entryType = toBeCategorised._1
+    val date = toBeCategorised._2
+    val description = toBeCategorised._3
+    val amount = toBeCategorised._4
     val createCategoryFrame = new CreateCategory(
-      entryType,date,description,amount, fontSpecs, this, mediator
+      entryType, date, description, amount, toSendBack, fontSpecs, this, mediator
     )
     createCategoryFrame.location = this.location
     createCategoryFrame.visible = true

@@ -6,8 +6,9 @@ import scala.swing.Swing.HGlue
 import java.awt.Font
 
 private[swing] class CreateCategory(entryType: String, date: String, description: String,
-                                    amount: String, fontSpecs: Font, main: MainMenu,
-                                    mediator: SwingMediator) extends MainFrame {
+                                    amount: String, others: Seq[(String,String,String,String)],
+                                    fontSpecs: Font, main: MainMenu, mediator: SwingMediator)
+  extends MainFrame {
 
   protected val cancelBtn = new Button("Cancel")
   protected val okBtn = new Button("Submit")

@@ -9,9 +9,8 @@ class MainWindow(mediator: SwingMediator) extends Reactor {
 
   private val mainMenu = new MainMenu(verdana, mediator)
 
-  def createCategory(entryType: String, date: String, description: String,
-                     amount: String): Unit = mainMenu
-    .createCategory(entryType,date,description,amount)
+  def createCategory(entries: Seq[(String,String,String,String)]): Unit =
+    mainMenu.createCategory(entries)
 
   def startup(): Unit = {
     if (mainMenu.size == new Dimension(0,0)) mainMenu.pack()
