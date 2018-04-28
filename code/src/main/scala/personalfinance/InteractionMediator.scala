@@ -5,6 +5,7 @@ import businesslogic._
 import transaction._
 import dates._
 import input._
+import org.joda.time.DateTime
 import validation._
 
 /**
@@ -113,10 +114,8 @@ object InteractionMediator extends PresentationMediator with Mediator {
   }
 
 
-  override def createCategoryUI(entryType: String, date: String, description: String, amount: String): Unit = ???
-
-  private def saveTransaction(cats: Seq[Category]): Unit = {
-    PersistenceMediator.commitTransactionToDB(cats)
+  override def createCategoryUI(entryType: String, date: String,
+                                description: String, amount: String): Unit = {
   }
 
   /**
@@ -126,6 +125,9 @@ object InteractionMediator extends PresentationMediator with Mediator {
     */
   override def quit(): Unit = PersistenceMediator.quit()
 
+  private def saveTransaction(cats: Seq[Category]): Unit = {
+    PersistenceMediator.commitTransactionToDB(cats)
+  }
 
   /**
     * this method converts the amount entered by the user
@@ -153,4 +155,19 @@ object InteractionMediator extends PresentationMediator with Mediator {
     */
   private def convertAmountForBreakdown(amt: String, entryType: String): Double =
     -1 * convertAmountForBank(amt, entryType)
+
+
+  private def classifyTheUnCategorised(uncategorised: Entry): Unit = {
+    val entryType: String = uncategorised.amount.total match {
+      case a if a > 0.0 => EntryType.expenditure.toString
+      case _ => EntryType.income.toString
+    }
+
+    val date: String = uncategorised.dateCreated.toString("dd/MM/YYYY")
+    val description: String = uncategorised.description
+    val amount: String = uncategorised.amount.total.toString
+
+    presentationAmbassador.createCategoryUI(entryType,date,description,amount)
+  }
+
 }

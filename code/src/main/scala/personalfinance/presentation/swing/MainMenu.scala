@@ -23,6 +23,16 @@ private [swing] class MainMenu(fontSpecs: Font, mediator: SwingMediator) extends
     viewSummary.button,calcBudget.button
   )
 
+  def createCategory(entryType: String, date: String, description: String,
+                     amount: String): Unit = {
+    val createCategoryFrame = new CreateCategory(
+      entryType,date,description,amount, fontSpecs, this, mediator
+    )
+    createCategoryFrame.location = this.location
+    createCategoryFrame.visible = true
+    this.visible = false
+  }
+
   private def mainButtonAction(b: MainButton): Unit = {
     val frameKit: FrameKit = b.kitName match {
       case ManualEntry => manualEntry

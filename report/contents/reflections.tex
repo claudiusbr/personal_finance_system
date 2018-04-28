@@ -126,3 +126,17 @@ mediator. Unfortunately, time constraints prevented this from happening.
 specialised modules more independent by having them depend on code in the same
 layer, and having code duplication, such as with the Mediators which depend on
 two different traits}
+
+
+\textbf{talk about the decision to sometimes use pattern matching with objects
+and at other times use enum classes (as with the objects which extend KitName
+in the presentation layer vs the EntryType in the root personalfinance
+package), and that although here they have been used interchangeably, a level
+of consistence would have been improved readability in a different situation}
+
+\textbf{Regarding the fact that the same transaction can be repeated multiple
+times with manual entry, this was allowed to happen because it is not clear
+whether it is impossible for multiple transactions in a statement to have the
+exact same creation date, description and value. The same is true for manual
+entries: if the user wants, they can enter as many entries with the same amount
+as they want}

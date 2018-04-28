@@ -181,12 +181,20 @@ fashion. Explain also why the modules in the default package are implementing
 all similar interfaces in the more specialised ones, so that changes in the
 more specialised ones which could affect dependencies will also have to be
 implemented at the higher level, thus causing the flow to be maintained. E.g.,
-each package declares PropertiesLoader, and the default package.
-But: this has not been tested yet. Some classes such as PropertiesLoader are
+each package declares PropertiesLoader, and the default package.}
+
+\textbf{But: this has not been tested yet. Some classes such as PropertiesLoader are
 private to the personalfiance package. This means that external pacakges cannot
 import it directly, but would it be indirectly imported as a dependency when
 importing other classes? Also, does it matter, since the dependency is actually
 in an interface which is later implemented by the personalfinance package?}
+
+\textbf{Talk how the above is a risky move, since Scala's mixin composition has
+this habit of picking up the implementation of the last trait mixed into it, so
+in this case you get PresentationMediator inheriting form SwingMediator and
+then PlayMediator -- although both are traits, this could cause problems in the
+future if the Play one implements something which Swing doesn't, so basically
+these traits must always be the exact same}
 
 \subsection{The Bridge Pattern} \label{sec:Implementation.TheBridgePattern}
 \textbf{TODO: review this. It all changed after the 20th of April}
