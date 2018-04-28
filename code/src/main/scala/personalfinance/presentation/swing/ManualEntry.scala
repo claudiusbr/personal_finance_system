@@ -1,11 +1,8 @@
-package personalfinance
-package presentation
-package swing
-package frames
+package personalfinance.presentation.swing
 
+import scala.swing.Orientation.{Horizontal, Vertical}
+import scala.swing.Swing.{HGlue, VGlue}
 import scala.swing._
-import Orientation.{Horizontal, Vertical}
-import Swing.{HGlue, VGlue}
 import scala.swing.event.ButtonClicked
 
 /**

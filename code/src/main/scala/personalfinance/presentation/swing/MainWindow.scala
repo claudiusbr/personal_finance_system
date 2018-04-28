@@ -1,8 +1,6 @@
-package personalfinance.presentation.swing.frames
+package personalfinance.presentation.swing
 
 import java.awt.{Dimension, Font}
-
-import personalfinance.presentation.swing.SwingMediator
 
 import scala.swing.Reactor
 

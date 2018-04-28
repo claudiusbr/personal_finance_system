@@ -1,7 +1,4 @@
-package personalfinance
-package presentation
-package swing
-package frames
+package personalfinance.presentation.swing
 
 /**
   * this trait needs to be implemented by all menus which will be

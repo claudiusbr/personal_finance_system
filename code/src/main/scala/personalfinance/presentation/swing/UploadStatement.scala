@@ -1,14 +1,11 @@
-package personalfinance
-package presentation
-package swing
-package frames
+package personalfinance.presentation.swing
 
 import java.awt.Font
 import java.io.File
 
+import scala.swing.Orientation.{Horizontal, Vertical}
+import scala.swing.Swing.HGlue
 import scala.swing._
-import Orientation.{Horizontal, Vertical}
-import Swing.HGlue
 import scala.swing.event.ButtonClicked
 
 private[swing] case object UploadStatement extends KitName { val title = "Upload Statement" }

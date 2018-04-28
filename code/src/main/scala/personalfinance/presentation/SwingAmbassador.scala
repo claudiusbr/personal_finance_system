@@ -1,12 +1,13 @@
 package personalfinance
 package presentation
 
-import swing.frames.MainWindow
+import personalfinance.presentation.swing.MainWindow
 
 /**
   * This class exists in order to pass a direct reference to the swing package.
   * This is the only reason it exists -- it acts as a channel between the external
   * class that implements the PresentationMediator and the swing frontend.
+ *
   * @param mediator an instance of the PresentationMediator trait
   */
 private[presentation] case class SwingAmbassador(mediator: PresentationMediator) extends PresentationMediator {

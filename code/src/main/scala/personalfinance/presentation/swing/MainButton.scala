@@ -1,7 +1,4 @@
-package personalfinance
-package presentation
-package swing
-package frames
+package personalfinance.presentation.swing
 
 import scala.swing.Button
 

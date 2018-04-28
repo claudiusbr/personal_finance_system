@@ -1,14 +1,11 @@
-package personalfinance
-package presentation
-package swing
-package frames
+package personalfinance.presentation.swing
 
 import java.awt.Font
 
+import scala.swing.Orientation.{Horizontal, Vertical}
+import scala.swing.Swing.VGlue
 import scala.swing._
-import Orientation.{Horizontal, Vertical}
-import event.ButtonClicked
-import Swing.VGlue
+import scala.swing.event.ButtonClicked
 
 private[swing] case object ViewSummary extends KitName { val title = "View Summary" }
 private[swing] class ViewSummary(fontSpecs: Font, main: MainMenu,
