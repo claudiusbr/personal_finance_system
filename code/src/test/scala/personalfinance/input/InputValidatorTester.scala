@@ -1,7 +1,7 @@
 package personalfinance
 package input
 
-import validation.{Pass,Fail}
+import businesslogic.transaction.validation.{Pass,Fail}
 
 class InputValidatorTester extends BehaviourTester {
   val iv: InputValidator = new InputValidator

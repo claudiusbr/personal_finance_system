@@ -5,7 +5,7 @@ import businesslogic._
 import transaction._
 import dates._
 import input._
-import personalfinance.validation._
+import validation._
 
 /**
   * this object handles the interactions between the application logic and

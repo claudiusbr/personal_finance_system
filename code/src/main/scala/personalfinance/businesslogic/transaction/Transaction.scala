@@ -8,7 +8,7 @@ import validation._
   * This is the control class which restricts access to the creation of entries
   * on categories.
   * Here the dependencies to the validators with default parameters were passed
-  * to the constructor in case the personalfinance.validation and transaction aspect of the
+  * to the constructor in case the personalfinance.businesslogic.transaction.validation and transaction aspect of the
   * code can be executed in multiple threads
   */
 class Transaction(validators: List[Validator] = List(

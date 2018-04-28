@@ -121,3 +121,8 @@ connection exceptions would have to be handled internally, and exceptions
 related to user input should be passed to the user). Therefore, some exceptions
 should be handled by the \texttt{PersistenceBridge}, and others by the
 mediator. Unfortunately, time constraints prevented this from happening.
+
+\textbf{TODO: talk about having to make a decision between making the
+specialised modules more independent by having them depend on code in the same
+layer, and having code duplication, such as with the Mediators which depend on
+two different traits}

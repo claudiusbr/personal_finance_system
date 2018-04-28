@@ -1,4 +1,6 @@
 package personalfinance
+package businesslogic
+package transaction
 package validation
 
 sealed trait TestResult

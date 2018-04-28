@@ -8,7 +8,8 @@ import java.util.Properties
   * @param fileName the name of the properties file
   */
 private[personalfinance] class PropertiesLoader(fileName: String) extends
-  persistence.PropertiesLoader with presentation.PropertiesLoader {
+  persistence.PropertiesLoader with presentation.PropertiesLoader with
+  businesslogic.transaction.PropertiesLoader {
 
   private val props: Properties = new Properties()
 

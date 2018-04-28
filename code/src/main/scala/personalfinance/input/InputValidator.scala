@@ -1,6 +1,7 @@
-package personalfinance.input
+package personalfinance
+package input
 
-import personalfinance.validation._
+import businesslogic.transaction.validation._
 
 class InputValidator extends Validator {
   override def validate(what: Iterable[Any]): TestResult =
