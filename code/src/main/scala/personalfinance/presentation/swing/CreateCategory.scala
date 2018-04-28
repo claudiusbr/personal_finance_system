@@ -10,8 +10,8 @@ private[swing] class CreateCategory(entryType: String, date: String, description
                                     amount: String, fontSpecs: Font, main: MainMenu,
                                     mediator: SwingMediator) extends MainFrame {
 
-  protected val cancelBtn = new Button("Back")
-  protected val okBtn = new Button("OK")
+  protected val cancelBtn = new Button("Cancel")
+  protected val okBtn = new Button("Submit")
 
   protected val me: CreateCategory = this
 
@@ -21,6 +21,17 @@ private[swing] class CreateCategory(entryType: String, date: String, description
       contents += Swing.HStrut(3)
       contents += okBtn
     }
+
+  private val entryTypeLabel = new Label(entryType)
+  private val descriptionLabel = new Label(s"Description: $description")
+  private val dateCreatedLabel = new Label(s"Date Created: $date")
+
+  private val patternLabel = new Label("New pattern for this category")
+  private val patternField = new TextField(description)
+
+  private val amountLabel = new Label(s"Amount: $amount")
+
+  private val searchCategoryPopUpBtn = new Button("Choose Category from Existing")
 
   /**
     * an aid to set the maximum height of text fields and other components
@@ -33,6 +44,7 @@ private[swing] class CreateCategory(entryType: String, date: String, description
 
   reactions += {
     case ButtonClicked(`cancelBtn`) =>
+      // TODO: show pop up saying that pressing
       main.location = this.location
       main.visible = true
       this.visible = false
