@@ -54,7 +54,9 @@ private[swing] class ViewSummary(fontSpecs: Font, main: MainMenu,
 
   reactions += {
     case ButtonClicked(`okBtn`) =>
-      mediator.viewSummary(fromField.text,toField.text)
+      mediator.getSummary(fromField.text,toField.text)
+      this.visible = false
+      main.visible = true
   }
 }
 

@@ -13,7 +13,9 @@ trait PlayMediator {
 
   def calculateBudget(): Unit
 
-  def viewSummary(from: String, to: String): Unit
+  def getSummary(from: String, to: String): Unit
+
+  def displaySummary(from: String, to: String, summary: Seq[(String,Double)]): Unit
 
   def warnUser(message: String): Unit
 

@@ -17,7 +17,7 @@ private[presentation] case class SwingAmbassador(mediator: PresentationMediator)
 
   override def calculateBudget(): Unit = mediator.calculateBudget()
 
-  override def viewSummary(from: String, to: String): Unit = mediator.viewSummary(from,to)
+  override def getSummary(from: String, to: String): Unit = mediator.getSummary(from,to)
 
   override def uploadStatement(filePath: String): Unit = mediator.uploadStatement(filePath)
 
@@ -54,4 +54,7 @@ private[presentation] case class SwingAmbassador(mediator: PresentationMediator)
   override def informUser(message: String): Unit = mainWindow.informUser(message)
 
   override def sendConfirmationMessage(message: String): Unit = mainWindow.sendConfirmationMessage(message)
+
+  override def displaySummary(from: String, to: String, summary: Seq[(String, Double)]): Unit =
+    mainWindow.displaySummary(from,to,summary)
 }

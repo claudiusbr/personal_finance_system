@@ -2,7 +2,7 @@ package personalfinance.presentation.swing
 
 import java.awt.{Dimension, Font}
 
-import scala.swing.Reactor
+import scala.swing.{Dialog, Reactor}
 
 class MainWindow(mediator: SwingMediator) extends Reactor {
   private val verdana: Font = new Font("Verdana", Font.BOLD, 20)
@@ -20,6 +20,20 @@ class MainWindow(mediator: SwingMediator) extends Reactor {
   def startup(): Unit = {
     if (mainMenu.size == new Dimension(0,0)) mainMenu.pack()
     mainMenu.visible = true
+  }
+
+  def displaySummary(from: String,to: String, summary: Seq[(String,Double)]): Unit = {
+    val head =
+      "<html><table style='font-family:monospace; width:400px;'><tr><th>Category</th><th>Amount</th></tr>"
+
+    val (headAndbody: String, sum: Double) = summary.reverse.foldLeft((head,0.0))((strSum,catAndAmt) => {
+      (strSum._1 + s"<tr><td>${catAndAmt._1}</td><td>${catAndAmt._2.toString}</td></tr>",
+        strSum._2 + catAndAmt._2)
+    })
+
+    val foot = s"<tr><th>Total</th><th>$sum</th></tr></table></html>"
+
+    Dialog.showMessage(message=headAndbody+foot)
   }
 
   /** Finalizes the application by calling `shutdown` and exits.*/

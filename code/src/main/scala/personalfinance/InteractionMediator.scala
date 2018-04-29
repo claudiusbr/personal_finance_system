@@ -7,6 +7,7 @@ import businesslogic._
 import transaction._
 import dates._
 import input._
+import org.joda.time.DateTime
 import validation._
 
 /**
@@ -38,9 +39,17 @@ object InteractionMediator extends PresentationMediator with Mediator {
 
   override def calculateBudget(): Unit = ???
 
-  override def viewSummary(from: String, to: String): Unit = {
-
+  override def getSummary(from: String, to: String): Unit = {
+    val f: DateTime = dateRegistryFactory.getDateRegistry(from).dateCreated
+    val t: DateTime = dateRegistryFactory.getDateRegistry(to).dateCreated
+    val summary: Seq[(String,Double)] = PersistenceMediator.getSummary(f,t)
+    displaySummary(from,to, summary)
   }
+
+  override def displaySummary(from: String, to: String, summary: Seq[(String, Double)]): Unit = {
+    presentationAmbassador.displaySummary(from,to,summary)
+  }
+
 
   override def uploadStatement(filePath: String): Unit = {
     val input = new Input
@@ -204,12 +213,19 @@ object InteractionMediator extends PresentationMediator with Mediator {
   }
 
 
+  override def getAllCategoryNames(): Seq[String] = PersistenceMediator
+    .getAllCategoriesAndPatterns().map { _.name }.sorted
+
+
+  override def warnUser(message: String): Unit = presentationAmbassador.warnUser(message)
+
+  override def informUser(message: String): Unit = presentationAmbassador.informUser(message)
+
+  override def sendConfirmationMessage(message: String): Unit = presentationAmbassador.informUser(message)
+
   private def saveTransaction(cats: Seq[Category]): Unit = {
     PersistenceMediator.commitTransactionToDB(cats)
   }
-
-  override def getAllCategoryNames(): Seq[String] = PersistenceMediator
-    .getAllCategoriesAndPatterns().map { _.name }.sorted
 
   /**
     * this method converts the amount entered by the user
@@ -260,9 +276,4 @@ object InteractionMediator extends PresentationMediator with Mediator {
     }
   }
 
-  override def warnUser(message: String): Unit = presentationAmbassador.warnUser(message)
-
-  override def informUser(message: String): Unit = presentationAmbassador.informUser(message)
-
-  override def sendConfirmationMessage(message: String): Unit = presentationAmbassador.informUser(message)
 }
