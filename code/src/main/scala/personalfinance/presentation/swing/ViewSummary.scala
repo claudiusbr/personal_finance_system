@@ -42,7 +42,9 @@ private[swing] class ViewSummary(fontSpecs: Font, main: MainMenu,
   contents = new BoxPanel(Vertical) {
     contents += topBox
     contents += middleBox
-    contents += navigationBox
+    contents += new BoxPanel(Orientation.Vertical) {
+      contents += navigationBox
+    }
     border = Swing.EmptyBorder(30)
   }
 

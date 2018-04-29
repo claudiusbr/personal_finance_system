@@ -8,5 +8,5 @@ import scala.swing.Frame
   * @param frame the frame to be loaded
   * @param button the button which loads the frame
   */
-class FrameKit(val frame: Frame, val button: MainButton)
+class FrameKit(val frame: Frame, val button: MainButton, val frameMessage: String = "")
 

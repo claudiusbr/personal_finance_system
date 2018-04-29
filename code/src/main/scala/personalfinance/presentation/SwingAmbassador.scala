@@ -11,11 +11,7 @@ import personalfinance.presentation.swing.MainWindow
   * @param mediator an instance of the PresentationMediator trait
   */
 private[presentation] case class SwingAmbassador(mediator: PresentationMediator) extends PresentationMediator {
-  /**
-    *
-    */
   private val mainWindow = new MainWindow(mediator)
-
 
   override def startup(): Unit = mainWindow.startup()
 
@@ -52,4 +48,10 @@ private[presentation] case class SwingAmbassador(mediator: PresentationMediator)
   override def classifyWithNewCategory(catName: String, catPattern: String,
                                        entries: Seq[(String, String, String, String)]): Unit =
     mediator.classifyWithNewCategory(catName,catPattern,entries)
+
+  override def warnUser(message: String): Unit = mainWindow.warnUser(message)
+
+  override def informUser(message: String): Unit = mainWindow.informUser(message)
+
+  override def sendConfirmationMessage(message: String): Unit = mainWindow.sendConfirmationMessage(message)
 }

@@ -12,6 +12,11 @@ class MainWindow(mediator: SwingMediator) extends Reactor {
   def createCategory(entries: Seq[(String,String,String,String)]): Unit =
     mainMenu.createCategory(entries)
 
+  def warnUser(message: String): Unit = Messenger.warnUser(message)
+  def informUser(message: String): Unit = Messenger.informUser(message)
+  def sendConfirmationMessage(message: String): Unit = Messenger
+    .sendConfirmationMessage(message)
+
   def startup(): Unit = {
     if (mainMenu.size == new Dimension(0,0)) mainMenu.pack()
     mainMenu.visible = true

@@ -103,9 +103,12 @@ private[swing] class ManualEntry(fontSpecs: Font, main: MainMenu,
   }
 
   // bottom box
-  private val bottomBox = navigationBox
+  private val bottomBox = new BoxPanel(Orientation.Vertical) {
+    contents += navigationBox
+    contents += Messenger.messengerBox
+  }
 
-  private val allBoxes = Array(topBox,upperMiddleBox,lowerMiddleBox,bottomBox)
+  private val allBoxes = Array(topBox,upperMiddleBox,lowerMiddleBox,navigationBox,bottomBox)
 
   allBoxes.foreach { setMaxHeight }
 
@@ -119,17 +122,24 @@ private[swing] class ManualEntry(fontSpecs: Font, main: MainMenu,
 
   reactions += {
     case ButtonClicked(`okBtn`) =>
-      mediator.createManualEntry(
-        typeDropDown.selection.item,
-        dateField.text,
-        descriptionField.text,
-        totalField.text,
-        Seq[Map[String,String]]( // TODO: This will have to be changed when the New Line option is implemented
-          Map[String,String](
-            "currency" -> currencyDropDown.selection.item.trim(),
-            "category" -> categoryField.text.trim(),
-            "pattern" -> "",
-            "percentage" -> percentField.text.trim(),
-            "amount" -> amountField.text.trim())))
+      if (dateField.text.nonEmpty && descriptionField.text.nonEmpty
+        && totalField.text.nonEmpty && categoryField.text.nonEmpty
+        && amountField.text.nonEmpty) {
+
+        mediator.createManualEntry(
+          typeDropDown.selection.item,
+          dateField.text,
+          descriptionField.text,
+          totalField.text,
+          Seq[Map[String, String]]( // TODO: This will have to be changed when the New Line option is implemented
+            Map[String, String](
+              "currency" -> currencyDropDown.selection.item.trim(),
+              "category" -> categoryField.text.trim(),
+              "pattern" -> "",
+              "percentage" -> percentField.text.trim(),
+              "amount" -> amountField.text.trim())))
+      } else {
+        Messenger.warnUser("One or more of the fields above is empty. Please check.")
+      }
   }
 }

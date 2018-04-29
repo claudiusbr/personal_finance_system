@@ -13,7 +13,7 @@ private[swing] class UploadStatement(fontSpecs: Font, main: MainMenu, mediator: 
   extends OtherMenu(main) {
 
   private val fileLabel = new Label("CSV Path")
-  private val fileFieldText = "(enter absolute file path or click 'Open')"
+  private val fileFieldText = ""
 
   private val fileField = new TextField(fileFieldText) {
     columns = main.WindowWidth - 20
@@ -35,17 +35,15 @@ private[swing] class UploadStatement(fontSpecs: Font, main: MainMenu, mediator: 
   private val findFileBox = new BoxPanel(Vertical) {
     contents += fileLabel
     contents += fileBox
-    contents += navigationBox
+    contents += Messenger.messengerBox
+    contents += new BoxPanel(Orientation.Vertical) {
+      contents += navigationBox
+    }
     border = Swing.EtchedBorder
   }
 
-  private val messageLabel =
-    new Label("Please choose the csv version of the statement," +
-      " then press 'Upload'")
-
   private val uploadStatementBox = new BoxPanel(Vertical) {
     contents += findFileBox
-    contents += messageLabel
   }
 
 
@@ -65,6 +63,9 @@ private[swing] class UploadStatement(fontSpecs: Font, main: MainMenu, mediator: 
   listenTo(uploadButton)
 
   reactions += {
-    case ButtonClicked(`uploadButton`) => mediator.uploadStatement(fileField.text)
+    case ButtonClicked(`uploadButton`) => {
+      Messenger.informUser("Processing statement entries. Please wait.")
+      mediator.uploadStatement(fileField.text)
+    }
   }
 }

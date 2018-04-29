@@ -2,6 +2,7 @@ package personalfinance.presentation.swing
 
 import java.awt.Font
 
+import scala.swing.{BoxPanel, Orientation}
 import scala.swing.event.ButtonClicked
 
 private[swing] case object CalculateBudget extends KitName {
@@ -12,10 +13,12 @@ private[swing] class CalculateBudget(fontSpecs: Font, main: MainMenu,
   extends OtherMenu(main) {
 
   title = CalculateBudget.title
-  contents = navigationBox
+  contents = new BoxPanel(Orientation.Vertical) {
+    contents += navigationBox
+  }
 
   reactions += {
-    case ButtonClicked(`okBtn`) => mediator.calculateBudget()
+    case ButtonClicked(`okBtn`) => Messenger.informUser("Button pressed")
   }
 }
 

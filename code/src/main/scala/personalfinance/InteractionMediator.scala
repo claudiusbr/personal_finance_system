@@ -164,9 +164,13 @@ object InteractionMediator extends PresentationMediator with Mediator {
     })
 
     if (readyToCommit.nonEmpty) PersistenceMediator.commitTransactionToDB(readyToCommit)
-    if(uncategorised.nonEmpty) classifyTheUnCategorised(uncategorised)
-  }
 
+    if (uncategorised.nonEmpty) {
+      classifyTheUnCategorised(uncategorised)
+    } else {
+      sendConfirmationMessage("Categorisation complete.")
+    }
+  }
 
   /**
     * on the Swing implementation, this is being called by MainWindow,
@@ -174,7 +178,6 @@ object InteractionMediator extends PresentationMediator with Mediator {
     * reactor, which detects when the user closes the window.
     */
   override def quit(): Unit = PersistenceMediator.quit()
-
 
   private def makeBankTransactionUnit(entryType: String, date: String, total: String,
                                       description: String): TransactionUnit = {
@@ -250,7 +253,14 @@ object InteractionMediator extends PresentationMediator with Mediator {
           (entryType, date, description, amount)
         })
 
+      informUser("Please choose a category and pattern for this entry.")
       getCategoryFromUser(toSendToUser)
     }
   }
+
+  override def warnUser(message: String): Unit = presentationAmbassador.warnUser(message)
+
+  override def informUser(message: String): Unit = presentationAmbassador.informUser(message)
+
+  override def sendConfirmationMessage(message: String): Unit = presentationAmbassador.informUser(message)
 }

@@ -15,6 +15,12 @@ trait PlayMediator {
 
   def viewSummary(from: String, to: String): Unit
 
+  def warnUser(message: String): Unit
+
+  def informUser(message: String): Unit
+
+  def sendConfirmationMessage(message: String): Unit
+
   def createManualEntry(entryType: String, date: String, description: String, total: String,
                         breakdown: Seq[Map[String,String]]): Unit
 

@@ -45,8 +45,10 @@ private [swing] class MainMenu(fontSpecs: Font, mediator: SwingMediator) extends
       case ViewSummary => viewSummary
       case CalculateBudget => calcBudget
     }
+    Messenger.informUser("")
     frameKit.frame.location = this.location
     frameKit.frame.visible = true
+    Messenger.informUser(frameKit.frameMessage)
     this.visible = false
   }
 
@@ -62,14 +64,24 @@ private [swing] class MainMenu(fontSpecs: Font, mediator: SwingMediator) extends
       border = Swing.EmptyBorder(30, 30, 30, 30)
     }
 
-    contents += new BoxPanel(Orientation.Horizontal) {
-      contents += new Label {
-        text = "£ $ €"
-        font = new Font(fontSpecs.getFontName(),Font.BOLD,100)
+    contents += new BoxPanel(Orientation.Vertical) {
+      contents += new BoxPanel(Orientation.Horizontal) {
+        contents += Messenger.messengerBox
+        contents += Swing.HGlue
+        border = Swing.EmptyBorder(30, 30, 30, 30)
       }
-      border = Swing.EmptyBorder(30, 30, 30, 30)
+
+      contents += new BoxPanel(Orientation.Horizontal) {
+        contents += new Label {
+          text = "£ $ €"
+          font = new Font(fontSpecs.getFontName(), Font.BOLD, 100)
+        }
+        border = Swing.EmptyBorder(30, 30, 30, 30)
+      }
     }
   }
+
+  Messenger.informUser("Hello!")
 
   listenTo(usBtn,meBtn,vsBtn,cbBtn)
 

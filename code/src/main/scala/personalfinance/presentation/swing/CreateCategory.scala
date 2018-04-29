@@ -22,7 +22,7 @@ private[swing] class CreateCategory(entryType: String, date: String, description
       contents += okBtn
     }
 
-  private val messenger = new Label("")
+  private val messageLabel = Messenger.messenger
 
   private val instructionsLabel = new Label("Choose or create a category for the entry below:")
 
@@ -57,7 +57,7 @@ private[swing] class CreateCategory(entryType: String, date: String, description
         patternField,Swing.VStrut(2))
     }
 
-    contents += messenger
+    contents += messageLabel
 
     border = Swing.EmptyBorder(10, 10, 10, 10)
   }
@@ -96,12 +96,13 @@ private[swing] class CreateCategory(entryType: String, date: String, description
 
     case ButtonClicked(`okBtn`) => {
       categoryField.text match {
-        case "" => messenger.text = "Category cannot be empty"
-        case cat if cat.length <= 1 => messenger.text = "Category names should " +
-          "be at least 2 characters long."
+        case "" => Messenger.warnUser("Category cannot be empty")
+        case cat if cat.length <= 1 => Messenger.warnUser("Category names should " +
+          "be at least 2 characters long.")
         case _ => {
           main.visible = true
           this.visible = false
+          Messenger.informUser(s"Attempting to assign entry to '${categoryField.text}'")
           mediator.classifyWithNewCategory(
             categoryField.text,
             patternField.text,

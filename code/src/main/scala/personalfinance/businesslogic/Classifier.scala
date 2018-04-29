@@ -25,13 +25,24 @@ class Classifier {
 
   private def classifyByDescription(categories: Seq[Category],
     entries: Seq[Entry]): (Seq[TransactionUnit], Seq[Entry]) = {
+    val patternIndex: Seq[String] = categories
+      .flatMap(c=>{c.patterns.list.map( _.value )})
+      .sortBy(_.length)
+      .reverse
+
     entries.map({
-      entry => (entry,categories.find({
+      entry => (entry,patternIndex.find(entry.description.startsWith)) match {
+
+        /*categories.find({
           cat => cat.patterns.list.foldLeft(false)({
             (test,pat) => entry.description.contains(pat.value) || test})
-      })) match {
-        case (e: Entry, Some(cat)) =>
-          TransactionUnit(cat,Seq(e))
+      }) match {*/
+        case (e: Entry, Some(pat)) =>
+          TransactionUnit(categories.find(cat => {
+            cat.patterns.list.foldLeft(false)({
+              (test,catPat) => catPat.value == pat || test
+            })
+          }).get,Seq(e))
         case (e: Entry, None) => e
       }
     }).partition(_.isInstanceOf[TransactionUnit])
