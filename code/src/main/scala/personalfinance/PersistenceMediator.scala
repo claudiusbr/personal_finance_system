@@ -1,7 +1,6 @@
 package personalfinance
 
 import java.sql.{ResultSet, SQLException}
-import java.util.InputMismatchException
 
 import businesslogic._
 import transaction._
@@ -82,11 +81,10 @@ object PersistenceMediator extends Mediator {
 
           case Category(_, _, ps, Some(id)) => {
             ps.list.foreach {
+              case Pattern(_,Some(_)) =>
+
               case Pattern(v, None) =>
                 persistenceBridge.createPattern(id, v)
-
-              case _ => throw new RuntimeException("this should never happen" +
-                " just suppressing warnings")
             }
 
             entriesFromCategory(cat)

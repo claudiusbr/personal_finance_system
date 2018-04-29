@@ -53,7 +53,7 @@ object InteractionMediator extends PresentationMediator with Mediator {
       case Fail(message, _) => throw new RuntimeException(message)
     }
     val entries: Seq[Entry] = {
-      val headers: Array[String] = linesFromFile.head.split(",")
+      val headers: Array[String] = linesFromFile.head.toLowerCase().split(",")
       val date: Int = headers.indexOf("date")
       val description: Int = headers.indexOf("description")
       val amount: Int = headers.indexOf("amount")
@@ -163,8 +163,8 @@ object InteractionMediator extends PresentationMediator with Mediator {
       transaction.execute(Seq(bankTransactionUnit,tu))
     })
 
-    PersistenceMediator.commitTransactionToDB(readyToCommit)
-    classifyTheUnCategorised(uncategorised)
+    if (readyToCommit.nonEmpty) PersistenceMediator.commitTransactionToDB(readyToCommit)
+    if(uncategorised.nonEmpty) classifyTheUnCategorised(uncategorised)
   }
 
 

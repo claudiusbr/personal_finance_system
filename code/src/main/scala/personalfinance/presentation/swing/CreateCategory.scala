@@ -99,11 +99,15 @@ private[swing] class CreateCategory(entryType: String, date: String, description
         case "" => messenger.text = "Category cannot be empty"
         case cat if cat.length <= 1 => messenger.text = "Category names should " +
           "be at least 2 characters long."
-        case _ => mediator.classifyWithNewCategory(
-          categoryField.text,
-          patternField.text,
-          Seq((entryType,date,description,amount)) ++ others
-        )
+        case _ => {
+          main.visible = true
+          this.visible = false
+          mediator.classifyWithNewCategory(
+            categoryField.text,
+            patternField.text,
+            Seq((entryType,date,description,amount)) ++ others
+          )
+        }
       }
     }
   }

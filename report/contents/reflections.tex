@@ -161,3 +161,11 @@ a transaction unit, it still needs to wrap the category and entry into a Seq
 before it can create the method. Although it all works, there could be better
 ways to engineer it so that it is clear from the contract and the fields in the
 class what is happening inside of it}
+
+\textbf{The way the matching of an entry description against a pattern is being
+done should be by: first sort all the entries by longest description;
+then categorise, create patterns etc; then when actually classifying similar
+entries in the next month, start by the longest transactions, and match them
+first against the longest patterns, then the shortest. This way more generic
+patterns such as 'laptop' would not match first with an entry such as 'laptop
+for girlfriend'}
