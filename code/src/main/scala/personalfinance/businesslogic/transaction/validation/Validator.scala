@@ -4,7 +4,7 @@ package transaction
 package validation
 
 trait Validator {
-  def validate(what: Iterable[Any]): TestResult
+  def validate(what: Seq[Any]): TestResult
 
   /**
     * this is a method mainly to aid the implementation of the `validate` method.

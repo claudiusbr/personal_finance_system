@@ -10,17 +10,19 @@ private[swing] class CreateCategory(entryType: String, date: String, description
                                     fontSpecs: Font, main: MainMenu, mediator: SwingMediator)
   extends MainFrame {
 
-  protected val cancelBtn = new Button("Cancel")
-  protected val okBtn = new Button("Submit")
+  private val cancelBtn = new Button("Cancel")
+  private val okBtn = new Button("Submit")
 
-  protected val me: CreateCategory = this
+  private val me: CreateCategory = this
 
-  protected val navigationBox: BoxPanel =
+  private val navigationBox: BoxPanel =
     new BoxPanel(Orientation.Horizontal) {
       contents += cancelBtn
       contents += Swing.HStrut(3)
       contents += okBtn
     }
+
+  private val messenger = new Label("")
 
   private val instructionsLabel = new Label("Choose or create a category for the entry below:")
 
@@ -54,6 +56,8 @@ private[swing] class CreateCategory(entryType: String, date: String, description
       contents ++= Seq(patternLabel, Swing.VStrut(2),
         patternField,Swing.VStrut(2))
     }
+
+    contents += messenger
 
     border = Swing.EmptyBorder(10, 10, 10, 10)
   }
@@ -89,6 +93,19 @@ private[swing] class CreateCategory(entryType: String, date: String, description
    }
 
     case WindowActivated(`me`) => this.size = main.size
+
+    case ButtonClicked(`okBtn`) => {
+      categoryField.text match {
+        case "" => messenger.text = "Category cannot be empty"
+        case cat if cat.length <= 1 => messenger.text = "Category names should " +
+          "be at least 2 characters long."
+        case _ => mediator.classifyWithNewCategory(
+          categoryField.text,
+          patternField.text,
+          Seq((entryType,date,description,amount)) ++ others
+        )
+      }
+    }
   }
 
 }

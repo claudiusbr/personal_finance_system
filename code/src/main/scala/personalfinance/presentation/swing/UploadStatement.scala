@@ -62,9 +62,9 @@ private[swing] class UploadStatement(fontSpecs: Font, main: MainMenu, mediator: 
 
   fileButton.requestFocus()
 
-  listenTo(okBtn)
+  listenTo(uploadButton)
 
   reactions += {
-    case ButtonClicked(`okBtn`) => mediator.uploadStatement(fileField.text)
+    case ButtonClicked(`uploadButton`) => mediator.uploadStatement(fileField.text)
   }
 }

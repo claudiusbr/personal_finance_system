@@ -4,11 +4,11 @@ package input
 import businesslogic.transaction.validation._
 
 class InputValidator extends Validator {
-  override def validate(what: Iterable[Any]): TestResult =
+  override def validate(what: Seq[Any]): TestResult =
     validateType( "An Iterable[String] argument is required",
-      what,(p: Any) => validateInput(p.asInstanceOf[Iterable[String]]))
+      what,(p: Any) => validateInput(p.asInstanceOf[Seq[String]]))
 
-  private def validateInput(input: Iterable[String]): TestResult = {
+  private def validateInput(input: Seq[String]): TestResult = {
     val firstLine = input.head.toLowerCase
     firstLine match {
       case "date,description,amount" => Pass(input)

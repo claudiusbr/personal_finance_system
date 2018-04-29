@@ -1,5 +1,7 @@
 package personalfinance
 
+import java.io.FileNotFoundException
+
 import presentation._
 import businesslogic._
 import transaction._
@@ -41,7 +43,12 @@ object InteractionMediator extends PresentationMediator with Mediator {
   override def uploadStatement(filePath: String): Unit = {
     val input = new Input
     val validator = new InputValidator
-    val linesFromFile: Seq[String] = validator.validate(input.lines(filePath)) match {
+    val linesFromFile: Seq[String] = validator.validate(
+      input.lines(filePath) match {
+        case Some(lines) => lines
+        case None => throw new FileNotFoundException("file not found")
+      }
+    ) match {
       case Pass(lines) => lines.asInstanceOf[Seq[String]]
       case Fail(message, _) => throw new RuntimeException(message)
     }

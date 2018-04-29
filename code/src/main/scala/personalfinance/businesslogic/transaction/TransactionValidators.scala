@@ -6,11 +6,11 @@ import validation._
 
 final class TransactionEntriesValidator extends Validator {
 
-  def validate(what: Iterable[Any]): TestResult =
+  def validate(what: Seq[Any]): TestResult =
     validateType("A list of TransactionUnits is required",what,(p: Any) =>
-      transactionUnitsAreValid(p.asInstanceOf[List[TransactionUnit]]))
+      transactionUnitsAreValid(p.asInstanceOf[Seq[TransactionUnit]]))
 
-  private def transactionUnitsAreValid(tu: List[TransactionUnit]): TestResult =
+  private def transactionUnitsAreValid(tu: Seq[TransactionUnit]): TestResult =
     sumOfEntriesEqualZero(tu.flatMap(_.entries))
 
   /**
@@ -20,7 +20,7 @@ final class TransactionEntriesValidator extends Validator {
     * @return true if the sum of the amounts of all entries equals
     *         zero
     */
-  private def sumOfEntriesEqualZero(entries: List[Entry]): TestResult = {
+  private def sumOfEntriesEqualZero(entries: Seq[Entry]): TestResult = {
     val sumOfEntries = entries.foldLeft(0.0d)((s: Double, e: Entry) => s + e.amount.total)
     if (sumOfEntries == 0.0d) Pass(entries)
     else Fail("Sum of entries should equal 0",sumOfEntries)
@@ -29,7 +29,7 @@ final class TransactionEntriesValidator extends Validator {
 }
 
 final class TransactionUnitValidator extends Validator {
-  def validate(what: Iterable[Any]): TestResult =
+  def validate(what: Seq[Any]): TestResult =
     atLeastOneCategoryWasGiven(what.asInstanceOf[List[TransactionUnit]])
 
   private def atLeastOneCategoryWasGiven(transactionUnits: List[TransactionUnit]): TestResult = {
