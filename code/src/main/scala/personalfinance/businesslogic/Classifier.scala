@@ -40,7 +40,7 @@ class Classifier {
         case (e: Entry, Some(pat)) =>
           TransactionUnit(categories.find(cat => {
             cat.patterns.list.foldLeft(false)({
-              (test,catPat) => catPat.value == pat || test
+              (test,catPat) => catPat.value.toLowerCase() == pat.toLowerCase() || test
             })
           }).get,Seq(e))
         case (e: Entry, None) => e

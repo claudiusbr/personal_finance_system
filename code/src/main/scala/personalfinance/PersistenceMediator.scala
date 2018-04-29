@@ -125,6 +125,15 @@ object PersistenceMediator extends Mediator {
     }.toSeq
   }
 
+  def getSummary(from: DateTime, to: DateTime): Seq[(String,Double)] = {
+    val rs: ResultSet = persistenceBridge.getSummary(from,to)
+    try iterateResultSet[Seq[(String,Double)]](
+      rs,
+      (res,catAndTotal) => { (res.getString(1),res.getDouble(2)) +: catAndTotal },
+      Seq[(String,Double)]())
+    finally rs.close()
+  }
+
   private def entriesFromCategory(cat: Category): Seq[(Double,Int,Int,Int)] = {
     cat.entries.map {
       case Entry(amt, dateRegistry, desc, None) => {

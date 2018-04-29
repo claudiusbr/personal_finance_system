@@ -94,7 +94,7 @@ class PersistenceBridge(propertiesLoader: PropertiesLoader, privateLoader: Prope
 
   def createEntryDescription(entryDescriptions: Seq[(DateTime, DateTime, String)]): Boolean = {
 
-    val result: Boolean = executePSUpdate(sqlDialect.createEntryDescriptionPS,
+    val result: Boolean = executePS(sqlDialect.createEntryDescriptionPS,
       (st: PreparedStatement) => {
       val updateResult: Seq[Boolean] = {
         entryDescriptions.map {
@@ -131,7 +131,7 @@ class PersistenceBridge(propertiesLoader: PropertiesLoader, privateLoader: Prope
     if (entries.foldLeft(0.0)((sum,entry) => sum + entry._1) != 0)
       throw new RuntimeException(
         "Sum of entries did not equal 0. Transaction not commited")
-    val result = executePSUpdate(sqlDialect.createEntryPS,(st: PreparedStatement) => {
+    val result = executePS(sqlDialect.createEntryPS,(st: PreparedStatement) => {
       val updateResult: Seq[Boolean] = entries.map {
         case (amount: Double, catId: Int, descriptionId: Int, currencyId: Int) =>
           st.setDouble(1, amount)
@@ -168,8 +168,9 @@ class PersistenceBridge(propertiesLoader: PropertiesLoader, privateLoader: Prope
 
     if (amountCredit + amountDebit != 0) throw new IllegalArgumentException("")
 
-    val result: Boolean = executePSUpdate(sqlDialect.createEntryPS,
-      (st: PreparedStatement) =>{
+    val result: Boolean = executePS(sqlDialect.createEntryPS,
+      (st: PreparedStatement) => {
+
       // for readability
       val stDebit = st
       val stCredit = st
@@ -191,8 +192,16 @@ class PersistenceBridge(propertiesLoader: PropertiesLoader, privateLoader: Prope
       resultDebit && resultCredit
     })
 
-
     result
+  }
+
+  def getSummary(from: DateTime, to: DateTime): ResultSet = {
+    executePS[ResultSet](sqlDialect.getSummaryPS(),
+      (st: PreparedStatement) => {
+        st.setDate(1,new JDate(from.getMillis))
+        st.setDate(2,new JDate(to.getMillis))
+        st.executeQuery()
+      }, leaveOpen = true)
   }
 
   private def executeUpdate(statement: String): Int = {
@@ -205,14 +214,11 @@ class PersistenceBridge(propertiesLoader: PropertiesLoader, privateLoader: Prope
     result
   }
 
-  private def executePSUpdate(statement: String, op: (PreparedStatement) => Boolean): Boolean = {
+  private def executePS[T](statement: String, op: PreparedStatement => T, leaveOpen: Boolean = false): T = {
 
     connection setAutoCommit false
-
     val st = connection prepareStatement statement
-
     try op(st) catch {
-
       case e: SQLException => {
         e.printStackTrace()
         if (connection != null) try {
@@ -228,7 +234,7 @@ class PersistenceBridge(propertiesLoader: PropertiesLoader, privateLoader: Prope
       }
     } finally {
       connection setAutoCommit true
-      if (st != null) st.close()
+      if (st != null && !leaveOpen) st.close()
     }
   }
 

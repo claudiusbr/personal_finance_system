@@ -38,7 +38,9 @@ object InteractionMediator extends PresentationMediator with Mediator {
 
   override def calculateBudget(): Unit = ???
 
-  override def viewSummary(from: String, to: String): Unit = ???
+  override def viewSummary(from: String, to: String): Unit = {
+
+  }
 
   override def uploadStatement(filePath: String): Unit = {
     val input = new Input

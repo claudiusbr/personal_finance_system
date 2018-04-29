@@ -32,16 +32,20 @@ private[swing] class ViewSummary(fontSpecs: Font, main: MainMenu,
   private val catSearchField = new TextField(
     "(start typing to initiate search)"
   )
+
+  /*
   private val middleBox = new BoxPanel(Vertical) {
     contents ++= Array(catSearchLabel,Swing.HStrut(3),catSearchField)
   }
+  */
 
-  Array(topBox,middleBox).foreach {setMaxHeight}
+  //Array(topBox,middleBox).foreach {setMaxHeight}
+  Array(topBox).foreach {setMaxHeight}
 
   title = ViewSummary.title
   contents = new BoxPanel(Vertical) {
     contents += topBox
-    contents += middleBox
+    //contents += middleBox
     contents += new BoxPanel(Orientation.Vertical) {
       contents += navigationBox
     }

@@ -28,6 +28,8 @@ private[persistence] sealed trait ConnectionType {
 
   def getEntryDescription(description: String): String
 
+  def getSummaryPS(): String
+
   def createEntryPS: String
 }
 
@@ -70,6 +72,14 @@ private[persistence] final case class MySql(_dbName: String) extends ConnectionT
   override def createEntryPS: String =
     s"insert into $entry (`amount`, `category_id`, `description_id`, `currency_id`)" +
       "values (?, ?, ?, ?)"
+
+  override def getSummaryPS(): String =
+    "select cat.name as Category,sum(amount)*-1 as Total " +
+    "from category cat left join entry on entry.category_id = cat.idcategory " +
+    "join entry_description on entry.description_id = entry_description.id_entry_description " +
+    "where date_created >= (?) and date_created <= (?) " +
+    "group by cat.name " +
+    "order by sum(amount)"
 }
 
 /**
@@ -95,4 +105,6 @@ private[persistence] final case class H2(_dbName: String) extends ConnectionType
   override def getEntryDescription(description: String): String = ???
 
   override def createEntryPS: String = ???
+
+  override def getSummaryPS(): String = ???
 }

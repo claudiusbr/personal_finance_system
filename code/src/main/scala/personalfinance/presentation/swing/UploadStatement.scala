@@ -66,6 +66,9 @@ private[swing] class UploadStatement(fontSpecs: Font, main: MainMenu, mediator: 
     case ButtonClicked(`uploadButton`) => {
       Messenger.informUser("Processing statement entries. Please wait.")
       mediator.uploadStatement(fileField.text)
+      main.location = this.location
+      this.visible = false
+      main.visible = true
     }
   }
 }

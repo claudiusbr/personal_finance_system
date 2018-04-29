@@ -81,8 +81,6 @@ private [swing] class MainMenu(fontSpecs: Font, mediator: SwingMediator) extends
     }
   }
 
-  Messenger.informUser("Hello!")
-
   listenTo(usBtn,meBtn,vsBtn,cbBtn)
 
   reactions += {
