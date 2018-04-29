@@ -150,3 +150,14 @@ remaining uncategorised entries after a new category has been created: since
 every method has a Unit value, the whole block of entries had to be passed
 around as messages so that the state would not be lost. Hence why there are so
 many Seq String String String String flying around.}
+
+\textbf{Perhaps due to what is a combination of inexperience and lack of more
+detailed preparation regarding method signatures, there is a bit of (for lack
+of a better term) `awkwardness' around method signatures, return types and
+constructors. For instance, Transaction.execute takes Seq TransactionUnit, but
+at times it is clear that only two transaction units are going to be entered,
+but it is still necessary to make them into a sequel. Or when Classifier makes
+a transaction unit, it still needs to wrap the category and entry into a Seq
+before it can create the method. Although it all works, there could be better
+ways to engineer it so that it is clear from the contract and the fields in the
+class what is happening inside of it}

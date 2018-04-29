@@ -13,7 +13,7 @@ import personalfinance.businesslogic.transaction.dates.DateRegistry
   * @param dates an instance of the DateRegistry class
   * @param description a description of the entry in question
   */
-case class Entry(amount: Amount, private val dates: DateRegistry,
+case class Entry(amount: Amount, dates: DateRegistry,
                  description: String, id: Option[Int] = None) {
 
   val dateCreated: DateTime = dates.dateCreated
