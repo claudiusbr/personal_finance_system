@@ -37,9 +37,9 @@ object InteractionMediator extends PresentationMediator with Mediator {
 
   override def entryTypes: Seq[String] = EntryType.values.map(_.toString).toSeq
 
-  override def calculateBudget(): Unit = ???
+  override def requestBudget(): Unit = ???
 
-  override def getSummary(from: String, to: String): Unit = {
+  override def requestSummary(from: String, to: String): Unit = {
     val f: DateTime = dateRegistryFactory.getDateRegistry(from).dateCreated
     val t: DateTime = dateRegistryFactory.getDateRegistry(to).dateCreated
     val summary: Seq[(String,Double)] = PersistenceMediator.getSummary(f,t)
@@ -118,8 +118,8 @@ object InteractionMediator extends PresentationMediator with Mediator {
   }
 
 
-  override def getCategoryFromUser(entries: Seq[(String,String,String,String)]): Unit = {
-    presentationAmbassador.getCategoryFromUser(entries)
+  override def requestCategoryFromUser(entries: Seq[(String,String,String,String)]): Unit = {
+    presentationAmbassador.requestCategoryFromUser(entries)
   }
 
 
@@ -272,7 +272,7 @@ object InteractionMediator extends PresentationMediator with Mediator {
         })
 
       informUser("Please choose a category and pattern for this entry.")
-      getCategoryFromUser(toSendToUser)
+      requestCategoryFromUser(toSendToUser)
     }
   }
 

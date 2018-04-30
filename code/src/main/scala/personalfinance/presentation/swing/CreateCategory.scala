@@ -27,7 +27,7 @@ private[swing] class CreateCategory(entryType: String, date: String, description
   private val instructionsLabel = new Label("Choose or create a category for the entry below:")
 
   private val categoriesDropDown =
-    new ComboBox[String](Seq("") ++ mediator.getAllCategoryNames())
+    new ComboBox[String](Seq("") ++ mediator.getAllCategoryNames)
   private val categoryField = new TextField("")
 
   private val entryTypeLabel = new Label(entryType)

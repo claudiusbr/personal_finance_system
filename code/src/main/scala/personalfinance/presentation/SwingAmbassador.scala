@@ -15,9 +15,9 @@ private[presentation] case class SwingAmbassador(mediator: PresentationMediator)
 
   override def startup(): Unit = mainWindow.startup()
 
-  override def calculateBudget(): Unit = mediator.calculateBudget()
+  override def requestBudget(): Unit = mediator.requestBudget()
 
-  override def getSummary(from: String, to: String): Unit = mediator.getSummary(from,to)
+  override def requestSummary(from: String, to: String): Unit = mediator.requestSummary(from,to)
 
   override def uploadStatement(filePath: String): Unit = mediator.uploadStatement(filePath)
 
@@ -29,7 +29,7 @@ private[presentation] case class SwingAmbassador(mediator: PresentationMediator)
 
   override def entryTypes: Seq[String] = mediator.entryTypes
 
-  override def getAllCategoryNames(): Seq[String] = mediator.getAllCategoryNames()
+  override def getAllCategoryNames: Seq[String] = mediator.getAllCategoryNames
 
   /**
     * this method takes a list of entries as a Tuple4[String] and
@@ -41,7 +41,7 @@ private[presentation] case class SwingAmbassador(mediator: PresentationMediator)
     *                entries._3 is the description
     *                entries._4 is the amount
     */
-  override def getCategoryFromUser(entries: Seq[(String, String, String, String)]): Unit = {
+  override def requestCategoryFromUser(entries: Seq[(String, String, String, String)]): Unit = {
     mainWindow.createCategory(entries)
   }
 

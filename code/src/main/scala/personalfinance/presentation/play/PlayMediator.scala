@@ -11,9 +11,9 @@ trait PlayMediator {
 
   def entryTypes: Seq[String]
 
-  def calculateBudget(): Unit
+  def requestBudget(): Unit
 
-  def getSummary(from: String, to: String): Unit
+  def requestSummary(from: String, to: String): Unit
 
   def displaySummary(from: String, to: String, summary: Seq[(String,Double)]): Unit
 
@@ -38,9 +38,9 @@ trait PlayMediator {
     *                entries._3 is the description
     *                entries._4 is the amount
     */
-  def getCategoryFromUser(entries: Seq[(String,String,String,String)])
+  def requestCategoryFromUser(entries: Seq[(String,String,String,String)]): Unit
 
-  def getAllCategoryNames(): Seq[String]
+  def getAllCategoryNames: Seq[String]
 
   def uploadStatement(filePath: String): Unit
 }
