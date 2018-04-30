@@ -196,6 +196,11 @@ then PlayMediator -- although both are traits, this could cause problems in the
 future if the Play one implements something which Swing doesn't, so basically
 these traits must always be the exact same}
 
+\textbf{talk about the reason why the presentation mediator's methods returning
+Unit being because this way they can stay as implementation-agnostic regarding
+the other layers as they possibly can, again thinking that the interface needs
+to be able to change without the code being recompiled}
+
 \subsection{The Bridge Pattern} \label{sec:Implementation.TheBridgePattern}
 \textbf{TODO: review this. It all changed after the 20th of April}
 The Bridge pattern allows for an abstraction and its implementation to be

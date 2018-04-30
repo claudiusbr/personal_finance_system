@@ -15,7 +15,9 @@ private[presentation] case class SwingAmbassador(mediator: PresentationMediator)
 
   override def startup(): Unit = mainWindow.startup()
 
-  override def requestBudget(): Unit = mediator.requestBudget()
+  override def requestMonthlyBudget(): Unit = mediator.requestMonthlyBudget()
+
+  override def requestYearlyBudget(): Unit = mediator.requestYearlyBudget()
 
   override def requestSummary(from: String, to: String): Unit = mediator.requestSummary(from,to)
 

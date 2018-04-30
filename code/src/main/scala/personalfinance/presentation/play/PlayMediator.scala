@@ -11,7 +11,9 @@ trait PlayMediator {
 
   def entryTypes: Seq[String]
 
-  def requestBudget(): Unit
+  def requestMonthlyBudget(): Unit
+
+  def requestYearlyBudget(): Unit
 
   def requestSummary(from: String, to: String): Unit
 

@@ -37,7 +37,53 @@ object InteractionMediator extends PresentationMediator with Mediator {
 
   override def entryTypes: Seq[String] = EntryType.values.map(_.toString).toSeq
 
-  override def requestBudget(): Unit = ???
+  override def requestMonthlyBudget(): Unit = {
+    val now: DateTime = new DateTime()
+    val yearAgo: DateTime = now.minusYears(1)
+    val balance: Seq[(String,Double)] = PersistenceMediator.getSummary(yearAgo,now)
+    val budget: Seq[(String,Double,Double)] = getBudget(balance)
+    println(budget.mkString("\n"))
+  }
+
+  private def getBudget(balance: Seq[(String,Double)]): Seq[(String,Double,Double)] = {
+    val (income,expenditure): (Seq[(String,Double)],Seq[(String,Double)]) =
+      balance.partition(_._2 > 0)
+
+    case class BudgetTuple(name: String, amount: Double, percentageOfIncome: Double) {
+      def toTuple: (String,Double,Double) = (name,amount,percentageOfIncome)
+    }
+
+    val incomeForPeriod = BudgetTuple(
+      "Income", income.foldLeft(0.0)((sum,catAndAmt) => { sum + catAndAmt._2 }), 100.0)
+
+    val expenditureForPeriod: Seq[BudgetTuple] = expenditure.map { catAndAmt => {
+        BudgetTuple(catAndAmt._1, catAndAmt._2, Math.abs(
+          100.0 * catAndAmt._2 / incomeForPeriod.amount))
+      }
+    }
+
+    /* the prepend method (+:) was chosen due to being O(1) efficient
+       when dealing with linear Sequences in Scala
+       (Odersky et al, 2016, Location 14469)
+     */
+    val budgetForPeriod = expenditureForPeriod.sortBy(-1 * _.amount)
+      .foldLeft(Seq(incomeForPeriod))((budg,exp) => {
+        budg match {
+          case _ :: Nil => exp +: budg
+
+          case x :: accBudg if x.percentageOfIncome < 20.0
+            && x.percentageOfIncome + exp.percentageOfIncome <= 20.0 =>
+              BudgetTuple("Other", x.amount + exp.amount,
+                x.percentageOfIncome + exp.percentageOfIncome) +: accBudg
+
+          case _ => exp +: budg
+        }
+      }).reverse
+
+    budgetForPeriod.map(_.toTuple)
+  }
+
+  override def requestYearlyBudget(): Unit = ???
 
   override def requestSummary(from: String, to: String): Unit = {
     val f: DateTime = dateRegistryFactory.getDateRegistry(from).dateCreated
@@ -213,7 +259,7 @@ object InteractionMediator extends PresentationMediator with Mediator {
   }
 
 
-  override def getAllCategoryNames(): Seq[String] = PersistenceMediator
+  override def getAllCategoryNames: Seq[String] = PersistenceMediator
     .getAllCategoriesAndPatterns().map { _.name }.sorted
 
 
@@ -275,5 +321,4 @@ object InteractionMediator extends PresentationMediator with Mediator {
       requestCategoryFromUser(toSendToUser)
     }
   }
-
 }
