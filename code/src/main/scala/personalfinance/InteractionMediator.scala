@@ -38,56 +38,33 @@ object InteractionMediator extends PresentationMediator with Mediator {
   override def entryTypes: Seq[String] = EntryType.values.map(_.toString).toSeq
 
   override def requestMonthlyBudget(): Unit = {
-    val now: DateTime = new DateTime()
-    val yearAgo: DateTime = now.minusYears(1)
-    val balance: Seq[(String,Double)] = PersistenceMediator.getSummary(yearAgo,now)
+    val to: DateTime = dateRegistryFactory.getDateRegistry("now").dateCreated
+    val yearPrior: DateTime = to.minusYears(1)
+    val balance: Seq[(String,Double)] = PersistenceMediator.getSummary(yearPrior,to)
     val budget: Seq[(String,Double,Double)] = getBudget(balance)
-    println(budget.mkString("\n"))
+    val monthlyBudget: Seq[(String,Double,Double)] =
+      budget.map(tuple => {tuple.copy(_2 = tuple._2/12.0)})
+    displayBudget(monthlyBudget)
   }
 
-  private def getBudget(balance: Seq[(String,Double)]): Seq[(String,Double,Double)] = {
-    val (income,expenditure): (Seq[(String,Double)],Seq[(String,Double)]) =
-      balance.partition(_._2 > 0)
-
-    case class BudgetTuple(name: String, amount: Double, percentageOfIncome: Double) {
-      def toTuple: (String,Double,Double) = (name,amount,percentageOfIncome)
-    }
-
-    val incomeForPeriod = BudgetTuple(
-      "Income", income.foldLeft(0.0)((sum,catAndAmt) => { sum + catAndAmt._2 }), 100.0)
-
-    val expenditureForPeriod: Seq[BudgetTuple] = expenditure.map { catAndAmt => {
-        BudgetTuple(catAndAmt._1, catAndAmt._2, Math.abs(
-          100.0 * catAndAmt._2 / incomeForPeriod.amount))
-      }
-    }
-
-    /* the prepend method (+:) was chosen due to being O(1) efficient
-       when dealing with linear Sequences in Scala
-       (Odersky et al, 2016, Location 14469)
-     */
-    val budgetForPeriod = expenditureForPeriod.sortBy(-1 * _.amount)
-      .foldLeft(Seq(incomeForPeriod))((budg,exp) => {
-        budg match {
-          case _ :: Nil => exp +: budg
-
-          case x :: accBudg if x.percentageOfIncome < 20.0
-            && x.percentageOfIncome + exp.percentageOfIncome <= 20.0 =>
-              BudgetTuple("Other", x.amount + exp.amount,
-                x.percentageOfIncome + exp.percentageOfIncome) +: accBudg
-
-          case _ => exp +: budg
-        }
-      }).reverse
-
-    budgetForPeriod.map(_.toTuple)
+  override def requestYearlyBudget(): Unit = {
+    val to: DateTime = dateRegistryFactory.getDateRegistry("now").dateCreated
+    val from: DateTime = to.minusYears(5)
+    val balance: Seq[(String,Double)] = PersistenceMediator.getSummary(from,to)
+    val budget: Seq[(String,Double,Double)] = getBudget(balance)
+    val yearlyBudget: Seq[(String,Double,Double)] =
+      budget.map(tuple => {tuple.copy(_2 = tuple._2/5.0)})
+    displayBudget(yearlyBudget)
   }
 
-  override def requestYearlyBudget(): Unit = ???
+  override def displayBudget(budget: Seq[(String, Double, Double)]): Unit =
+    presentationAmbassador.displayBudget(budget)
 
   override def requestSummary(from: String, to: String): Unit = {
     val f: DateTime = dateRegistryFactory.getDateRegistry(from).dateCreated
-    val t: DateTime = dateRegistryFactory.getDateRegistry(to).dateCreated
+    val t: DateTime =
+      if (to == "") dateRegistryFactory.getDateRegistry("now").dateCreated
+      else dateRegistryFactory.getDateRegistry(to).dateCreated
     val summary: Seq[(String,Double)] = PersistenceMediator.getSummary(f,t)
     displaySummary(from,to, summary)
   }
@@ -319,6 +296,50 @@ object InteractionMediator extends PresentationMediator with Mediator {
 
       informUser("Please choose a category and pattern for this entry.")
       requestCategoryFromUser(toSendToUser)
+    }
+  }
+
+  private def getBudget(balance: Seq[(String,Double)]): Seq[(String,Double,Double)] = {
+    val (income,expenditure): (Seq[(String,Double)],Seq[(String,Double)]) =
+      balance.partition(_._2 > 0)
+
+    case class BudgetTuple(name: String, amount: Double, percentageOfIncome: Double) {
+      def toTuple: (String,Double,Double) = (name,amount,percentageOfIncome)
+    }
+
+    val incomeForPeriod = BudgetTuple(
+      "Income", income.foldLeft(0.0)((sum,catAndAmt) => { sum + catAndAmt._2 }), 100.0)
+
+    val expenditureForPeriod: Seq[BudgetTuple] = expenditure.map { catAndAmt => {
+      BudgetTuple(catAndAmt._1, catAndAmt._2, Math.abs(
+        100.0 * catAndAmt._2 / incomeForPeriod.amount))
+    }
+    }
+
+    /* the prepend method (+:) was chosen due to being O(1) efficient
+       when dealing with linear Sequences in Scala
+       (Odersky et al, 2016, Location 14469)
+     */
+    val budgetForPeriod = expenditureForPeriod.sortBy(-1 * _.amount)
+      .foldLeft(Seq(incomeForPeriod))((budg,exp) => {
+        budg match {
+          case _ :: Nil => exp +: budg
+
+          case x :: accBudg if x.percentageOfIncome < 20.0
+            && x.percentageOfIncome + exp.percentageOfIncome <= 20.0 =>
+            BudgetTuple("Other", x.amount + exp.amount,
+              x.percentageOfIncome + exp.percentageOfIncome) +: accBudg
+
+          case _ => exp +: budg
+        }
+      }).reverse
+
+    val budgetExpenditure: Double = budgetForPeriod.tail.foldLeft(0.0)(_ + _.amount)
+    budgetForPeriod match {
+      case budgetIncome :: exp if budgetIncome.amount < budgetExpenditure =>
+        (budgetIncome.copy(amount=budgetExpenditure) +: exp).map(_.toTuple)
+
+      case _ => budgetForPeriod.map(_.toTuple)
     }
   }
 }

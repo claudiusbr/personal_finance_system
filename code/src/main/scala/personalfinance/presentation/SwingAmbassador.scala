@@ -19,6 +19,22 @@ private[presentation] case class SwingAmbassador(mediator: PresentationMediator)
 
   override def requestYearlyBudget(): Unit = mediator.requestYearlyBudget()
 
+
+  /**
+    * displays the budget, which is given as a list of category
+    * names plus the total
+    *
+    * @param budget a Seq of Tuple3, of which the head is the
+    *               budgeted income, and where it and all
+    *               other lines consist of:
+    *               budget._1 the category name
+    *               budget._2 the budgeted amount
+    *               budget._3 the percentage of income
+    */
+  override def displayBudget(budget: Seq[(String, Double, Double)]): Unit = {
+    mainWindow.displayBudget(budget)
+  }
+
   override def requestSummary(from: String, to: String): Unit = mediator.requestSummary(from,to)
 
   override def uploadStatement(filePath: String): Unit = mediator.uploadStatement(filePath)

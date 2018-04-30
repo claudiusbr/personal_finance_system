@@ -3,6 +3,8 @@ package personalfinance.presentation.swing
 import java.awt.Font
 import java.io.File
 
+import java.nio.file.{Files,Paths}
+
 import scala.swing.Orientation.{Horizontal, Vertical}
 import scala.swing.Swing.HGlue
 import scala.swing._
@@ -64,11 +66,15 @@ private[swing] class UploadStatement(fontSpecs: Font, main: MainMenu, mediator: 
 
   reactions += {
     case ButtonClicked(`uploadButton`) => {
-      Messenger.informUser("Processing statement entries. Please wait.")
-      mediator.uploadStatement(fileField.text)
-      main.location = this.location
-      this.visible = false
-      main.visible = true
+      if (fileField.text != "" && Files.exists(Paths.get(fileField.text))) {
+        Messenger.informUser("Processing statement entries. Please wait.")
+        mediator.uploadStatement(fileField.text)
+        main.location = this.location
+        this.visible = false
+        //main.visible = true
+      } else {
+        Messenger.warnUser(s"File ${fileField.text} not found.")
+      }
     }
   }
 }

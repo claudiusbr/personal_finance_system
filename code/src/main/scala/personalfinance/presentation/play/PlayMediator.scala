@@ -15,6 +15,18 @@ trait PlayMediator {
 
   def requestYearlyBudget(): Unit
 
+  /**
+    * displays the budget, which is given as a list of category
+    * names plus the total
+    * @param budget a Seq of Tuple3, of which the head is the
+    *               budgeted income, and where it and all
+    *               other lines consist of:
+    *               budget._1 the category name
+    *               budget._2 the budgeted amount
+    *               budget._3 the percentage of income
+    */
+  def displayBudget(budget: Seq[(String,Double,Double)]): Unit
+
   def requestSummary(from: String, to: String): Unit
 
   def displaySummary(from: String, to: String, summary: Seq[(String,Double)]): Unit

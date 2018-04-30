@@ -18,6 +18,8 @@ class RegexDateStringParser extends dates.DateStringParser {
     date match {
       case slashDotDashYYYYMMDD(year, _, month, _, day) => new DateTime(year, month, day,0,0)
       case slashDotDashDDMMYYYY(day, _, month, _, year) => new DateTime(year,month,day,0,0)
+      case "0" | "" => new DateTime(0)
+      case "now" => new DateTime()
       case _ => throw new IllegalArgumentException("Unsupported date format")
     }
   }
