@@ -169,3 +169,20 @@ entries in the next month, start by the longest transactions, and match them
 first against the longest patterns, then the shortest. This way more generic
 patterns such as 'laptop' would not match first with an entry such as 'laptop
 for girlfriend'}
+
+
+\textbf{Although originally there did not seem to be any advantages on
+implementing the `Amount' field in the `Category' class, as suggested by Fowler
+(1997) when referring to the `Account' analysis pattern, it became apparent
+that it would have been beneficial to have it for the budgeting feature. If
+each category could have their own amount, then instead of passing around
+Tuples of String and Double, instances of `Category' could have been passed
+instead, each of which containing their own subtotal during the period in
+question.}
+
+\textbf{The current implementation of the budget feature would not work well if
+the user has overspent: it will increase the projected income to match the
+user's expenditure, which would not be a desirable trait in a commercial
+expenditure analyser. There are better ways to implement this feature, such as
+decreasing some of the expenditure when budgeting, but the time constraints
+once again prevented this from being built.}
