@@ -1,8 +1,8 @@
 \section{Implementation} \label{sec:Implementation}
 
-The initial MVP was designed with slight differences from the design outlined
-in chapter \ref{sec:AnalysisAndDesign}. The most visible one is the fact that
-what is mainly the Mediator pattern
+The initial Minimum Viable Product (MVP) was designed with slight differences
+from the design outlined in chapter \ref{sec:AnalysisAndDesign}. The most
+visible one is the fact that what is mainly the \emph{Mediator} pattern
 (\cite[][Ch.~9,~Location~3594]{nikolov2016scala}) was used in order to
 implement the dialogue between the presentation and other layers using a
 feature similar to the MVC architecture. Normally, this type of architecture is
@@ -13,18 +13,50 @@ model for liaising with the business logic through a controller. This also
 allows the controller to update multiple existing views based on what input was
 received from one view (\cite[][p.~381]{bennett2010object}). The difference in
 the implementation for this project is that this last feature, essentially, was
-not implemented. However, a mechanism was put in place which could allow for
-this to happen.
+not implemented, since only one view exists at one time.
 
-In the implementation used for this project, the components were segregated
-into packages and sub-packages. Each sub-package has been implemented so that
-it does not have any knowledge of the super package, but rather exposes and
-depends on interfaces which exist within itself. The super- (or outer)
-packages, then, implement the interfaces of the sub-packages, which allows them
-to interact with the sub-package components. The diagram below (Figure
-\ref{fig:PresentationMVC}) illustrates this using the interaction between the
-\texttt{InteractionMediator}, \texttt{SwingAmbassador} and \texttt{swing}
-sub-package of the \texttt{presentation} package:
+In the implementation phase of this project, the components were segregated
+into packages (each of which representing one of the layers mentioned in
+Chapter \ref{sec:AnalysisAndDesign}) and sub-packages. Each sub-package has
+been implemented so that it does not have any knowledge of the super-package,
+but rather exposes and depends on interfaces which exist within itself. The
+super-packages, then, implement the interfaces of the sub-packages, which
+allows them to interact with the sub-package components. The \emph{Mediator}
+pattern was implemented at the default package level by the
+\emph{InteractionMediator} and \emph{PersistenceMediator} objects, both of
+which also happen to represent Scala's native implementation of the
+\emph{Singleton} pattern (\cite[][Ch.~6,~Location.~2242]{nikolov2016scala}).
+The following subsections will give more detail into the inner workings of the
+application and the techniques used to build it.
+
+\subsection{Presentation Layer} \label{sec:Implementation.Presentation}
+In the presentation layer, for this MVP, the \emph{Scala Swing} package was
+used to design the \emph{view}. The package itself consists of Scala wrappers
+for the \emph{Java Swing} package, and one of the reasons why it was chosen was
+that, as with many other GUI packages, it already comes with an implementation
+of the \emph{Observer Design Pattern} (\cite[][p.~293]{gamma1995design}) in its
+capacity to react to events (\cite[][p.~5]{maier2009scala};
+\cite[][Ch.~9,~Location~3731]{nikolov2016scala}).
+
+\begin{sloppypar}
+  The application starts by implementing the \texttt{MainWindow} class, which
+  extends the \texttt{MainFrame} class from the \texttt{scala.swing} package.
+  The class has an implementation of a \emph{main method}, therefore it acts as
+  an entry point for the application to run. It also contains a
+  \texttt{MainFrame}, which is a Swing \texttt{Frame} -- ``a window containing
+  arbitrary data'' (\cite[][Ch.~34,~Section~34.1]{odersky2016scala})-- which
+  switches off the application when closed. It also has implementations of
+  other methods to allow the application to close gracefully
+  (\cite[][p.~2~\&~3]{maier2009scala}), so with these aspects implemented, it
+  allows development to be focused on functionality more relevant to the
+  application's logic itself.
+\end{sloppypar}
+
+
+The diagram below
+(Figure \ref{fig:PresentationMVC}) illustrates this using the interaction
+between the \texttt{InteractionMediator}, \texttt{SwingAmbassador} and
+\texttt{swing} sub-package of the \texttt{presentation} package:
 
 \begin{figure}[ht!]
   \begin{center}
@@ -34,7 +66,6 @@ sub-package of the \texttt{presentation} package:
   \label{fig:PresentationMVC}
 \end{figure}
 \FloatBarrier
-
 
 
 In order to preserve encapsulation, specifically for the \texttt{swing}
@@ -54,20 +85,47 @@ it is interacting with. The \emph{Factory Method} pattern implemented on
 \texttt{PresentationFactory}, which uses reflection to determine what
 implementation to deliver, allows for the view itself to be decided with the
 use of an external \texttt{.properties} file. This allows for the actual
-dependency to change without the code having to be recompiled, which introduces
-flexibility to the application. The \texttt{play} package is only a placeholder
-at this point, as due to time constraints it was not possible to actually
-implement it, but it is there to exemplify how the project can be further
-extended.
+implementation which will be delivered by the Factory to change without the
+code having to be recompiled, which introduces flexibility to the application.
+The \texttt{play} package is only a placeholder at this point, as due to time
+constraints it was not possible to actually implement it, but it is there to
+exemplify how the project can be further extended.
 
-\subsection{Scala Case Classes and the Prototype Design Pattern} \label{sec:Reflections.ScalaCaseClasses}
+Another element not seen in the diagram but which is present in the code is the
+fact that the dependency of the \texttt{MainWindow} class on the
+\texttt{SwingMediator} interface exists in the constructor, as seen in the code
+listing below:
+{
+  \small
+  \lstinputlisting[
+    language=Scala,
+    firstline=7,
+    lastline=7,
+    caption={ }
+  ]{../code/src/main/scala/personalfinance/presentation/swing/MainWindow.scala}
+}
+
+This is an attempt at implementing the principle of \emph{Dependency Injection}
+through \emph{Constructor Injection} (\cite[][]{fowler2004inversion}). In the
+case of this project, the advantage of this simple piece of code is tremendous,
+especially because the fact that the \texttt{MainWindow} class does not have to
+instantiate a mediator -- it simply relies on the fields published by the
+\texttt{SwingMediator} trait. Likewise, the fact that the
+\texttt{InteractionMediator} singleton object has a dependency on the
+\texttt{PresentationFactory} only, allows for the actual implementation of the
+view to change without it having to change.
+
+
+\subsection{Business Logic} \label{sec:Implementation.BusinessLogic}
+
+\subsubsection{Scala Case Classes and the Prototype Design Pattern} \label{sec:Implementation.ScalaCaseClasses}
 One of the benefits of Scala are its case classes. Not just are they very
 useful for pattern matching, but also come with a few perks such as the
 \texttt{copy()} method. This method allows for the class to be copied with some
 or all its members modified. It could be said that it is a language-native
 implementation of the \emph{Prototype Design Pattern}
 (\cite[][Ch.~6,~Location~2461]{nikolov2016scala}), and throughout the
-implementation and testing stage it proved to be a useful feature.
+implementation and testing stage it proved to be a useful asset.
 
 One of its many utilisations in this project can be seen in the
 \texttt{Transaction} class, as one of the tools used to add entries to a
@@ -77,8 +135,8 @@ more similar to what is done in the \emph{Functional Programming} paradigm:
   \small
   \lstinputlisting[
     language=Scala,
-    firstline=32,
-    lastline=38,
+    firstline=35,
+    lastline=40,
     caption={
       extract of the \texttt{Transaction} class showing the \texttt{copy()}
       method in action
@@ -86,39 +144,6 @@ more similar to what is done in the \emph{Functional Programming} paradigm:
   ]{../code/src/main/scala/personalfinance/businesslogic/transaction/Transaction.scala}
 }
 
-
-\subsection{Presentation Layer} \label{sec:Implementation.Presentation}
-In the presentation layer, for the first iteration, the \emph{Scala Swing}
-package was used for building most its aspects. The package consists of Scala
-wrappers for the \emph{Java Swing} package, and one of the reasons why it was
-chosen was that, as with many other GUI packages, it already comes with an
-implementation of the \emph{Observer Design Pattern}
-(\cite[][p.~293]{gamma1995design}) in its capacity to react to events
-(\cite[][p.~5]{maier2009scala};
-\cite[][Ch.~9,~Location~3731]{nikolov2016scala}).
-
-\begin{sloppypar}
-  The application starts by implementing the \texttt{MainMenu} class, which
-  extends the \texttt{SimpleSwingApplication} abstract class from the
-  \texttt{scala.swing} package. The class has an implementation of a \emph{main
-  method}, therefore it acts as an entry point for the application to run. It
-  also contains a \texttt{MainFrame}, which is a Swing \texttt{Frame} -- ``a
-  window containing arbitrary data''
-  (\cite[][Ch.~34,~Section~34.1]{odersky2016scala})-- which switches off the
-  application when closed. It also has implementations of other methods to
-  allow the application to close gracefully
-  (\cite[][p.~2~\&~3]{maier2009scala}), so with these aspects implemented, it
-  allows development to be focused on functionality more relevant to the
-  application's logic itself.
-\end{sloppypar}
-
-
-\subsection{Business Logic} \label{sec:Implementation.BusinessLogic}
-
-\textbf{TODO: syntax highlighting for code listings}
-
-\textbf{TODO: write about how using properties file is a good way to decide
-otherwise static behaviour at runtime -- is this dependency injection?}
 
 \textbf{TODO: Write about how one of the advantages of scala is how it tries to
 enforce the Universal Access. For example, Arrays and Lists implement the

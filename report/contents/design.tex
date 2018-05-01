@@ -231,13 +231,13 @@ joining the more relevant entities listed so far:
 \FloatBarrier
 
 Manual entries and uploaded statements will inevitably always go against a Bank
-category. For this requirement alone, there does not seem to be any harm in
-hard-coding the \texttt{Bank} category. In this case, since most transactions
-are going to affect it, it was decided that no patterns should be assigned to
-it. Due to this, it was decided to allow multiplicity of \texttt{0..*} to the
-association between \texttt{Pattern} and \texttt{Category}. This relationship
-has also been made into a composition, since patterns should not exist without
-categories on the system, but a category can exist without a pattern.
+category. For this reason, there does not seem to be any harm in hard-coding
+the \texttt{Bank} category. In this case, since most transactions are going to
+affect it, it was decided that no patterns should be assigned to it. Due to
+this, it was decided to allow multiplicity of \texttt{0..*} to the association
+between \texttt{Pattern} and \texttt{Category}. This relationship has also been
+made into a composition, since patterns should not exist without categories on
+the system, but a category can exist without a pattern.
 
 
 \subsection{The Persistence Layer} \label{sec:AnalysisAndDesign.PersistenceLayer}

@@ -1,4 +1,4 @@
-\section{Appendix I: Types of Requirements} \label{appendix1}
+\section{Appendix I: Types of Requirements and the use of UML} \label{appendix1}
 
 Bennett et al.
 (\citeyear[][pp.~140-142]{bennett2010object}) categorises requirements as being
@@ -17,5 +17,23 @@ of three types:
     achieve their goals in the existing system. User interfaces can play a big
     part in meeting these requirements.
 \end{description}
-%
+
+\subsection{The use of Universal Modelling Language (UML) constructs}
+\label{sec:Introduction.methodology.uml}
+
+UML is a modelling language created with the intention of providing system
+architects, software engineers and developers with a common set of modelling
+tools, with a defined syntax, which would help them better analyse and design
+software-based systems, and to model business and similar processes
+(\cite[][p.~43]{omg2015uml}). It defines several constructs which have been
+employed throughout this report in order to model the specifications of the
+system, such as Use Case, Activity, Class, Sequence and Communication Diagrams.  
+
+In the class diagrams used, some thought was given to how to model the
+relationships between entities. In the end, it was decided that transitory
+relationships should be modelled as dependencies, and more permanent ones would
+be modelled as associations. An example can be seen in Figure
+\ref{fig:ClassDiagram.SummaryCategory}, where the \texttt{Category} interface
+has an association to the \texttt{Entry} class, since entries are not going to
+be removed, only added, to categories, making it a more permanent relationship.
 
