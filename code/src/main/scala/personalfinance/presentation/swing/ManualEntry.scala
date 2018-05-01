@@ -138,6 +138,12 @@ private[swing] class ManualEntry(fontSpecs: Font, main: MainMenu,
               "pattern" -> "",
               "percentage" -> percentField.text.trim(),
               "amount" -> amountField.text.trim())))
+        dateField.text = ""
+        descriptionField.text = ""
+        totalField.text = ""
+        categoryField.text = ""
+        percentField.text = ""
+        amountField.text = ""
       } else {
         Messenger.warnUser("One or more of the fields above is empty. Please check.")
       }
