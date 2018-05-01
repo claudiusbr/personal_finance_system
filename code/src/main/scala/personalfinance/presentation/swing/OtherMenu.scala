@@ -3,7 +3,7 @@ package personalfinance.presentation.swing
 import scala.swing._
 import scala.swing.event._
 
-abstract class OtherMenu(main: MainMenu) extends MainFrame {
+private[swing] abstract class OtherMenu(main: MainMenu) extends MainFrame {
 
   protected val cancelBtn = new Button("Back")
   protected val okBtn = new Button("OK")
