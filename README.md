@@ -85,4 +85,7 @@ $ sbt run
   ...
   ```
 
-- As this tends to be the trend with bank statements (or at least mine), all income should be negative, and all expenditure positive, so if you are uploading either 
+- As this tends to be the trend with bank statements (or at least mine), all
+  income should be negative, and all expenditure positive, so if you are
+  uploading either bank or credit card statements, make sure all income and
+  expenditure is exactly with these signs.
