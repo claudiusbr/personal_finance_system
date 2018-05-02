@@ -40,7 +40,9 @@ class StringClassifier extends Classifier {
     // match the full pattern against the prefix of every
     // entry description
     entries.map({
-      entry => (entry,patternIndex.find(entry.description.startsWith)) match {
+      entry =>
+        (entry,patternIndex.find(
+          entry.description.startsWith)) match {
 
         // if it finds them, return a transaction unit for
         // that category
@@ -48,7 +50,9 @@ class StringClassifier extends Classifier {
           TransactionUnit(categories.find(cat => {
             cat.patterns.list.foldLeft(false)({
               (test,catPat) =>
-                catPat.value.toLowerCase() == pat.toLowerCase() || test
+                catPat
+                  .value
+                  .toLowerCase() == pat.toLowerCase() || test
             })
           }).get,Seq(e))
 

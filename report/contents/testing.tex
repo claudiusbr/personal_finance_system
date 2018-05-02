@@ -1,26 +1,32 @@
 \section{Testing} \label{sec:Testing}
 
-\textbf{TODO: write about Scala's own implementation of Mockito as one of the
-language features}
+As can be seen in the test suites implemented, the testing for this project was
+an attempt at Behaviour-Driven Development, which is a form of Test-Driven
+Development which focuses on trying to write tests by including descriptions of
+the expected behaviour, which is also an attempt to make the code more readable
+(\cite[][Ch.~1]{wynne2017cucumber}). Scala's infix notation also make it easy
+to write more readable tests, due to its infix notation, and the aid of the
+\texttt{FlatSpec} class and \texttt{Matchers} trait.
 
-\textbf{TODO: write about why I chose to do integration tests rather than unit}
+Most of the automated testing consist of integration tests, since more groups
+of objects are being tested together but not necessarily the whole application.
+This was chosen where it felt it would be beneficial to test how well the more
+heavily integrated objects interacted. Whenever it was appropriate, mocks of
+other objects were used, as can be seen in the \texttt{StringClassifierTester}
+class. The \emph{Mockito} libraries were used for object mocking, as they work
+well with \texttt{ScalaTest}, with the aid of Scala's \texttt{MockitoSugar}
+trait, to aid with the syntax (\cite[][pp.~102-106]{hinojosa2013testing}).
 
-\textbf{TODO: write about why I chose BDD as my form of TDD, if there's space
-write about the BehaviourTester class. Include Scala's infix notation as one of
-the reasons}
 
-\textbf{TODO: write about how there is very limited testing in the presentation
-layer due to the fact that I do not have much experience with testing front
-end}
-
-\textbf{TODO: talk about how testing for the persistence layer was done with
-MySql because the present version uses a local db, but that in the future for
-performance reasons they should be done using a self-generated portable db
-version instead (such as H2)}
-
-\textbf{TODO: had to make a decision when testing the persistence regarding the
-reloading of the whole DB from the dump after performing Create/Update/Delete only.
-Reloading it every time using `before` was just taking too long, so to improve
-performance I redid it in an unelegant way. The alternative of having one test suite for 
-reading and another one for writing was not working also, as many problems were happening,
-possibly due to so many classes overwriting the database concurrently}
+The automated tests cover mostly the persistence and business logic layers, and
+unfortunately not much has been done with the presentation layer due to time
+constraints. For the persistence layer, a test schema was created, and it needs
+to be loaded into a \emph{MySQL} database before it can be used. The
+specifications for these need to be entered into \texttt{.properties} files
+before running the tests, otherwise they will fail. Each time they run, any
+changes made to the test database will be overwritten by the persistence
+helper, which ensures consistency. The only reason this was done with
+\emph{MySQL} for the current implementation is that the database is local,
+therefore performance is not significantly affected. However, for future
+iterations a portable database would be more suitable for persistence layer
+testing.

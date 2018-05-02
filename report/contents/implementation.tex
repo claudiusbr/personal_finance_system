@@ -16,6 +16,12 @@ based on what input was received from one view
 this project is that this last feature, essentially, was not implemented, since
 only one view exists at one time.
 
+It is noticeable that the interface for manual entry available is different
+than that shown in Figure \ref{fig:Wireframe.CreateManualEntry} is not exactly
+the one implemented: the feature to add a new line to the breakdown is missing,
+which makes the percentage of income irrelevant. This was once again due to
+time constraints, and will have to perhaps be done at a further iteration.
+
 In the implementation phase of this project, the components were segregated
 into packages (each of which represents one of the layers mentioned in Chapter
 \ref{sec:AnalysisAndDesign}) and sub-packages. Each sub-package has been
@@ -178,12 +184,6 @@ change the state of a specific instance -- more similar to what is done in the
 }
 
 
-\textbf{TODO: write about why Validator has an auxiliary method for type --
-generics would affect the interface. The Validator was created as a trait in
-the first place to allow for lesser coupling between the classes which need
-validation}
-
-
 In order to be concise where possible, where it was felt that the domain's
 requirements were captured accurately and was estimated that they are not
 likely to change, high level modules are depending directly on classes rather
@@ -229,7 +229,7 @@ code listing which shows how this was implemented:
   \lstinputlisting[
     language=Scala,
     firstline=30,
-    lastline=60,
+    lastline=64,
     caption={
       Extract of the \texttt{StringClassifier} class, showing the algorithm currently
       used to match Entry descriptions' prefixes against patterns
@@ -257,7 +257,7 @@ brought over from mathematics. The main point of mentioning these is because
 they are one of the things which makes the functional paradigm so powerful:
 these constructs create a common interface which allows for the different types
 with which they are associated to be interacted with in a common way -- that
-is, a lot can be done with them with very few lines of code
+is, a lot can be achieved with only a few lines of code
 (\cite[][Ch.~1,~Location~4243~\&~703]{nikolov2016scala}). Not just this, but
 the immutability of the instances within them also makes it easy to perform
 these operations in parallel and, although this parallelism has not been

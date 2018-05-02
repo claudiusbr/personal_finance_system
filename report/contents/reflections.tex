@@ -9,12 +9,12 @@ dedicated to the software itself.
 
 \subsection{Nested iterations in Analysis and Design stage}
 The Analysis and Design stage of the first iteration was delayed due to
-multiple `trial and errors' within it. Appendices \ref{appendix2} and
-\ref{appendix3} show a examples of different models which had been incorporated
-into the final design, but which were later changed even before the
-implementation started -- that is, even before any coding was done. This caused
-a reflection on whether the development method was truly iterative, and whether
-or not it was more similar to the Waterfall model.
+multiple `trial and errors' within it. Appendices \hyperref[appendix2]{II} and
+\hyperref[appendix3]{III} show examples of different models which had been
+incorporated into the final design, but which were later changed even before
+the implementation started -- that is, even before any coding was done. This
+caused a reflection on whether the development method was truly iterative, and
+whether or not it was more similar to the Waterfall model.
 
 Still, in the author's opinion, spending more time within the analysis and
 design stage were very helpful in implementing \emph{SOLID} classes, and as a
@@ -39,42 +39,6 @@ sub-packages containing the implementations to see the super-package, and
 declare the methods once in the \texttt{PresentationMediator} interface, but
 this would have meant sacrificing the concept of sub-package independence
 already mentioned.
-
-% this could be moved to an appendix
-\subsection{Dependency Injection} \label{sec:Reflections.DependencyInjection}
-Very often during the implementation it was felt that better dependency
-injection could be achieved. In classes such as those found in the
-\texttt{TransactionsValidators.scala} file there was constant hard-coded
-dependency to the \texttt{validation} package. In this instance, a framework
-such as \emph{Spring} or \emph{Guice} would have been useful, but unfortunately
-time constraints made it unlikely that the author would be able to successfully
-implement these and still deliver an MVP for this project. As a result, there
-is more tight coupling than there could be, but wherever possible an effort has
-been made to pass the dependencies as constructor or method parameters, so as
-to facilitate testing, among other things.
-
-\subsection{Implementation of Presentation Layer using only Functional Paradigm}
-\textbf{THIS MAY HAVE BEEN CHANGED. LAST COMMIT WHERE TRUE WAS b0bae376264f}
-After the first iteration of the presentation layer, it was noticed that
-perhaps it could be fully implemented in a form more close to that of the
-functional paradigm. That is, make it a point to not use \texttt{var}'s, and
-only \texttt{val}'s for members (also not change state using Scala Swing's
-classes natural mutable fields, such as location, visible, etc -- the effects
-from these could be replicated by copying the values of the instances into new
-ones). This could have been achieved if the full \texttt{presentation.swing}
-package had been implemented from the start with this in mind: have an
-interaction mediator within the package, and then make more use of double
-dispatch, familiar to the \emph{Visitor Pattern}
-(\cite[][Ch.~8,~Location~3943]{nikolov2016scala}). Then, for the actual flow of
-the application, a strategy similar to that used by Felleisen et al.
-(\citeyear[][Ch.~5]{felleisen2013realm}), where each action would trigger a
-function which changes the state of the application, and then the GUI
-displaying the new state would be passed recursively to to the main function,
-ensures that the immutability of the functional paradigm is maintained
-throughout the presentation layer.
-
-Unfortunately, time constraints were once again too tight for this to be fully
-implemented.
 
 \subsection{Layering vs Manual Dependency Injection}
 One of the original (implicit) goals of this project was to have a hierarchy
@@ -119,10 +83,22 @@ database or application levels, or both. In the current implementation,
 however, this constraint is only enforced at business logic layer, and in the
 \texttt{PersistenceBridge.createEntrySet} method of the persistence layer.
 
+Regarding user input validation, there is still a lot of room for improvement
+in that area. As the current implementation is mainly a desktop app, the risk
+mainly consists of bad input due to user misuderstandings of the interface, or
+errors, and not so much of malicious intent. However, it would still be in line
+with best practices to have an interface that is as ``immune'' to user-errors as
+possible.
+
+Another feature which relates to validation is checking for duplicate entries.
+As it stands, it is possible to upload the same statement, or make the same
+manual entry, twice. This is another feature which will have to be implemented
+at a possible future iteration, outside of the scope of this report.
+
 
 \subsubsection{Implementation of the Strategy Design Pattern for Parser}
 One of the original intentions of the author was to utilise an implementation
-of the Strategy Design pattern when loading the user's bank statements into the
+of the \emph{Strategy} pattern when loading the user's bank statements into the
 system. The current implementation uploads data from CSV files, but making use
 of the Strategy pattern, which allows for different implementations of an
 algorithm to exist, and for the right one to be chosen while the application is
@@ -130,68 +106,37 @@ algorithm to exist, and for the right one to be chosen while the application is
 for other formats to be used too. JSON and XML formats come to mind, especially
 if a version of the application could be made which would allow for it to
 communicate with a banking system's API -- API's (especially RESTful) tend to
-favour these two formats.
+favour these two formats. This did not happen in this iteration, unfortunately.
+
+\subsubsection{The Over-simplicity of the budgeting feature}
+The current implementation of the budget feature would not work well if
+the user has overspent: it will simply show an increase the projected income to
+match the user's expenditure, which would not be a desirable trait in a
+commercial expenditure analyser -- this implies that the application is telling
+the user to ``earn more'', rather than spend less. There are better ways to
+implement this feature, such as decreasing some of the expenditure when
+budgeting, but the time constraints once again prevented this from being built.
 
 
-\textbf{TODO: talk about the small amount of input validation due to the first
-version being for a desktop app only, but that if a hosted version were to be
-made available more validation would be added}
+\subsubsection{Implementation of Presentation Layer using only Functional Paradigm}
+After the first iteration of the presentation layer, it was noticed that
+perhaps it could be fully implemented in a form more close to that of the
+functional paradigm. That is, make it a point to not use \texttt{var}'s, and
+only \texttt{val}'s for members (also not change state using Scala Swing's
+classes natural mutable fields, such as location, visible, etc -- the effects
+from these could be replicated by copying the values of the instances into new
+ones). This could have been achieved if the full \texttt{presentation.swing}
+package had been implemented from the start with this in mind: have an
+interaction mediator within the package, and then make more use of double
+dispatch, familiar to the \emph{Visitor Pattern}
 
-\textbf{talk about the decision to sometimes use pattern matching with objects
-and at other times use enum classes (as with the objects which extend KitName
-in the presentation layer vs the EntryType in the root personalfinance
-package), and that although here they have been used interchangeably, a level
-of consistence would have been improved readability in a different situation}
+(\cite[][Ch.~8,~Location~3943]{nikolov2016scala}). Then, for the actual flow of
+the application, a strategy similar to that used by Felleisen et al.
+(\citeyear[][Ch.~5]{felleisen2013realm}), where each action would trigger a
+function which changes the state of the application, and then the GUI
+displaying the new state would be passed recursively to to the main function,
+ensures that the immutability of the functional paradigm is maintained
+throughout the presentation layer.
 
-\textbf{Regarding the fact that the same transaction can be repeated multiple
-times with manual entry, this was allowed to happen because it is not clear
-whether it is impossible for multiple transactions in a statement to have the
-exact same creation date, description and value. The same is true for manual
-entries: if the user wants, they can enter as many entries with the same amount
-as they want}
-
-
-\textbf{The lack of experience of the author really showed when it came to
-getting individual categories from the user. The idea of making subpackages
-unaware of super packages led to ``awkward'' uses of tuples and maps as
-parameters on the user interface, and a somewhat unelegant way of handling the
-remaining uncategorised entries after a new category has been created: since
-every method has a Unit value, the whole block of entries had to be passed
-around as messages so that the state would not be lost. Hence why there are so
-many Seq String String String String flying around.}
-
-\textbf{Perhaps due to what is a combination of inexperience and lack of more
-detailed preparation regarding method signatures, there is a bit of (for lack
-of a better term) `awkwardness' around method signatures, return types and
-constructors. For instance, Transaction.execute takes Seq TransactionUnit, but
-at times it is clear that only two transaction units are going to be entered,
-but it is still necessary to make them into a sequel. Or when Classifier makes
-a transaction unit, it still needs to wrap the category and entry into a Seq
-before it can create the method. Although it all works, there could be better
-ways to engineer it so that it is clear from the contract and the fields in the
-class what is happening inside of it}
-
-\textbf{The way the matching of an entry description against a pattern is being
-done should be by: first sort all the entries by longest description;
-then categorise, create patterns etc; then when actually classifying similar
-entries in the next month, start by the longest transactions, and match them
-first against the longest patterns, then the shortest. This way more generic
-patterns such as 'laptop' would not match first with an entry such as 'laptop
-for girlfriend'}
-
-
-\textbf{Although originally there did not seem to be any advantages on
-implementing the `Amount' field in the `Category' class, as suggested by Fowler
-(1997) when referring to the `Account' analysis pattern, it became apparent
-that it would have been beneficial to have it for the budgeting feature. If
-each category could have their own amount, then instead of passing around
-Tuples of String and Double, instances of `Category' could have been passed
-instead, each of which containing their own subtotal (as per \hyperref[appendix3]{Appendix III})
-during the period in question.}
-
-\textbf{The current implementation of the budget feature would not work well if
-the user has overspent: it will increase the projected income to match the
-user's expenditure, which would not be a desirable trait in a commercial
-expenditure analyser. There are better ways to implement this feature, such as
-decreasing some of the expenditure when budgeting, but the time constraints
-once again prevented this from being built.}
+Unfortunately, time constraints were once again too tight for this to be fully
+implemented.
