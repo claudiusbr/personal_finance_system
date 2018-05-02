@@ -8,8 +8,8 @@ import validation._
   * This is the control class which restricts access to the creation of entries
   * on categories.
   * Here the dependencies to the validators with default parameters were passed
-  * to the constructor in case the personalfinance.businesslogic.transaction.validation and transaction aspect of the
-  * code can be executed in multiple threads
+  * to the constructor in case the businesslogic.transaction.validation and
+  * transaction aspect of the code are being executed in multiple threads
   */
 class Transaction(validators: List[Validator] = List(
   new TransactionEntriesValidator,
@@ -18,8 +18,9 @@ class Transaction(validators: List[Validator] = List(
 
   /**
     * This method validates and executes a transaction executed by a user
-    * Decided to use dependency injection on method here, so that one Transaction
-    * object can still be reused with multiple Category/Entries pairs
+    * Decided to use dependency injection on method here, so that one
+    * Transaction object can still be reused with multiple
+    * Category/Entries pairs
     */
   def execute(transactionUnits: Seq[TransactionUnit]): Seq[Category] = {
     validators.foreach({vdr: Validator =>

@@ -21,7 +21,7 @@ object InteractionMediator extends PresentationMediator with Mediator {
     .getProperty("currentfrontend")
 
   private val presentationAmbassador =
-    PresentationFactory.getPresentationAmbassador(frontEndChoice, this)
+    PresentationBuilder.getPresentationAmbassador(frontEndChoice, this)
 
   private val dateRegistryFactory = new DateRegistryFactory
 

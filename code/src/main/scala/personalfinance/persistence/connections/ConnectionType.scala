@@ -36,7 +36,8 @@ private[persistence] sealed trait ConnectionType {
 /**
   * this is an implementation of MySql's dialect
   */
-private[persistence] final case class MySql(_dbName: String) extends ConnectionType {
+private[persistence] final case class MySql(_dbName: String)
+  extends ConnectionType {
 
   override def dbName: String = _dbName
 
@@ -86,7 +87,8 @@ private[persistence] final case class MySql(_dbName: String) extends ConnectionT
   * This is a placeholder for a possible future
   * implementation of a H2 database
   */
-private[persistence] final case class H2(_dbName: String) extends ConnectionType {
+private[persistence] final case class H2(_dbName: String)
+  extends ConnectionType {
 
   override def dbName: String = _dbName
 

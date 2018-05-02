@@ -1,0 +1,36 @@
+\section{Conclusions} \label{sec:Conclusion}
+
+Although not with as many iterations as originally planned, the main goal of
+the project has been achieved -- that is, to deliver a functional, simple
+expenditure analyser. The techniques used to develop it should allow for the
+code to be easily extended and refactored as appropriate, without requiring too
+much of a rewrite.
+
+The Scala language's multi-paradigm features allowed for most of the variables
+in the code to be made immutable where appropriate, while still ensuring that
+the mutable aspects inherited from other languages worked as expected. The
+functional aspects of the language made it easy for the developer to work well
+with the immutability, and the flexibility of the data structures also allowed
+for the focus to be placed on writing good abstractions, while trusting that
+the language's own implementation of its data structures, especially its
+collections (\cite[][Ch.~24]{odersky2016scala}), would maximise efficiency (as
+much as a possible).
+
+Regarding the author's perception of \emph{software development best
+practices}, the advantages of following an iterative cycle were definitely
+visible, especially those of trying to model the system before beginning the
+implementation using an appropriate language (in this case, UML). The models in
+chapter \ref{sec:AnalysisAndDesign} gave very good visibility of possible
+`pitfalls', such as too much responsibility being assigned to an entity, or
+which level of abstraction should be used for each domain aspect being
+modelled. This allowed for them to be redesigned more easily than would be
+possible if no planning had taken place.
+
+
+The benefits of analysis and design patterns were also noticed, and due to
+these techniques and the SOLID principles (which, although not applied
+perfectly, seem to have been used up to a reasonable extent), the code can now
+be extended more easily, and more features can be added with minimum impact
+being made to existing functionality. This shows, in the author's opinion, the
+value of these techniques for software development, and why they are considered
+best practices.

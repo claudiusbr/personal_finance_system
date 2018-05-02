@@ -3,10 +3,10 @@
 The initial Minimum Viable Product (MVP) was implemented with slight
 differences from the design outlined in chapter \ref{sec:AnalysisAndDesign}.
 The most visible one is the fact that what is mainly the \emph{Mediator}
-pattern (\cite[][Ch.~9,~Location~3594]{nikolov2016scala}) was used in order to
-implement the dialogue between the presentation and other layers using a
-feature similar to the MVC architecture. Normally, this type of architecture is
-implemented in order to make sure that multiple views can refer to the same
+pattern (\cite[][Ch.~9,~Location~3594]{nikolov2016scala}) has been used in
+order to implement the dialogue between the presentation and other layers using
+a feature similar to the MVC architecture. Normally, this type of architecture
+is implemented in order to make sure that multiple views can refer to the same
 core functionality (or model) without actually implementing that functionality
 themselves, which allows the view to be responsible for presentation and the
 model for liaising with the business logic through a controller. This also
@@ -40,25 +40,24 @@ capacity to react to events (\cite[][p.~5]{maier2009scala};
 
 The entry point of the application is the \texttt{App} object, in the main
 package. This application works as a main method, and its only task is to
-call the \texttt{InteractionMediator.startup()} method, which will send a
+call the \texttt{InteractionMediator.startup} method, which will send a
 message through the \texttt{PresentationMediator} instance returned by the
-\texttt{PresentationFactory} to start the view.
+\texttt{PresentationBuilder} to start the view.
 
 \begin{sloppypar}
   In its current implementation, the view is started by the \texttt{MainWindow}
-  class, which extends the \texttt{MainFrame} class from the
-  \texttt{scala.swing} package. A \texttt{MainFrame} is a Swing \texttt{Frame}
-  -- ``a window containing arbitrary data''
-  (\cite[][Ch.~34,~Section~34.1]{odersky2016scala}) -- can send a signal to
-  terminate the application when closed. \texttt{MainWindow} also has
-  implementations of other methods to allow the application to close
-  gracefully, all of which were inspired by the \texttt{SimpleSwingApplication}
-  of the scala package (\cite[][p.~2~\&~3]{maier2009scala}). The author chose
-  not to make the first extend the latter was because the super-class
-  implements a main method, which, considering that it would be another entry
-  point to the application, could cause confusion when it were to start (not to
-  mention the fact that this is not the responsibility of the
-  \texttt{MainWindow} class).
+  class, which extends the \texttt{scala.swing.MainFrame} class. A
+  \texttt{MainFrame} is a Swing \texttt{Frame} -- ``a window containing
+  arbitrary data'' (\cite[][Ch.~34,~Section~34.1]{odersky2016scala}) -- that
+  can send a signal to terminate the application when closed.
+  \texttt{MainWindow} also has implementations of other methods to allow the
+  application to close gracefully, all of which were inspired by the
+  \texttt{SimpleSwingApplication} of the scala package
+  (\cite[][p.~2~\&~3]{maier2009scala}). The author chose not to make the first
+  extend the latter was because the super-class implements a main method,
+  which, considering that it would be another entry point to the application,
+  could cause confusion when it were to start (not to mention the fact that
+  this is not the responsibility of the \texttt{MainWindow} class).
 \end{sloppypar}
 
 
@@ -66,8 +65,7 @@ As mentioned in the beginning of this chapter, each sub-package has been
 designed so that it does not have to depend on the packages which envelop it.
 The diagram below (Figure \ref{fig:PresentationMVC}) illustrates this using the
 interaction between the \texttt{InteractionMediator}, \texttt{SwingAmbassador}
-and \texttt{swing} sub-package of the \texttt{presentation} package as an
-example:
+and the \texttt{presentation.swing} package and sub-packages as an example:
 
 \begin{figure}[ht!]
   \begin{center}
@@ -79,23 +77,27 @@ example:
 \FloatBarrier
 
 
-In order to preserve encapsulation, specifically for the \texttt{swing}
-package, only the \texttt{MainWindow} controller and \texttt{SwingMediator}
-interface are exposed to the outside world, with the first having a constructor
-dependency on the latter. This means that, in order to interact with the
-components of the package, any external classes will need to implement the
-\texttt{SwingMediator} interface. This is also useful if the
-\texttt{presentation.swing} package is to be extracted and used as a library in
-another code, and also leaves room for the \emph{Adaptor} pattern
-(\cite[][p.~139]{gamma1995design}), if it needs to interact with other objects which do not
-necessarily implement the interface upon which it depends.
+\begin{sloppypar}
+  In order to preserve encapsulation, specifically for the \texttt{swing}
+  package, only the \texttt{MainWindow} controller and \texttt{SwingMediator}
+  interface are exposed to the outside world, with the first having a
+  constructor dependency on the latter. This means that, in order to interact
+  with the components of the package, any external classes will need to
+  implement the \texttt{SwingMediator} interface. This is also useful if the
+  \texttt{presentation.swing} package is to be extracted and used as a library
+  in another project, and also leaves room for the \emph{Adaptor} pattern
+  (\cite[][p.~139]{gamma1995design}), if it needs to interact with other
+  objects which do not necessarily implement the interface upon which it
+  depends.
+\end{sloppypar}
 
 One feature also noticeable in Figure \ref{fig:PresentationMVC} is the fact the
 \texttt{personalfinance} package is unaware of which of the view's
-implementation it is interacting with. The \emph{Factory Method} pattern (\cite[][]{})
-implemented on \texttt{PresentationFactory}, which uses reflection to determine
-what implementation to deliver, allows for the view itself to be decided with
-the use of an external \texttt{.properties} file. This allows for the actual
+implementation it is interacting with. The modified version of 
+\emph{Builder} pattern (\cite[][pp.~37-38]{lokke2009scala}) implemented on
+\texttt{PresentationBuilder}, which uses reflection to determine what
+implementation to build, allows for the view itself to be decided with the use
+of an external \texttt{.properties} file. This allows for the actual
 implementation which will be delivered by the Factory to change without the
 code having to be recompiled, which introduces flexibility to the application.
 The \texttt{play} package is only a placeholder at this point, as due to time
@@ -123,25 +125,43 @@ especially because the fact that the \texttt{MainWindow} class does not have to
 instantiate a mediator -- it simply relies on the fields published by the
 \texttt{SwingMediator} trait. Likewise, the fact that the
 \texttt{InteractionMediator} singleton object has a dependency on the
-\texttt{PresentationFactory} only, allows for the actual implementation of the
+\texttt{PresentationBuilder} only, allows for the actual implementation of the
 view to change without it having to change.
+
+\textbf{Talk how the above is a risky move, since Scala's mixin composition has
+this habit of picking up the implementation of the last trait mixed into it, so
+in this case you get PresentationMediator inheriting form SwingMediator and
+then PlayMediator -- although both are traits, this could cause problems in the
+future if the Play one implements something which Swing doesn't, so basically
+these traits must always be the exact same}
+
+\textbf{talk about the reason why the presentation mediator's methods returning
+Unit being because this way they can stay as implementation-agnostic regarding
+the other layers as they possibly can, again thinking that the interface needs
+to be able to change without the code being recompiled}
+
 
 
 \subsection{Business Logic} \label{sec:Implementation.BusinessLogic}
 
+The business logic layer is the one which adhered more firmly to the model
+designed in section
+\ref{sec:AnalysisAndDesign.BusinessLogic.FinalClassDiagram}. The following are
+a few highlights from the implementation which are worth mentioning.
+
 \subsubsection{Scala Case Classes and the Prototype Design Pattern} \label{sec:Implementation.ScalaCaseClasses}
 One of the benefits of Scala are its case classes. Not just are they very
 useful for pattern matching, but also come with a few perks such as the
-\texttt{copy()} method. This method allows for the class to be copied with some
+\texttt{copy} method. This method allows for an object to be copied with some
 or all its members modified. It could be said that it is a language-native
 implementation of the \emph{Prototype Design Pattern}
 (\cite[][Ch.~6,~Location~2461]{nikolov2016scala}), and throughout the
 implementation and testing stage it proved to be a useful asset.
 
-One of its many utilisations in this project can be seen in the
-\texttt{Transaction} class, as one of the tools used to add entries to a
-\texttt{Category} without having to change the state of a specific instance --
-more similar to what is done in the \emph{Functional Programming} paradigm:
+One of its many utilisations can be seen in the \texttt{Transaction} class, as
+one of the tools used to add entries to a \texttt{Category} without having to
+change the state of a specific instance -- more similar to what is done in the
+\emph{Functional Programming} paradigm:
 {
   \small
   \lstinputlisting[
@@ -156,54 +176,10 @@ more similar to what is done in the \emph{Functional Programming} paradigm:
 }
 
 
-\textbf{TODO: Write about how one of the advantages of scala is how it tries to
-enforce the Universal Access. For example, Arrays and Lists implement the
-interface (which I think is Iterable) which allows the user to completely
-ignore how the data is implemented and access both as lists}
-
 \textbf{TODO: write about why Validator has an auxiliary method for type --
 generics would affect the interface. The Validator was created as a trait in
 the first place to allow for lesser coupling between the classes which need
 validation}
-
-\textbf{TODO: write about why I chose to do integration tests rather than unit}
-
-\textbf{TODO: Read the lightbend guide
-https://www.lightbend.com/lagom-framework to Scala and Microservices}
-
-\textbf{TODO: see if the below still makes sense}
-The constraints from \texttt{Transaction} and \texttt{Pattern} were implemented
-in the business logic code as follows:
-{
-  \small
-  \lstinputlisting[
-    language=Scala,
-    firstline=15,
-    lastline=24,
-    caption={
-      method to validate \texttt{Transaction} entries
-    },
-    label=DescriptiveLabel
-  ]{../code/src/main/scala/personalfinance/businesslogic/transaction/Transaction.scala}
-}
-
-{
-  \small
-  \lstinputlisting[
-    language=Scala,
-    firstline=4,
-    lastline=16,
-    caption={
-      snippet of \texttt{Pattern} showing requirement for it to have at least one Category
-    }
-  ]{../code/src/main/scala/personalfinance/businesslogic/transaction/Patterns.scala}
-}
-
-As Fowler (\citeyear[][]{fowler1997analysis}), one of the classes should be
-responsible for keeping track of the relationship. As seen above, it was
-decided that each \texttt{Category} will keep track of its patterns, and this
-will at the same time enforce the constraint at the application layer level.
-
 
 \textbf{Classifier was implemented with longest matching prefix: patterns are
 matched to the start of the description of every entry, starting from longest
@@ -213,16 +189,14 @@ pattern "laptop", for category "personal equipment", then entries with the
 description "Laptop for Girlfriend" would not be picked up by the shorter match
 for laptop.}
 
-\textbf{TODO: talk about the decision to create constructor dependencies to
-traits rather than classes directly, as is the case with
-\texttt{DateStringParser}}
-
-\textbf{TODO: talk about choosing not to user the Builder pattern for the Entry
-class as it would turn into boilerplate town}
-
-\textbf{TODO: talk about the small amount of input validation due to the first
-version being for a desktop app only, but that if a hosted version were to be
-made available more validation would be added}
+In order to be concise where possible, not all classes depend on interfaces
+rather than the classes themselves directly, but where it was felt that this
+would be beneficial, this technique was employed. This is the case with
+\texttt{transaction.RegexDateStringParser}: this class implements the
+\texttt{transaction.dates.DateStringParser} trait, upon which the higher level
+modules which use dates will depend. This is an example of one of the places in
+the code where the \emph{Dependency Inversion} principle
+(\cite[][]{martin1996dependency}) can be seen, but it is not the only one.
 
 \textbf{TODO: talk about the decision to have single methods to commit to the
 database one entry at a time, which was because the database is local and
@@ -231,74 +205,18 @@ debugging or informing the end user. In future iterations, though, the plan was
 to use batch versions as exemplified here
 https://docs.oracle.com/javase/tutorial/jdbc/basics/prepared.html}
 
-\textbf{Explain decision to make dependencies only flow in one direction --
-namely, towards the more specialised packages (aside from the dependencies on
-pre-compiled libraries, such as java.util and the ones listed on sbt) -- so
-that the specialised modules could be extracted and reused in a more modular
-fashion. Explain also why the modules in the default package are implementing
-all similar interfaces in the more specialised ones, so that changes in the
-more specialised ones which could affect dependencies will also have to be
-implemented at the higher level, thus causing the flow to be maintained. E.g.,
-each package declares PropertiesLoader, and the default package.}
-
-\textbf{But: this has not been tested yet. Some classes such as PropertiesLoader are
-private to the personalfiance package. This means that external pacakges cannot
-import it directly, but would it be indirectly imported as a dependency when
-importing other classes? Also, does it matter, since the dependency is actually
-in an interface which is later implemented by the personalfinance package?}
-
-\textbf{Talk how the above is a risky move, since Scala's mixin composition has
-this habit of picking up the implementation of the last trait mixed into it, so
-in this case you get PresentationMediator inheriting form SwingMediator and
-then PlayMediator -- although both are traits, this could cause problems in the
-future if the Play one implements something which Swing doesn't, so basically
-these traits must always be the exact same}
-
-\textbf{talk about the reason why the presentation mediator's methods returning
-Unit being because this way they can stay as implementation-agnostic regarding
-the other layers as they possibly can, again thinking that the interface needs
-to be able to change without the code being recompiled}
-
 \subsection{The Bridge Pattern} \label{sec:Implementation.TheBridgePattern}
-\textbf{TODO: review this. It all changed after the 20th of April}
+\textbf{TODO: write more about this}
 The Bridge pattern allows for an abstraction and its implementation to be
 decoupled, so that both can vary independently
 (\cite[][Ch.~7,Location~2699]{nikolov2016scala}). In this project, the bridge
-pattern can be seen implemented in the \emph{presentation} and
-\emph{persistence} layers. In the first, the \texttt{Presentation} class is
-linked to the \texttt{PresentationBridge} trait by aggregation. The
-\texttt{Swing} class implements this trait and refers to the \emph{swing}
-package for the implementation. This was done so that the implementation of the
-\emph{presentation} layer can change easily at runtime -- for example, if there
-are a hosted and a portable version of the application, the first which runs on
-a web framework and the latter with a desktop package such as Swing, the same
-application can be implemented to both without the code having to be
-recompiled.
-
-Another feature which facilitates this is the fact that the clients -- the
-\texttt{Presentation} class -- uses a combination of a
-\texttt{java.util.Properties} object and \emph{reflection} to determine which
-implementation it will run. This will also aid the above goal of having the
-behaviour of the application change without it having to be recompiled.
-
-
-\subsection{The Strategy Pattern} \label{sec:Implementation.TheStrategyPattern}
-
-Thanks to Scala's mixin traits, the Strategy Pattern was implemented
-successfully in the \texttt{PresentationMediator} class with only a few lines
-of code. What happens here is that the combination of the Strategy and Factory
-patterns are allow enough flexibility that the more specialised packages do not
-have to depend on the packages which envelop it -- within the
-\texttt{presentation} package there is a \texttt{swing} package and a
-placeholder \texttt{play} package for the front-end implementations. So long as
-the outer packages implement the interfaces for each specialised package, 
+pattern can be seen implemented in the \emph{persistence} layer.
 
 \subsection{Algebraic Data Types and the Value Object Pattern} \label{sec:Implementation.ADTAndValueObject}
-
 Throughout the code, examples of Algebraic Data Types can be seen. These appear
 in the form of sealed traits and case objects, and are normally used when
-instances need to be passed around as values, but also contain information
-which will be relevant to the code. Examples of these can be found in the
+instances need to be passed around as values, but also contain information which will
+be relevant to the code. Examples of these can be found in the
 \texttt{ConnectionType} hierarchy, where the number of possible instances for
 each case class would classify the trait and its subtypes as \emph{Product
 Types} (\cite[][p.~411]{wampler2015programming}). The code listing below
@@ -308,12 +226,35 @@ illustrates this:
   \small
   \lstinputlisting[
     language=Scala,
+    firstline=9,
+    lastline=9,
     caption={
       extract of the \texttt{ConnectionType} hierarchy showing the case classes
       used as value objects
     }
   ]{../code/src/main/scala/personalfinance/persistence/connections/ConnectionType.scala}
 }
+...
+
+{
+  \small
+  \lstinputlisting[
+    language=Scala,
+    firstline=39,
+    lastline=40
+  ]{../code/src/main/scala/personalfinance/persistence/connections/ConnectionType.scala}
+}
+...
+
+{
+  \small
+  \lstinputlisting[
+    language=Scala,
+    firstline=90,
+    lastline=91
+  ]{../code/src/main/scala/personalfinance/persistence/connections/ConnectionType.scala}
+}
+...
 
 Algebraic data types could be said to be the natural implementation of the
 Value Object design pattern. This pattern is used widely for comparison of
