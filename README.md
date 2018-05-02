@@ -1,6 +1,19 @@
 Personal Finance System Project
 ===============================
 
+This was my project for my final year in my BSc in Computer Science. It
+consists of a simple Swing application built in Scala which allows a user to
+upload their bank or credit card statement and create categories for each
+entry. The categories will be recorded with their descriptions (or whatever the
+user chooses) as patterns, which should allow further statements to be matched
+to those patterns to the same categories. In time, the usual patterns will have
+been recorded, which should require very little input from the users in the
+future.
+
+The data entered can then be visualised as summaries broken down by periods,
+and after enough data has been entered the user can also visualise simple
+budgets.
+
 How to build and run the application
 ------------------------------------
 
@@ -10,9 +23,15 @@ How to build and run the application
 - MySql
   - also, the [schema.sql](./code/original_db_schemas/mysql/schema.sql) file,
     for the main database schema
-  - and the [test\_schema](./code/original_db_schemas/mysql/test_schema.sql)
+  - and the [test\_schema.sql](./code/original_db_schemas/mysql/test_schema.sql)
     for the test database schema
 - The [config.properties](./code/config.properties) file for the main application
+  - within the file, replace the mysql database address with your own:
+  ```
+  MySqlUrl=jdbc:mysql://localhost:3306/personal_finance_system
+  ```
+
+
 - The [testprops](./code/src/test/testprops) and
   [testtextfile](./code/src/test/testtextfile) files, if you plan to run the
   tests.
@@ -55,3 +74,15 @@ How to build and run the application
 $ cd personal_finance_system/code
 $ sbt run
 ```
+
+
+### How to use it
+- Make sure your bank statements are in a csv format, and that the column names
+  match the below exactly (non-case sensitive, though):
+  ```
+  date,description,amount
+  ... , ... , ...
+  ...
+  ```
+
+- As this tends to be the trend with bank statements (or at least mine), all income should be negative, and all expenditure positive, so if you are uploading either 
