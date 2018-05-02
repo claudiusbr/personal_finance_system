@@ -1,9 +1,9 @@
 \section{Implementation} \label{sec:Implementation}
 
-The initial Minimum Viable Product (MVP) was designed with slight differences
-from the design outlined in chapter \ref{sec:AnalysisAndDesign}. The most
-visible one is the fact that what is mainly the \emph{Mediator} pattern
-(\cite[][Ch.~9,~Location~3594]{nikolov2016scala}) was used in order to
+The initial Minimum Viable Product (MVP) was implemented with slight
+differences from the design outlined in chapter \ref{sec:AnalysisAndDesign}.
+The most visible one is the fact that what is mainly the \emph{Mediator}
+pattern (\cite[][Ch.~9,~Location~3594]{nikolov2016scala}) was used in order to
 implement the dialogue between the presentation and other layers using a
 feature similar to the MVC architecture. Normally, this type of architecture is
 implemented in order to make sure that multiple views can refer to the same
@@ -16,10 +16,10 @@ the implementation for this project is that this last feature, essentially, was
 not implemented, since only one view exists at one time.
 
 In the implementation phase of this project, the components were segregated
-into packages (each of which representing one of the layers mentioned in
-Chapter \ref{sec:AnalysisAndDesign}) and sub-packages. Each sub-package has
-been implemented so that it does not have any knowledge of the super-package,
-but rather exposes and depends on interfaces which exist within itself. The
+into packages (each of which represents one of the layers mentioned in Chapter
+\ref{sec:AnalysisAndDesign}) and sub-packages. Each sub-package has been
+implemented so that it does not have any knowledge of the super-package, but
+rather exposes and depends on interfaces which exist within itself. The
 super-packages, then, implement the interfaces of the sub-packages, which
 allows them to interact with the sub-package components. The \emph{Mediator}
 pattern was implemented at the default package level by the
@@ -38,25 +38,36 @@ of the \emph{Observer Design Pattern} (\cite[][p.~293]{gamma1995design}) in its
 capacity to react to events (\cite[][p.~5]{maier2009scala};
 \cite[][Ch.~9,~Location~3731]{nikolov2016scala}).
 
+The entry point of the application is the \texttt{App} object, in the main
+package. This application works as a main method, and its only task is to
+call the \texttt{InteractionMediator.startup()} method, which will send a
+message through the \texttt{PresentationMediator} instance returned by the
+\texttt{PresentationFactory} to start the view.
+
 \begin{sloppypar}
-  The application starts by implementing the \texttt{MainWindow} class, which
-  extends the \texttt{MainFrame} class from the \texttt{scala.swing} package.
-  The class has an implementation of a \emph{main method}, therefore it acts as
-  an entry point for the application to run. It also contains a
-  \texttt{MainFrame}, which is a Swing \texttt{Frame} -- ``a window containing
-  arbitrary data'' (\cite[][Ch.~34,~Section~34.1]{odersky2016scala})-- which
-  switches off the application when closed. It also has implementations of
-  other methods to allow the application to close gracefully
-  (\cite[][p.~2~\&~3]{maier2009scala}), so with these aspects implemented, it
-  allows development to be focused on functionality more relevant to the
-  application's logic itself.
+  In its current implementation, the view is started by the \texttt{MainWindow}
+  class, which extends the \texttt{MainFrame} class from the
+  \texttt{scala.swing} package. A \texttt{MainFrame} is a Swing \texttt{Frame}
+  -- ``a window containing arbitrary data''
+  (\cite[][Ch.~34,~Section~34.1]{odersky2016scala}) -- can send a signal to
+  terminate the application when closed. \texttt{MainWindow} also has
+  implementations of other methods to allow the application to close
+  gracefully, all of which were inspired by the \texttt{SimpleSwingApplication}
+  of the scala package (\cite[][p.~2~\&~3]{maier2009scala}). The author chose
+  not to make the first extend the latter was because the super-class
+  implements a main method, which, considering that it would be another entry
+  point to the application, could cause confusion when it were to start (not to
+  mention the fact that this is not the responsibility of the
+  \texttt{MainWindow} class).
 \end{sloppypar}
 
 
-The diagram below
-(Figure \ref{fig:PresentationMVC}) illustrates this using the interaction
-between the \texttt{InteractionMediator}, \texttt{SwingAmbassador} and
-\texttt{swing} sub-package of the \texttt{presentation} package:
+As mentioned in the beginning of this chapter, each sub-package has been
+designed so that it does not have to depend on the packages which envelop it.
+The diagram below (Figure \ref{fig:PresentationMVC}) illustrates this using the
+interaction between the \texttt{InteractionMediator}, \texttt{SwingAmbassador}
+and \texttt{swing} sub-package of the \texttt{presentation} package as an
+example:
 
 \begin{figure}[ht!]
   \begin{center}
@@ -80,11 +91,11 @@ another code, and also leaves room for the \emph{Adaptor} pattern
 necessarily implement the interface upon which it depends.
 
 One feature also noticeable in Figure \ref{fig:PresentationMVC} is the fact the
-\texttt{personalfinance} package is unaware of which implementation of the view
-it is interacting with. The \emph{Factory Method} pattern implemented on
-\texttt{PresentationFactory}, which uses reflection to determine what
-implementation to deliver, allows for the view itself to be decided with the
-use of an external \texttt{.properties} file. This allows for the actual
+\texttt{personalfinance} package is unaware of which of the view's
+implementation it is interacting with. The \emph{Factory Method} pattern (\cite[][]{})
+implemented on \texttt{PresentationFactory}, which uses reflection to determine
+what implementation to deliver, allows for the view itself to be decided with
+the use of an external \texttt{.properties} file. This allows for the actual
 implementation which will be delivered by the Factory to change without the
 code having to be recompiled, which introduces flexibility to the application.
 The \texttt{play} package is only a placeholder at this point, as due to time
