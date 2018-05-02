@@ -237,6 +237,32 @@ code listing which shows how this was implemented:
   ]{../code/src/main/scala/personalfinance/businesslogic/Classifier.scala}
 }
 
+As mentioned on the code listing above, the \emph{longest matching prefix} is
+achieved by sorting all the patterns by length, from longest to shortest, then
+trying to match them against the prefix of the entry description in the same
+order. This way, even if an entry would be a match against more than one
+category, the pattern with the longest matching prefix will still be the first
+match.
+
+One other interesting feature which can be seen in the above listing is how
+much is being done using the native \texttt{flatMap} and \texttt{foldLeft}
+methods of Scala collections. The \texttt{map} function and its derivates are
+normally implemented by types which can be classified as \emph{Functors} in
+scala. Functors are challenging to explain concisely, but for this report it
+should suffice to say that they are \emph{classes which implement the}
+\texttt{map} \emph{method and conform to a set of laws called} \textbf{functor
+laws}. The \texttt{foldLeft} method of the collections are also an indication
+that they can be classified as \emph{monoids}, which are another construct
+brought over from mathematics. The main point of mentioning these is because
+they are one of the things which makes the functional paradigm so powerful:
+these constructs create a common interface which allows for the different types
+with which they are associated to be interacted with in a common way -- that
+is, a lot can be done with them with very few lines of code
+(\cite[][Ch.~1,~Location~4243~\&~703]{nikolov2016scala}). Not just this, but
+the immutability of the instances within them also makes it easy to perform
+these operations in parallel and, although this parallelism has not been
+explicitly implemented in this iteration, the author felt it was worth
+mentioning them in this section.
 
 \subsection{The Presentation Layer}
 
