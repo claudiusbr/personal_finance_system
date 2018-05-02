@@ -1,19 +1,20 @@
 \section{Implementation} \label{sec:Implementation}
 
-The initial Minimum Viable Product (MVP) was implemented with slight
+The initial Minimum Viable Product (MVP) was implemented with major
 differences from the design outlined in chapter \ref{sec:AnalysisAndDesign}.
-The most visible one is the fact that what is mainly the \emph{Mediator}
+The most visible one is the fact that (what is mainly) the \emph{Mediator}
 pattern (\cite[][Ch.~9,~Location~3594]{nikolov2016scala}) has been used in
 order to implement the dialogue between the presentation and other layers using
-a feature similar to the MVC architecture. Normally, this type of architecture
-is implemented in order to make sure that multiple views can refer to the same
-core functionality (or model) without actually implementing that functionality
-themselves, which allows the view to be responsible for presentation and the
-model for liaising with the business logic through a controller. This also
-allows the controller to update multiple existing views based on what input was
-received from one view (\cite[][p.~381]{bennett2010object}). The difference in
-the implementation for this project is that this last feature, essentially, was
-not implemented, since only one view exists at one time.
+a feature which resembles the MVC architecture. Normally, this type of
+architecture is implemented in order to make sure that multiple views can refer
+to the same core functionality (or model) without actually implementing that
+functionality themselves, which allows the view to be responsible for
+presentation and the model for liaising with the business logic through a
+controller. This also allows the controller to update multiple existing views
+based on what input was received from one view
+(\cite[][p.~381]{bennett2010object}). The difference in the implementation for
+this project is that this last feature, essentially, was not implemented, since
+only one view exists at one time.
 
 In the implementation phase of this project, the components were segregated
 into packages (each of which represents one of the layers mentioned in Chapter
@@ -182,40 +183,81 @@ generics would affect the interface. The Validator was created as a trait in
 the first place to allow for lesser coupling between the classes which need
 validation}
 
-\textbf{Classifier was implemented with longest matching prefix: patterns are
-matched to the start of the description of every entry, starting from longest
-pattern to the shortest. This is so that if there is, for example, a pattern
-"Laptop for girlfriend" which would match to category "Gifts", and another
-pattern "laptop", for category "personal equipment", then entries with the
-description "Laptop for Girlfriend" would not be picked up by the shorter match
-for laptop.}
 
-In order to be concise where possible, not all classes depend on interfaces
-rather than the classes themselves directly, but where it was felt that this
-would be beneficial, this technique was employed. This is the case with
-\texttt{transaction.RegexDateStringParser}: this class implements the
-\texttt{transaction.dates.DateStringParser} trait, upon which the higher level
-modules which use dates will depend. This is an example of one of the places in
-the code where the \emph{Dependency Inversion} principle
-(\cite[][]{martin1996dependency}) can be seen, but it is not the only one.
+In order to be concise where possible, where it was felt that the domain's
+requirements were captured accurately and was estimated that they are not
+likely to change, high level modules are depending directly on classes rather
+than interfaces. This can be seen as being in direct violation of the
+\emph{Dependency Inversion} principle of SOLID
+(\cite[][]{martin1996dependency}), which some would consider to be a ``risky'''
+move (after all, it is not always possible to predict which requirements will
+and which will not change), but others would believe that this was acceptable
+for more static requirements. The author decided to follow the latter.
 
-\textbf{TODO: talk about the decision to have single methods to commit to the
-database one entry at a time, which was because the database is local and
-because it gives more control over when something goes wrong, both for
-debugging or informing the end user. In future iterations, though, the plan was
-to use batch versions as exemplified here
-https://docs.oracle.com/javase/tutorial/jdbc/basics/prepared.html}
+\begin{sloppypar}
+  However, this principle was still employed where it seemed beneficial to
+  follow it -- for example, in areas where it was felt that the implementation
+  of certain algorithms could be further optimised in future iterations. This
+  is the case with \texttt{transaction.RegexDateStringParser}: this class
+  implements the \texttt{transaction.dates.DateStringParser} trait, upon which
+  the higher level modules which use dates will depend. This is an example of
+  one of the places in the code where the \emph{Dependency Inversion} principle
+  can be seen, but it is not the only one.
+\end{sloppypar}
+
+
+\subsubsection{The engine behind it all: the \texttt{Classifier}}
+
+Another example of \emph{Dependency Inversion} (though not of \emph{Dependency
+Injection}) is the \texttt{Classifier} trait, and the class implementing it:
+\texttt{StringClassifier}. The \texttt{InteractionMediator} declares a variable
+of the first type, and then instantiates it with the latter. Therefore,
+although it still depends on the abstraction, it also has a dependency on the
+implementation, which would mean that in order to change it a slight
+refactoring would be necessary.
+
+For this implementation, \texttt{StringClassifier} was built using longest matching
+prefix to match entries to categories: patterns are matched to the start of the
+description of every entry, starting from longest pattern to the shortest. This
+is so that if there is, for example, a pattern ``Laptop for parent'' which
+would match to category ``Gifts'', and another pattern ``laptop'', for category
+``personal equipment'', then entries with the description ``Laptop for
+Girlfriend'' would not be picked up by the shorter match for laptop. Below is a
+code listing which shows how this was implemented:
+{
+  \small
+  \lstinputlisting[
+    language=Scala,
+    firstline=30,
+    lastline=60,
+    caption={
+      Extract of the \texttt{StringClassifier} class, showing the algorithm currently
+      used to match Entry descriptions' prefixes against patterns
+    }
+  ]{../code/src/main/scala/personalfinance/businesslogic/Classifier.scala}
+}
 
 
 \subsection{The Presentation Layer}
 
+The presentation layer is another one where decoupling and reflection can be
+observed. The package is accessible via the \texttt{PersistenceBridge} class,
+which uses reflection to instantiate one of the classes which implements the
+\texttt{ConnectionType} trait. This is an implementation of the \emph{Strategy}
+pattern (\cite[][p.~80]{lokke2009scala}), which allows for the database vendor
+to be changed without the code having to be recompiled. At the moment, the only
+dialect implemented is \emph{MySQL}, but a placeholder can already be seen for
+the \emph{H2} database.
 
-\subsubsection{The Bridge Pattern} \label{sec:Implementation.TheBridgePattern}
-\textbf{TODO: write more about this}
-The Bridge pattern allows for an abstraction and its implementation to be
-decoupled, so that both can vary independently
-(\cite[][Ch.~7,Location~2699]{nikolov2016scala}). In this project, the bridge
-pattern can be seen implemented in the \emph{persistence} layer.
+It is also worth noticing that the operations currently being executed by the
+implementation have a lot of room for improvement: many of the queries and
+updates which could be grouped together and sent to the database in batch are
+still being done individually. This does not have a huge impact on performance
+with a local database, but might cause issues with remote ones. Further
+iterations of the application should focus on optimising this.
+
+Another pattern which can be observed in this layer is the \emph{Value Object}
+pattern, which will be discussed in more detail below.
 
 \subsubsection{Algebraic Data Types and the Value Object Pattern} \label{sec:Implementation.ADTAndValueObject}
 Throughout the code, examples of Algebraic Data Types can be seen. These appear

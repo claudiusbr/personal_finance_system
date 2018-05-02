@@ -3,11 +3,15 @@ package businesslogic
 
 import personalfinance.businesslogic.transaction._
 
+trait Classifier {
+  def classify(categories: Seq[Category], entries: Seq[Entry]):(Seq[TransactionUnit], Seq[Entry])
+}
+
 /**
   * this class is responsible for matching entries against
   * existing categories
   */
-class Classifier {
+class StringClassifier extends Classifier {
 
   /**
     * this is the method responsible for matching entries to categories
@@ -25,24 +29,30 @@ class Classifier {
 
   private def classifyByDescription(categories: Seq[Category],
     entries: Seq[Entry]): (Seq[TransactionUnit], Seq[Entry]) = {
+
+    // extract all the patterns from categories and sort
+    // them by length, from longest to shortest
     val patternIndex: Seq[String] = categories
       .flatMap(c=>{c.patterns.list.map( _.value )})
       .sortBy(_.length)
       .reverse
 
+    // match the full pattern against the prefix of every
+    // entry description
     entries.map({
       entry => (entry,patternIndex.find(entry.description.startsWith)) match {
 
-        /*categories.find({
-          cat => cat.patterns.list.foldLeft(false)({
-            (test,pat) => entry.description.contains(pat.value) || test})
-      }) match {*/
+        // if it finds them, return a transaction unit for
+        // that category
         case (e: Entry, Some(pat)) =>
           TransactionUnit(categories.find(cat => {
             cat.patterns.list.foldLeft(false)({
-              (test,catPat) => catPat.value.toLowerCase() == pat.toLowerCase() || test
+              (test,catPat) =>
+                catPat.value.toLowerCase() == pat.toLowerCase() || test
             })
           }).get,Seq(e))
+
+        // if not, return the entry as uncategorised
         case (e: Entry, None) => e
       }
     }).partition(_.isInstanceOf[TransactionUnit])

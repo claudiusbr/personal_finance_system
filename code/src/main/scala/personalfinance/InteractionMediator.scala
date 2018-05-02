@@ -181,7 +181,7 @@ object InteractionMediator extends PresentationMediator with Mediator {
     */
   private def categorise(entries: Seq[Entry]): Unit = {
     val categories: Seq[Category] = PersistenceMediator.getAllCategoriesAndPatterns()
-    val classifier = new Classifier
+    val classifier: Classifier = new StringClassifier
     val (categorisedTransactionUnits,uncategorised): (Seq[TransactionUnit], Seq[Entry]) =
       classifier.classify(categories,entries)
 
