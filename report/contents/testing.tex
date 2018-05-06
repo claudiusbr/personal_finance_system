@@ -1,12 +1,15 @@
 \section{Testing} \label{sec:Testing}
 
 As can be seen in the test suites implemented, the testing for this project was
-an attempt at Behaviour-Driven Development, which is a form of Test-Driven
-Development which focuses on trying to write tests by including descriptions of
-the expected behaviour, which is also an attempt to make the code more readable
-(\cite[][Ch.~1]{wynne2017cucumber}). Scala's infix notation also make it easy
-to write more readable tests, due to its infix notation, and the aid of the
-\texttt{FlatSpec} class and \texttt{Matchers} trait.
+an attempt at Behaviour-Driven Development (BDD), which is a form of
+Test-Driven Development that focuses on trying to write tests by including
+descriptions of the expected behaviour, which is also an attempt to make the
+code more readable (\cite[][Ch.~1]{wynne2017cucumber}). The main library used
+for testing was \texttt{ScalaTest}, ``an extensive BDD suite with numerous
+built-in specs'' (\cite[][p.~21]{hinojosa2013testing}). Some of Scala's native
+features also make it easy to write more readable tests, such as its infix
+notation, which work well with the members of the \texttt{FlatSpec} class and
+\texttt{Matchers} trait.
 
 Most of the automated testing consist of integration tests, since more groups
 of objects are being tested together but not necessarily the whole application.
@@ -17,11 +20,10 @@ class. The \emph{Mockito} libraries were used for object mocking, as they work
 well with \texttt{ScalaTest}, with the aid of Scala's \texttt{MockitoSugar}
 trait, to aid with the syntax (\cite[][pp.~102-106]{hinojosa2013testing}).
 
-
-The automated tests cover mostly the persistence and business logic layers, and
-unfortunately not much has been done with the presentation layer due to time
-constraints. For the persistence layer, a test schema was created, and it needs
-to be loaded into a \emph{MySQL} database before it can be used. The
+The automated tests cover mostly the persistence and business logic layers, but
+unfortunately not much was done with the presentation layer due to time
+constraints. For the persistence layer, a test database schema was created, and
+it needs to be loaded into a \emph{MySQL} database before it can be used. The
 specifications for these need to be entered into \texttt{.properties} files
 before running the tests, otherwise they will fail. Each time they run, any
 changes made to the test database will be overwritten by the persistence
@@ -30,3 +32,23 @@ helper, which ensures consistency. The only reason this was done with
 therefore performance is not significantly affected. However, for future
 iterations a portable database would be more suitable for persistence layer
 testing.
+
+Since TDD was used, in the vast majority of cases the tests were implemented
+before the classes being tested were written. The classes were then written and
+refactored until the tests were satisfied. In some cases, further tests were
+written where it was noticed that more specific behaviours were required of
+particular classes. After the tests were written, they behaved like a harness
+which allowed for any further necessary changes to be made with confidence, and
+helped to speed up the implementation phase
+(\cite[][pp.~x-xi]{hinojosa2013testing}). The result of running the tests at
+the time of writing can be seen in \hyperref[appendix4]{Appendix IV}.
+
+
+Whenever `on-the-fly', manual tests were needed, these were done using the
+Simple Build Tool (SBT) console feature. This feature is a very interesting
+combination of Scala's Read-Eval-Print-Loop (REPL) with the build tool's
+ability to quickly integrate all necessary dependencies into a REPL console
+session (\cite[][p.~1]{hinojosa2013testing}). The advantage of testing in this
+manner was that it was possible to run a session with compiled code incomplete
+classes and test different aspects of their behaviour which did not seem fit
+for automated testing.

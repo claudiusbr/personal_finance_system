@@ -9,12 +9,9 @@ dedicated to the software itself.
 
 \subsection{Nested iterations in Analysis and Design stage}
 The Analysis and Design stage of the first iteration was delayed due to
-multiple `trial and errors' within it. Appendices \hyperref[appendix2]{II} and
-\hyperref[appendix3]{III} show examples of different models which had been
-incorporated into the final design, but which were later changed even before
-the implementation started -- that is, even before any coding was done. This
-caused a reflection on whether the development method was truly iterative, and
-whether or not it was more similar to the Waterfall model.
+multiple `trial and errors' within it. This caused a reflection on whether the
+development method was truly iterative, or whether or not it was more similar
+to the Waterfall model.
 
 Still, in the author's opinion, spending more time within the analysis and
 design stage were very helpful in implementing \emph{SOLID} classes, and as a
@@ -56,7 +53,7 @@ a problem when the interface is too specialised. Therefore, a compromise had to
 be made and the interfaces had to be made more generic.
 
 \subsection{Not implemented due to time constraints} \label{sec:Reflections.TimeConstraints}
-The following topics were not implemented due to time constraints.
+The following were not implemented due to time constraints.
 
 \subsubsection{Better exception handling and communication with the user}
 The \texttt{PersistenceMediator} class should be handling exceptions which
@@ -129,7 +126,6 @@ ones). This could have been achieved if the full \texttt{presentation.swing}
 package had been implemented from the start with this in mind: have an
 interaction mediator within the package, and then make more use of double
 dispatch, familiar to the \emph{Visitor Pattern}
-
 (\cite[][Ch.~8,~Location~3943]{nikolov2016scala}). Then, for the actual flow of
 the application, a strategy similar to that used by Felleisen et al.
 (\citeyear[][Ch.~5]{felleisen2013realm}), where each action would trigger a

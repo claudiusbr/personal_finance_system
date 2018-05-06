@@ -82,7 +82,6 @@ private[swing] class CreateCategory(entryType: String, date: String, description
 
   reactions += {
     case SelectionChanged(`categoriesDropDown`) => {
-      println(s"selection changed to ${categoriesDropDown.selection.item}")
       categoryField.text = categoriesDropDown.selection.item
     }
 

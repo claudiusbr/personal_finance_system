@@ -1,28 +1,116 @@
-\section{Appendix III: Not-implemented version of Category with a field for balance} \label{appendix3}
+\section{Appendix III: How to Build and Run the Application} \label{appendix3}
 
-The following text was part of a previous model of how to use the \emph{Summary
-Account} pattern to try to classify accounts between different types. It has
-been since then decided that the best way would actually to have the categories
-themselves keep track of their own types.
+This is also available from the GitHub Repository for this project,
+\href{https://github.com/claudiusbr/personal_finance_system}{here}.
 
-Furthermore, especially due to the requirements for tax estimates, the
-\emph{Summary Accounts} pattern (\cite[][Section~6.3]{fowler1997analysis}) will
-be adapted to help classify categories between income and expenditure. At this
-point, it seemed sensible to make \texttt{Category} into an interface, and
-specialise it on its subtypes. A \texttt{SummaryCategory} implements the
-\texttt{Category} interface, and would implement its \texttt{getEntries} method
-so that its entries are those of its components. It's components are other
-instances of \texttt{Category}, so they can be both both
-\texttt{DetailCategory} and its own type -- the implementation will have to
-take this into account somehow, such as by using recursion. The class diagram
-below (Figure \ref{fig:ClassDiagram.SummaryCategory}) can illustrate it better:
+As this is a list of instructions, some of it will be in an imperative voice.
 
-\begin{figure}[ht!]
-  \begin{center}
-    \includegraphics[width=11cm]{./contents/img/Class_Diagram_-_Summary_Category.png}
-  \end{center}
-  \caption{}
-  \label{fig:ClassDiagram.SummaryCategory}
-\end{figure}
-\FloatBarrier
+\subsection{What is needed}
+\begin{itemize}
+  \item
+    SBT 1.1.1 (can be downloaded from \href{http://sdkman.io/}{SDKMAN}
 
+  \item
+    Scala 2.12.4 (can be downloaded with SBT, or from
+    \href{http://sdkman.io/}{SDKMAN}
+
+  \item
+    MySQL
+    \begin{itemize}
+      \item
+        also, the \texttt{schema.sql} file, which should be included in the accompanying USB, but also can be downloaded from \href{https://github.com/claudiusbr/personal_finance_system/tree/master/code/original_db_schemas/mysql}{here}.
+
+      \item
+        and the \texttt{test\_schema.sql}, which should also be included in the USB stick, or downloaded from \href{https://github.com/claudiusbr/personal_finance_system/tree/master/code/original_db_schemas/mysql}{here}.
+    \end{itemize}
+
+  \item
+    The \texttt{config.properties} file for the main application, which is also in the USB, or can be downloaded from \href{https://github.com/claudiusbr/personal_finance_system/tree/master/code}{here}.
+    \begin{itemize}
+      \item
+        within the file, the \texttt{MySqlUrl} property value needs to be
+        replaced by the URL of the database using to run it.
+    \end{itemize}
+
+
+  \item
+    The \texttt{testprops} and \texttt{testtextfile} files, which are required
+    to run the tests (they should be in the USB, or can be downloaded from
+    \href{https://github.com/claudiusbr/personal_finance_system/tree/master/code/src/test}{here}.
+
+  \item
+    A \texttt{private.properties} file containing the MySQL username and password for
+    the user that can access the two database schemas for this project:
+    \texttt{personal\_finance\_schema} and \texttt{test\_personal\_finance}
+
+    \begin{lstlisting}[frame=single]
+      MySqlUsername=username
+      MySqlPassword=password
+    \end{lstlisting}
+
+\end{itemize}
+
+\subsection{Building and Running it}
+\subsubsection{set up the project}
+\begin{itemize}
+  \item
+    clone or copy the source files into an empty folder, then \texttt{cd} into
+    the root folder for the code (the one containing the \texttt{build.sbt} file);
+
+  \item
+    create the \texttt{private.properties} file mentioned above, and save it in
+    the root folder;
+
+  \item
+    make sure the \texttt{config.properties} is in the root directory
+
+  \item
+    make sure the \texttt{testprops} and \texttt{testtextfile} files are in the
+    \texttt{src/test} directory;
+
+  \item
+    add your username and password to it, if you haven't yet;
+\end{itemize}
+
+
+\subsubsection{Set up MySql}
+\begin{itemize}
+  \item
+    create a database schema called \texttt{personal\_finance\_system};
+
+  \item
+    create a database schema called \texttt{test\_personal\_finance};
+
+  \item
+    give the user on \texttt{private.properties} access to writing to them;
+
+  \item
+    Load the schemas into mysql
+
+    \begin{lstlisting}
+    $ mysql -u username -p personal_finance_system < schema.sql
+    $ mysql -u username -p test_personal_finance < test_schema.sql
+    \end{lstlisting}
+\end{itemize}
+
+
+\subsubsection{Run SBT from the root folder}
+\begin{lstlisting}
+$ cd personal_finance_system/code
+$ sbt run
+\end{lstlisting}
+
+
+\subsection{How to use it}
+Make sure your bank statements are in a csv format, and that the column names
+match the below exactly (non-case sensitive, though):
+\begin{lstlisting}
+date,description,amount
+... , ... , ...
+...
+\end{lstlisting}
+
+As this tends to be the trend with bank statements (or at least mine), all
+income should be negative, and all expenditure positive, so if you are
+uploading either bank or credit card statements, make sure all income and
+expenditure is exactly with these signs.

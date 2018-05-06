@@ -1,20 +1,20 @@
 \section{Implementation} \label{sec:Implementation}
 
-The initial Minimum Viable Product (MVP) was implemented with major
-differences from the design outlined in chapter \ref{sec:AnalysisAndDesign}.
-The most visible one is the fact that (what is mainly) the \emph{Mediator}
-pattern (\cite[][Ch.~9,~Location~3594]{nikolov2016scala}) has been used in
-order to implement the dialogue between the presentation and other layers using
-a feature which resembles the MVC architecture. Normally, this type of
-architecture is implemented in order to make sure that multiple views can refer
-to the same core functionality (or model) without actually implementing that
-functionality themselves, which allows the view to be responsible for
-presentation and the model for liaising with the business logic through a
-controller. This also allows the controller to update multiple existing views
-based on what input was received from one view
-(\cite[][p.~381]{bennett2010object}). The difference in the implementation for
-this project is that this last feature, essentially, was not implemented, since
-only one view exists at one time.
+The initial Minimum Viable Product (MVP) was implemented with major differences
+from the design outlined in chapter \ref{sec:AnalysisAndDesign}.  The most
+visible one is the fact that (what is mainly) the \emph{Mediator} pattern
+(\cite[][Ch.~9,~Location~3594]{nikolov2016scala}) has been used in order to
+implement the dialogue between the presentation and other layers using a
+feature which resembles the MVC architecture, as mentioned in chapter
+\ref{sec:AnalysisAndDesign}. Normally, this type of architecture is implemented
+in order to make sure that multiple views can refer to the same core
+functionality (or model) without actually implementing that functionality
+themselves, which allows the view to be responsible for presentation and the
+model for liaising with the business logic through a controller. This also
+allows the controller to update multiple existing views based on what input was
+received from one view (\cite[][p.~381]{bennett2010object}). The difference in
+the implementation for this project is that this last feature, essentially, was
+not implemented, since only one view exists at one time.
 
 It is noticeable that the interface for manual entry available is different
 than that shown in Figure \ref{fig:Wireframe.CreateManualEntry} is not exactly
@@ -139,18 +139,13 @@ instantiate a mediator -- it simply relies on the fields published by the
 view to change without it having to change.
 
 
-\textbf{Talk how the above is a risky move, since Scala's mixin composition has
-this habit of picking up the implementation of the last trait mixed into it, so
-in this case you get PresentationMediator inheriting form SwingMediator and
-then PlayMediator -- although both are traits, this could cause problems in the
-future if the Play one implements something which Swing doesn't, so basically
-these traits must always be the exact same}
-
-\textbf{talk about the reason why the presentation mediator's methods returning
-Unit being because this way they can stay as implementation-agnostic regarding
-the other layers as they possibly can, again thinking that the interface needs
-to be able to change without the code being recompiled}
-
+The approach described above has an inherent risk due to Scala's mixin
+composition. Essentially, since trait \texttt{PresentationMediator} inherits
+from multiple traits, any future extension to implement a new view would have
+to keep in mind that \texttt{PresentationMediator} will be implementing the
+behaviour of the last trait it implements in the source code. So any
+refactoring of this trait which extends other traits may generate unexpected
+behaviour, if this is not taken into consideration.
 
 
 \subsection{Business Logic} \label{sec:Implementation.BusinessLogic}

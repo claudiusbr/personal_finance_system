@@ -31,7 +31,6 @@ How to build and run the application
   MySqlUrl=jdbc:mysql://localhost:3306/personal_finance_system
   ```
 
-
 - The [testprops](./code/src/test/testprops) and
   [testtextfile](./code/src/test/testtextfile) files, if you plan to run the
   tests.
@@ -56,6 +55,9 @@ How to build and run the application
   ```
 - create the `private.properties` file mentioned above, and save it in this
   folder;
+- make sure the `config.properties` folder is in the `code` directory;
+- make sure the `testprops` and `testtextfile` are in the `code/src/test`
+  directory;
 - add your username and password to it, if you haven't yet;
  
 
