@@ -21,7 +21,7 @@ than that shown in Figure \ref{fig:Wireframe.CreateManualEntry} is not exactly
 the one implemented: the feature to add a new line to the breakdown is missing,
 which makes the percentage of income irrelevant. This was once again due to
 time constraints, and will have to perhaps be done at a further iteration.
-Another differece is the fact that there was not enough time to implement a
+Another difference is the fact that there was not enough time to implement a
 mechanism to suggest categories to the end user, so this will have to be left
 for a future iteration, outside of the scope of this report.
 
@@ -139,7 +139,7 @@ instantiate a mediator -- it simply relies on the fields published by the
 view to change without it having to change.
 
 
-The approach described above has an inherent risk due to Scala's mixin
+The approach described above has an inherent risk due to Scala's \emph{mixin}
 composition. Essentially, since trait \texttt{PresentationMediator} inherits
 from multiple traits, any future extension to implement a new view would have
 to keep in mind that \texttt{PresentationMediator} will be implementing the
