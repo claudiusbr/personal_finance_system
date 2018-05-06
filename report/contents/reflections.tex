@@ -80,13 +80,21 @@ database or application levels, or both. In the current implementation,
 however, this constraint is only enforced at business logic layer, and in the
 \texttt{PersistenceBridge.createEntrySet} method of the persistence layer.
 
-Regarding user input validation, there is still a lot of room for improvement
-in this area. As the current implementation is mainly a desktop app, the risk
-mainly consists of bad input due to user misunderstandings of the interface, or
-errors, and not so much of malicious intent. However, it would still be in line
-with best practices to have an interface that is as ``immune'' to user-errors as
-possible. Special characters are not yet being properly handled, but which
-should be fixed on a future iteration outside of the scope of this report.
+This means, unfortunately, that the user is still able to bypass double entry by
+directly accessing the database, especially since the data is being stored
+unencrypted. It should be possible to design the application so that the only
+possible access point to the data will be the application, and that constraints
+will be enforced at every level, but this will have to be left to a future
+iteration, which will fall outside of the scope of this report.
+
+Regarding user input validation, the current implementation left a lot of room
+for improvement in this area. As the current implementation is a desktop app,
+the risk mainly consists of bad input due to user misunderstandings of the
+interface, or errors, and not so much of malicious intent. However, it would
+still be in line with best practices to have an interface that is as ``immune''
+to user-errors as possible. Special characters are not yet being properly
+handled, but which should be fixed on a future iteration outside of the scope
+of this report.
 
 Another feature which relates to validation is checking for duplicate entries.
 As it stands, it is possible to upload the same statement, or make the same
