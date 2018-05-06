@@ -81,11 +81,12 @@ however, this constraint is only enforced at business logic layer, and in the
 \texttt{PersistenceBridge.createEntrySet} method of the persistence layer.
 
 Regarding user input validation, there is still a lot of room for improvement
-in that area. As the current implementation is mainly a desktop app, the risk
-mainly consists of bad input due to user misuderstandings of the interface, or
+in this area. As the current implementation is mainly a desktop app, the risk
+mainly consists of bad input due to user misunderstandings of the interface, or
 errors, and not so much of malicious intent. However, it would still be in line
 with best practices to have an interface that is as ``immune'' to user-errors as
-possible.
+possible. Special characters are not yet being properly handled, but which
+should be fixed on a future iteration outside of the scope of this report.
 
 Another feature which relates to validation is checking for duplicate entries.
 As it stands, it is possible to upload the same statement, or make the same
@@ -136,3 +137,11 @@ throughout the presentation layer.
 
 Unfortunately, time constraints were once again too tight for this to be fully
 implemented.
+
+\subsubsection{Decimal Precision}
+The application was implemented using \texttt{Double} as the data type.
+Unfortunately, after testing it with a larger dataset, it was noticed that this
+was affecting the precision of the data. Due to time constraints it was not
+possible to switch all the necessary classes to \texttt{BigDecimal}, or another
+similar implementation which would allow for decimal precision to be achieved.
+This should happen in a future iteration, however.
