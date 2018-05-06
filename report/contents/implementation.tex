@@ -64,10 +64,11 @@ message through the \texttt{PresentationMediator} instance returned by the
   application to close gracefully, all of which were inspired by the
   \texttt{SimpleSwingApplication} of the scala package
   (\cite[][p.~2~\&~3]{maier2009scala}). The author chose not to make the first
-  extend the latter was because the super-class implements a main method,
-  which, considering that it would be another entry point to the application,
-  could cause confusion when it were to start (not to mention the fact that
-  this is not the responsibility of the \texttt{MainWindow} class).
+  extend the latter was because it would have inherited the main method of the
+  super-class, which, considering that it would be another entry point to the
+  application, could cause confusion when trying to run the application (not to
+  mention the fact that this is not the responsibility of the
+  \texttt{MainWindow} class).
 \end{sloppypar}
 
 
