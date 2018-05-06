@@ -112,8 +112,15 @@ class PersistenceBridge(propertiesLoader: PropertiesLoader, privateLoader: Prope
     result
   }
 
-  def getEntryDescription(description: String): ResultSet =
-    runQuery(sqlDialect.getEntryDescription(description))
+  def getEntryDescription(dateCreated: DateTime, dateRecorded: DateTime,
+                          description: String): ResultSet = {
+    executePS[ResultSet](sqlDialect.getEntryDescription(description),
+      (st: PreparedStatement) => {
+        st.setDate(1,new JDate(dateCreated.getMillis))
+        st.setDate(2,new JDate(dateRecorded.getMillis))
+        st.executeQuery()
+      }, leaveOpen = true)
+  }
 
 
   /**

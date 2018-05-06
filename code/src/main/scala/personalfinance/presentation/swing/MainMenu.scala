@@ -38,12 +38,12 @@ private [swing] class MainMenu(fontSpecs: Font, mediator: SwingMediator) extends
     val date = toBeCategorised._2
     val description = toBeCategorised._3
     val amount = toBeCategorised._4
+    this.visible = false
     val createCategoryFrame = new CreateCategory(
       entryType, date, description, amount, toSendBack, fontSpecs, this, mediator
     )
     createCategoryFrame.location = this.location
     createCategoryFrame.visible = true
-    this.visible = false
   }
 
   def displayBudget(budget: Seq[(String, Double, Double)]): Unit = {

@@ -138,10 +138,10 @@ object PersistenceMediator extends Mediator {
     cat.entries.map {
       case Entry(amt, dateRegistry, desc, None) => {
         val created = dateRegistry.dateCreated
-        val recorded =dateRegistry.dateRecorded
+        val recorded = dateRegistry.dateRecorded
         val _ = persistenceBridge.createEntryDescription(Seq((created,recorded, desc)))
         val entryDescriptionId = {
-          val rs: ResultSet = persistenceBridge.getEntryDescription(desc)
+          val rs: ResultSet = persistenceBridge.getEntryDescription(created,recorded,desc)
           val _ = rs.next()
           rs.getInt(1)
         }

@@ -68,7 +68,9 @@ private[persistence] final case class MySql(_dbName: String)
 
   override def getEntryDescription(description: String): String =
     s"select id_entry_description,value from $entry_description " +
-      s"where value = '$description'"
+      s"where value = '$description'" +
+      s"and date_created = (?)" +
+      s"and date_recorded = (?)"
 
   override def createEntryPS: String =
     s"insert into $entry (`amount`, `category_id`, `description_id`, `currency_id`)" +

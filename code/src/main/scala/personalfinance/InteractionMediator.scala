@@ -60,11 +60,14 @@ object InteractionMediator extends PresentationMediator with Mediator {
   override def displayBudget(budget: Seq[(String, Double, Double)]): Unit =
     presentationAmbassador.displayBudget(budget)
 
+
   override def requestSummary(from: String, to: String): Unit = {
     val f: DateTime = dateRegistryFactory.getDateRegistry(from).dateCreated
+    println(from)
     val t: DateTime =
       if (to == "") dateRegistryFactory.getDateRegistry("now").dateCreated
       else dateRegistryFactory.getDateRegistry(to).dateCreated
+    println(to)
     val summary: Seq[(String,Double)] = PersistenceMediator.getSummary(f,t)
     displaySummary(from,to, summary)
   }

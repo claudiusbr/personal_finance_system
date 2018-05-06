@@ -70,7 +70,6 @@ private[swing] class CreateCategory(entryType: String, date: String, description
   private def setMaxHeight(comp: Component): Unit =
     comp.maximumSize = new Dimension(Short.MaxValue, comp.preferredSize.height)
 
-
   setMaxHeight(box)
 
   contents = new BoxPanel(Orientation.Vertical) {
@@ -91,7 +90,9 @@ private[swing] class CreateCategory(entryType: String, date: String, description
       this.visible = false
    }
 
-    case WindowActivated(`me`) => this.size = main.size
+    case WindowActivated(`me`) =>
+      this.size = main.size
+      main.visible = false
 
     case ButtonClicked(`okBtn`) => {
       categoryField.text match {

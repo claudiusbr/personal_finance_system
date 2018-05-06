@@ -116,7 +116,9 @@ class PersistenceBridgeTester extends BehaviourTester with BeforeAndAfter with B
 
   it should "retrieve entry descriptions details" in {
     val rs: ResultSet = persistenceBridge
-      .getEntryDescription(entryDescription.head._3)
+      .getEntryDescription(entryDescription.head._1,
+        entryDescription.head._2
+        ,entryDescription.head._3)
 
     val _ = rs.next()
     rs.getInt(1) shouldBe a [JInteger]

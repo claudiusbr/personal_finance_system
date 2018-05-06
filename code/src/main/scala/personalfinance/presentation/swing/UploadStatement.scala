@@ -71,7 +71,7 @@ private[swing] class UploadStatement(fontSpecs: Font, main: MainMenu, mediator: 
         mediator.uploadStatement(fileField.text)
         main.location = this.location
         this.visible = false
-        //main.visible = true
+        main.visible = true
       } else {
         Messenger.warnUser(s"File ${fileField.text} not found.")
       }
