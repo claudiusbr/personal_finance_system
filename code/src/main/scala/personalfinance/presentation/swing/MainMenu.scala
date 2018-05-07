@@ -77,7 +77,7 @@ private [swing] class MainMenu(fontSpecs: Font, mediator: SwingMediator) extends
           strSum._2 + catAndAmt._2)
     })
 
-    val foot = s"<tr><th>Balance</th><th>$sum</th></tr></table></html>"
+    val foot = f"<tr><th>Balance</th><th>$sum%2.2f</th></tr></table></html>"
 
     Dialog.showMessage(message=headAndbody+foot)
   }
