@@ -313,13 +313,15 @@ for more static requirements. The author decided to follow the latter.
 
 \subsubsection{The engine behind it all: the \texttt{Classifier}}
 
-Another example of \emph{Dependency Inversion} (though not of \emph{Dependency
-Injection}) is the \texttt{Classifier} trait, and the class implementing it:
-\texttt{StringClassifier}. The \texttt{InteractionMediator} declares a variable
-of the first type, and then instantiates it with the latter. Therefore,
-although it still depends on the abstraction, it also has a dependency on the
-implementation, which would mean that in order to change it a slight
-refactoring would be necessary.
+\begin{sloppypar}
+  Another example of \emph{Dependency Inversion} (though not of
+  \emph{Dependency Injection}) is the \texttt{Classifier} trait, and the class
+  implementing it: \texttt{StringClassifier}. The \texttt{InteractionMediator}
+  declares a variable of the first type, and then instantiates it with the
+  latter. Therefore, although it still depends on the abstraction, it also has
+  a dependency on the implementation, which would mean that in order to change
+  it a slight refactoring would be necessary.
+\end{sloppypar}
 
 For this implementation, \texttt{StringClassifier} was built using longest matching
 prefix to match entries to categories: patterns are matched to the start of the
