@@ -32,9 +32,10 @@ cbrasil@onthego:~/ideaProjects/project/code$ sbt test
 [info] - should ensure that the correct type argument has been passed
 [info] AmountTester:
 [info] an Amount instance
-[info] - should should default to GBP if no currency is provided
+[info] - should default to GBP if no currency is provided
 [info] RegexDateStringParserTester:
-[info] String dates passed to the `dateFromString` method of DateFormatter
+[info] String dates passed to the `dateFromString' method of
+      DateFormatter
 [info] - should be converted from yyyy(/.-)dd(/.-)dd to DateTime
 [info] - should be converted from dd(/.-)mm(/.-)yyyy to DateTime
 [info] - should cause it to throw an exception if not in any
@@ -64,10 +65,12 @@ cbrasil@onthego:~/ideaProjects/project/code$ sbt test
 [info] - should assign categories to entries when it can find them
 [info] - should return return all entries when it cannot find them
 [info] - should match against longest matching prefix
-[info]   + Given an entry with a prefix which matches more than one pattern 
+[info]   + Given an entry with a prefix which matches more than 
+      one pattern 
 [info]   + When it is matched against all categories with which it
-        could match 
-[info]   + Then it should match against the one with longest matching prefix 
+      could match 
+[info]   + Then it should match against the one with longest 
+      matching prefix 
 [info] CategoryTester:
 [info] A Category
 [info] - should have a name
@@ -77,9 +80,10 @@ cbrasil@onthego:~/ideaProjects/project/code$ sbt test
 [info] EntryTester:
 [info] an Entry
 [info] - should have an Amount
-[info] - should have a constructor which allows it to be created with value,
-        dates and description only
-[info] - should have a date the entry was created and a date it was recorded
+[info] - should have a constructor which allows it to be created
+      with value, dates and description only
+[info] - should have a date the entry was created and a date it
+      was recorded
 [info] TransactionUnitValidatorTester:
 [info] - should execute the transaction on a single TransactionUnit
 [info] - should execute the transaction on multiple transaction units
@@ -96,7 +100,8 @@ cbrasil@onthego:~/ideaProjects/project/code$ sbt test
 [info] - should connect to a database
 [info] - should retrieve all categories when requested
 [info] - should return a single category when requested
-[info] - should return nothing the single category requested does not exist
+[info] - should return nothing the single category requested does
+      not exist
 [info] - should return the patterns for a category
 [info] - should create a category and return true if it works
 [info] - should create a category and return the category details

@@ -1,14 +1,120 @@
 \section{Implementation} \label{sec:Implementation}
 
-The initial Minimum Viable Product (MVP) was implemented with major differences
-from the design outlined in chapter \ref{sec:AnalysisAndDesign}.  The most
-visible one is the fact that (what is mainly) the \emph{Mediator} pattern
-(\cite[][Ch.~9,~Location~3594]{nikolov2016scala}) has been used in order to
-implement the dialogue between the presentation and other layers using a
-feature which resembles the MVC architecture, as mentioned in chapter
-\ref{sec:AnalysisAndDesign}. Normally, this type of architecture is implemented
-in order to make sure that multiple views can refer to the same core
-functionality (or model) without actually implementing that functionality
+The initial Minimum Viable Product\footnote{The definition of Minimum Viable
+Product employed in this case is very broad, and should be interpreted as `a
+version of the application which provides for the most important of the
+requirements, but with limited usability'. It is not necessarily ready for
+commercial release (were this to be a commercial product), but but might be
+something which would be released for `Beta' testing.} (MVP) delivered was
+implemented with minor differences from the wireframes in section
+\ref{sec:Requirements.FunctionalRequirements.Wireframes} and major differences
+from the design outlined in chapter \ref{sec:AnalysisAndDesign}; however, the
+author believes that this version already provides the main deliverables
+outlined in the requirements. The main visible benefits of this MVP are the
+ability to allocate income and expenditure to categories entered by the user,
+and to then use this information to display breakdowns by category and simple
+budgets to the end user. This is intended to give the user more control over
+which transactions get allocated to what category, which at the time of
+inception of the idea for this project was not the main focus of similar
+applications in the market\footnote{An example for this point with which the
+author has personal experience as an end user could be Lloyds Bank's Money
+Manager, which, although at the time of writing does seem to allow a user to
+create categories, at the time of inception of the idea for this project did
+not seem to, or at least did not make it immediately clear for every user how
+this could be done from the dashboard. More information about the Money Manager
+in question can be found at
+\url{https://www.lloydsbank.com/online-banking/benefits-online-banking/money-manager.asp}}.
+
+The following is an example of how this can be achieved. For this
+demonstration, the user in question wants to upload the following bank
+statement:
+\begin{figure}[ht!]
+  \begin{center}
+    \includegraphics[width=10cm]{./contents/img/jul17_statement.png}
+  \end{center}
+  \caption{}
+\end{figure}
+\FloatBarrier
+
+As can be seen from the above, there are multiple lines with the same
+description. This is where the classifier will be most useful.
+
+The user starts the application, and is greeted with the below interface:
+\begin{figure}[ht!]
+  \begin{center}
+    \includegraphics[width=14cm]{./contents/img/home_screen.png}
+  \end{center}
+  \caption{}
+\end{figure}
+\FloatBarrier
+
+They choose the `Upload Statement' option, and point to the file containing the
+statement:
+\begin{figure}[ht!]
+  \begin{center}
+    \includegraphics[width=14cm]{./contents/img/upload_statement.png}
+  \end{center}
+  \caption{}
+\end{figure}
+\FloatBarrier
+
+When they click `Ok', this should trigger the sequence of events which will
+attempt to classify the transactions. Each time the system encounters a
+description it cannot match to an existing category, it will prompt the user
+for input using the \texttt{CreateCategory} view. Below is an extract of when
+trying to classify the income from the user's fictitious job:
+
+\begin{figure}[ht!]
+  \begin{center}
+    \includegraphics[width=14cm]{./contents/img/fictitious_job.png}
+  \end{center}
+  \caption{}
+\end{figure}
+\FloatBarrier
+
+As can be seen from the above, by simply removing the date form the
+description, the user will ensure that any future income is immediately put in
+the same category as they choose for this one.
+
+After all the categories have been entered, the user should be able to view a
+summary by categories for that month, which will look something like the below:
+
+\begin{figure}[ht!]
+  \begin{center}
+    \includegraphics[width=14cm]{./contents/img/view_summary.png}
+  \end{center}
+  \caption{}
+\end{figure}
+\FloatBarrier
+
+
+As it can be seen, the balance for that month is positive, showing the user
+spent less than they earned for that month. 
+
+After a whole year's worth of statements have been entered, the user should be
+able to request a monthly budget. An example of what they would see can be seen
+below:
+
+\begin{figure}[ht!]
+  \begin{center}
+    \includegraphics[width=14cm]{./contents/img/calculate_monthly_budget.png}
+  \end{center}
+  \caption{}
+\end{figure}
+\FloatBarrier
+
+\subsection{Development}
+As mentioned at the beginning of this chapter, the actual implementation of the
+current version of the project is different from the model designed in chapter
+\ref{sec:AnalysisAndDesign} -- the model in the chapter in question should be
+refined in a future iteration, which is now outside of the scope of this
+report. The most visible difference is the fact that (what is mainly) the
+\emph{Mediator} pattern (\cite[][Ch.~9,~Location~3594]{nikolov2016scala}) has
+been used in order to implement the dialogue between the presentation and other
+layers using a feature which resembles the MVC architecture, as mentioned in
+chapter \ref{sec:AnalysisAndDesign}. Normally, this type of architecture is
+implemented in order to make sure that multiple views can refer to the same
+core functionality (or model) without actually implementing that functionality
 themselves, which allows the view to be responsible for presentation and the
 model for liaising with the business logic through a controller. This also
 allows the controller to update multiple existing views based on what input was
@@ -245,7 +351,7 @@ match.
 
 One other interesting feature which can be seen in the above listing is how
 much is being done using the native \texttt{flatMap} and \texttt{foldLeft}
-methods of Scala collections. The \texttt{map} function and its derivates are
+methods of Scala collections. The \texttt{map} function and its derivatives are
 normally implemented by types which can be classified as \emph{Functors} in
 scala. Functors are challenging to explain concisely, but for this report it
 should suffice to say that they are \emph{classes which implement the}
@@ -335,86 +441,3 @@ small, immutable objects, and the instances of the case classes can be
 classified as just those (\cite[][Ch.~8,~Location~3068]{nikolov2016scala}).
 
 
-\subsection{Application Output}
-
-With the current version of the project, the main visible benefit which can be
-seen is how it summarises income and expenditure by category, and uses this
-information to display breakdowns by category and simple budgets to the end
-user. The following is an example of how this can be achieved.
-
-For this example, the user in question wants to upload the following bank
-statement:
-\begin{figure}[ht!]
-  \begin{center}
-    \includegraphics[width=10cm]{./contents/img/jul17_statement.png}
-  \end{center}
-  \caption{}
-\end{figure}
-\FloatBarrier
-
-As can be seen from the above, there are multiple lines with the same
-description. This is where the classifier will be most useful.
-
-The user starts the application, and is greeted with the below interface:
-\begin{figure}[ht!]
-  \begin{center}
-    \includegraphics[width=14cm]{./contents/img/home_screen.png}
-  \end{center}
-  \caption{}
-\end{figure}
-\FloatBarrier
-
-They choose the `Upload Statement' option, and point to the file containing the
-statement:
-\begin{figure}[ht!]
-  \begin{center}
-    \includegraphics[width=14cm]{./contents/img/upload_statement.png}
-  \end{center}
-  \caption{}
-\end{figure}
-\FloatBarrier
-
-When they click `Ok', this should trigger the sequence of events which will
-attempt to classify the transactions. Each time the system encounters a
-description it cannot match to an existing category, it will prompt the user
-for input using the \texttt{CreateCategory} view. Below is an extract of when
-trying to classify the income from the user's fictitious job:
-
-\begin{figure}[ht!]
-  \begin{center}
-    \includegraphics[width=14cm]{./contents/img/fictitious_job.png}
-  \end{center}
-  \caption{}
-\end{figure}
-\FloatBarrier
-
-As can be seen from the above, by simply removing the date form the
-description, the user will ensure that any future income is immediately put in
-the same category as they choose for this one.
-
-After all the categories have been entered, the user should be able to view a
-summary by categories for that month, which will look something like the below:
-
-\begin{figure}[ht!]
-  \begin{center}
-    \includegraphics[width=14cm]{./contents/img/view_summary.png}
-  \end{center}
-  \caption{}
-\end{figure}
-\FloatBarrier
-
-
-As it can be seen, the balance for that month is positive, showing the user
-spent less than they earned for that month. 
-
-After a whole year's worth of statements have been entered, the user should be
-able to request a monthly budget. An example of what they would see can be seen
-below:
-
-\begin{figure}[ht!]
-  \begin{center}
-    \includegraphics[width=14cm]{./contents/img/calculate_monthly_budget.png}
-  \end{center}
-  \caption{}
-\end{figure}
-\FloatBarrier

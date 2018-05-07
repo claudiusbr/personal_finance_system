@@ -1,9 +1,21 @@
 \section{Appendix III: How to Build and Run the Application} \label{appendix3}
 
-This is also available from the GitHub Repository for this project,
-\href{https://github.com/claudiusbr/personal_finance_system}{here}.
+\noindent
+As this appendix is a list of instructions, some of it will be in an imperative
+voice.
 
-As this is a list of instructions, some of it will be in an imperative voice.
+\noindent
+These instructions are also available in the \texttt{README} of the GitHub
+Repository for this project:\\
+\href{https://github.com/claudiusbr/personal_finance_system}{https://github.com/claudiusbr/personal\_finance\_system} 
+
+\noindent
+A portable version of the app with all the information has been provided in the
+accompanying USB memory, in the \texttt{PortableBinaryVersion} folder. In order
+to run it, you need to execute the steps on section \ref{appendix3.setupMySql}
+of this appendix first, then follow the steps on section
+\ref{appendix3.runningcompiled}.
+
 
 \subsection{What is needed}
 \begin{itemize}
@@ -19,71 +31,90 @@ As this is a list of instructions, some of it will be in an imperative voice.
     \begin{itemize}
       \item
         also, the \texttt{schema.sql} file, which should be included in the
-        accompanying USB, but also can be downloaded from
+        accompanying USB memory under
+        \texttt{.../SourceCode/original\_db\_schemas/mysql/schema.sql}, but
+        also can be downloaded from
         \href{https://github.com/claudiusbr/personal_finance_system/tree/master/code/original_db_schemas/mysql}{the
-        GitHub repo}.
+        GitHub repo};
 
       \item
         and the \texttt{test\_schema.sql}, which should also be included in the
-        USB stick, or downloaded from
+        USB memory under
+        \texttt{.../SourceCode/original\_db\_schemas/mysql/test\_schema.sql},
+        or should be downloaded from
         \href{https://github.com/claudiusbr/personal_finance_system/tree/master/code/original_db_schemas/mysql}{the
         GitHub repo}.
     \end{itemize}
 
   \item
     The \texttt{config.properties} file for the main application, which is also
-    in the USB, or can be downloaded from
+    in the USB under
+    \texttt{.../SourceCode/config.properties}, or
+    can be downloaded from
     \href{https://github.com/claudiusbr/personal_finance_system/tree/master/code}{the
-    GitHub repo}.
+    GitHub repo};
     \begin{itemize}
       \item
         within the file, the \texttt{MySqlUrl} property value needs to be
-        replaced by the URL of the database using to run it.
+        replaced by the URL of the MySql server containing the schemas listed below.
     \end{itemize}
 
 
-  \item
-    The \texttt{testprops} and \texttt{testtextfile} files, which are required
-    to run the tests (they should be in the USB, or can be downloaded from
-    \href{https://github.com/claudiusbr/personal_finance_system/tree/master/code/src/test}{here}.
-
-  \item
+  \item 
     A \texttt{private.properties} file containing the MySQL username and password for
     the user that can access the two database schemas for this project:
-    \texttt{personal\_finance\_schema} and \texttt{test\_personal\_finance}
+    \texttt{personal\_finance\_schema} and \texttt{test\_personal\_finance}. It
+    should be a text file containing the two lines below, where
+    \texttt{username} and \texttt{password} should be replaced by the username
+    and password for the MySql server containing these schemas.
 
     \begin{lstlisting}[frame=single]
       MySqlUsername=username
       MySqlPassword=password
     \end{lstlisting}
 
+  \item
+    (\emph{Needed only If you are compiling from source:}) the
+    \texttt{testprops} and \texttt{testtextfile} files, which are required to
+    run the tests (they should be in the USB in the\\
+    \texttt{.../SourceCode/src/test} folder, or can be downloaded from
+    \href{https://github.com/claudiusbr/personal_finance_system/tree/master/code/src/test}{the
+    GitHub repo}).
+
+
 \end{itemize}
 
 \subsection{Building and Running it}
 \subsubsection{set up the project}
-\begin{itemize}
+\begin{enumerate}
   \item
-    clone or copy the source files into an empty folder, then \texttt{cd} into
-    the root folder for the code (the one containing the \texttt{build.sbt} file);
+    Copy the source files from the USB's \texttt{SourceCode} folder (or
+    download the files from the main GitHub repo's \texttt{code} folder) into
+    an empty folder, then \texttt{cd} into it (make sure it is the one
+    containing the \texttt{build.sbt} file). This is now the root folder for
+    the code;
+    \begin{itemize}
+    \item
+      make sure the \texttt{testprops} and \texttt{testtextfile} files are in the
+      \texttt{src/test} directory;
+    \end{itemize}
 
   \item
     create the \texttt{private.properties} file mentioned above, and save it in
     the root folder;
+    \begin{itemize}
+      \item
+      add your username and password to it, if you haven't yet;
+    \end{itemize}
 
   \item
-    make sure the \texttt{config.properties} is in the root directory
+    make sure the \texttt{config.properties} is also in the root folder;
 
-  \item
-    make sure the \texttt{testprops} and \texttt{testtextfile} files are in the
-    \texttt{src/test} directory;
-
-  \item
-    add your username and password to it, if you haven't yet;
-\end{itemize}
+\end{enumerate}
 
 
-\subsubsection{Set up MySql}
-\begin{itemize}
+\subsubsection{Set up MySql} \label{appendix3.setupMySql}
+\begin{enumerate}
   \item
     create a database schema called \texttt{personal\_finance\_system};
 
@@ -100,7 +131,7 @@ As this is a list of instructions, some of it will be in an imperative voice.
     $ mysql -u username -p personal_finance_system < schema.sql
     $ mysql -u username -p test_personal_finance < test_schema.sql
     \end{lstlisting}
-\end{itemize}
+\end{enumerate}
 
 
 \subsubsection{Run SBT from the root folder}
@@ -109,6 +140,22 @@ $ cd personal_finance_system/code
 $ sbt run
 \end{lstlisting}
 
+
+\subsection{Running the compiled version instead} \label{appendix3.runningcompiled}
+A pre-assembled executable \texttt{.jar} file is available on the USB memory.
+To run it instead of compiling the code, follow the steps from
+\ref{appendix3.setupMySql} to set up the database schemas, save the
+\texttt{config.properties} and \texttt{private.properties} files in the folder
+containing the \texttt{PersonalFinanceSystem.jar} file (make sure you enter the
+username and password in the private.properties file), and execute the
+\texttt{.jar} to run the application:
+\begin{lstlisting}
+$ java -jar PersonalFinanceSystem.jar
+\end{lstlisting}
+
+The current iteration does not have any ways of communicating with the user
+yet, so if running this version and something goes wrong the system will not
+tell you what it is, so the recommended approach is to build it from source.
 
 \subsection{How to use it}
 Make sure your bank statements are in a csv format, and that the column names
