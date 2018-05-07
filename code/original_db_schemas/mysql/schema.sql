@@ -73,7 +73,7 @@ DROP TABLE IF EXISTS `entry`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `entry` (
   `identry` int(11) NOT NULL AUTO_INCREMENT,
-  `amount` decimal(10,0) NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
   `category_id` int(11) NOT NULL,
   `description_id` int(11) NOT NULL,
   `currency_id` int(11) NOT NULL,

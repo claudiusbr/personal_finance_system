@@ -13,6 +13,7 @@ import personalfinance.persistence.connections._
   * The specific database flavour is chosen by entries in the `config.properties` and
   * `private.properties` files, placed in the root directory from which the
   * application is running
+  * TODO: improve how the Decimal conversion is currently happening
   * @param propertiesLoader a PropertiesLoader instance containing a reference to
   *                         `config.properties`
   * @param privateLoader a PropertiesLoader instance containing a reference to
@@ -141,7 +142,7 @@ class PersistenceBridge(propertiesLoader: PropertiesLoader, privateLoader: Prope
     val result = executePS(sqlDialect.createEntryPS,(st: PreparedStatement) => {
       val updateResult: Seq[Boolean] = entries.map {
         case (amount: Double, catId: Int, descriptionId: Int, currencyId: Int) =>
-          st.setDouble(1, amount)
+          st.setBigDecimal(1, new java.math.BigDecimal(amount.toString))
           st.setInt(2, catId)
           st.setInt(3, descriptionId)
           st.setInt(4, currencyId)
@@ -182,13 +183,13 @@ class PersistenceBridge(propertiesLoader: PropertiesLoader, privateLoader: Prope
       val stDebit = st
       val stCredit = st
 
-      stDebit.setDouble(1, amountDebit)
+      stDebit.setBigDecimal(1, new java.math.BigDecimal(amountDebit.toString))
       stDebit.setInt(2, categoryIdDebit)
       stDebit.setInt(3, entryDescriptionId)
       stDebit.setInt(4, currencyId)
       val resultDebit: Boolean = stDebit.executeUpdate() > 0
 
-      stCredit.setDouble(1,amountCredit)
+      stCredit.setBigDecimal(1,new java.math.BigDecimal(amountCredit.toString))
       stCredit.setInt(2,categoryIdCredit)
       stCredit.setInt(3,entryDescriptionId)
       stCredit.setInt(4,currencyId)

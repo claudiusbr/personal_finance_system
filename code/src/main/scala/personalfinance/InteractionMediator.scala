@@ -63,11 +63,9 @@ object InteractionMediator extends PresentationMediator with Mediator {
 
   override def requestSummary(from: String, to: String): Unit = {
     val f: DateTime = dateRegistryFactory.getDateRegistry(from).dateCreated
-    println(from)
     val t: DateTime =
       if (to == "") dateRegistryFactory.getDateRegistry("now").dateCreated
       else dateRegistryFactory.getDateRegistry(to).dateCreated
-    println(to)
     val summary: Seq[(String,Double)] = PersistenceMediator.getSummary(f,t)
     displaySummary(from,to, summary)
   }
@@ -98,7 +96,7 @@ object InteractionMediator extends PresentationMediator with Mediator {
       linesFromFile.tail.map({ tuple => {
         val tmp: Array[String] = tuple.split(",")
         Entry(
-          Amount(tmp(amount).toDouble),
+        Amount(tmp(amount).toDouble),
           dateRegistryFactory.getDateRegistry(tmp(date)),
           tmp(description))
       }
